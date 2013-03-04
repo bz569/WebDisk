@@ -4,6 +4,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.tmatesoft.svn.core.SVNDirEntry;
+import org.tmatesoft.svn.core.SVNNodeKind;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -41,8 +44,7 @@ public class ShowFileListAdapter extends BaseAdapter
 	private LayoutInflater mInflater;
 	private Bitmap icon_file;
 	private Bitmap icon_folder;
-	private List<String> items;
-	private List<String> paths;
+	private List<SVNDirEntry> mdir;
 	private Context context;
 	
 	private PopupWindow actionMenu;
@@ -59,12 +61,11 @@ public class ShowFileListAdapter extends BaseAdapter
 	private Button btn_delete;
 	private Button btn_download;
 	
-	public ShowFileListAdapter(Context context, List<String> it, List<String> pa)
+	public ShowFileListAdapter(Context context, List<SVNDirEntry> dirnames)
 	{
 		mInflater = LayoutInflater.from(context);
-		items = it;
-		paths = pa;
 		this.context = context;
+		this.mdir = dirnames;
 		
 		icon_file = BitmapFactory.decodeResource(context.getResources(), R.drawable.icon_file);
 		icon_folder = BitmapFactory.decodeResource(context.getResources(), R.drawable.icon_folder);
@@ -74,13 +75,13 @@ public class ShowFileListAdapter extends BaseAdapter
 	@Override
 	public int getCount()
 	{
-		return items.size();
+		return mdir.size();
 	}
 
 	@Override
 	public Object getItem(int position)
 	{
-		return items.get(position);
+		return mdir.get(position);
 	}
 
 	@Override
@@ -127,15 +128,28 @@ public class ShowFileListAdapter extends BaseAdapter
 			holder = (ViewHolder)convertView.getTag();
 		}
 		
-		File f = new File(paths.get(position).toString());
+//		File f = new File(paths.get(position).toString());
+//		
+//		//为每一行设置内容
+//		holder.tv_fileName.setText(f.getName());
+//		if(f.isDirectory())
+//		{
+//			holder.iv_showFileImage.setImageBitmap(icon_folder);
+//		}
+//		else
+//		{
+//			holder.iv_showFileImage.setImageBitmap(icon_file);
+//		}
 		
-		//为每一行设置内容
-		holder.tv_fileName.setText(f.getName());
-		if(f.isDirectory())
+		SVNDirEntry entry = mdir.get(position);
+		
+		holder.tv_fileName.setText(entry.getName());
+		
+		if (entry.getKind().compareTo(SVNNodeKind.DIR) == 0) //当前为文件夹时
 		{
 			holder.iv_showFileImage.setImageBitmap(icon_folder);
 		}
-		else
+		else if (entry.getKind().compareTo(SVNNodeKind.FILE) == 0) //当前为文件时
 		{
 			holder.iv_showFileImage.setImageBitmap(icon_file);
 		}

@@ -2,17 +2,28 @@ package com.webdisk.activity;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+
+import org.tmatesoft.svn.core.SVNDirEntry;
+import org.tmatesoft.svn.core.SVNNodeKind;
+import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import com.webdisk.R;
 import com.webdisk.adapter.ShowFileListAdapter;
 import com.webdisk.adapter.OverflowMenuAdapter;
+import com.webdisk.application.SVNApplication;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.AndroidCharacter;
 import android.util.Log;
 import android.view.Gravity;
@@ -32,10 +43,20 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ShowFileActivity extends Activity
+public class ShowFileActivity extends Activity implements Runnable
 {
 	
 	private final static String TAG = "ShowFileActivity";
+	
+	private SVNApplication mApp;
+	
+	private List<SVNDirEntry> mDirs;
+	private List<List<SVNDirEntry>> mDirCache;
+	private boolean mDirCacheInit = false;
+	private String mCurDir = "";
+	private SVNRevision mCurRevision = SVNRevision.HEAD;
+	
+	private ShowFileListAdapter mAdapter;
 	
 	private Button btn_naviationPrevious;
 	private TextView tv_showFolderName;
@@ -47,6 +68,8 @@ public class ShowFileActivity extends Activity
 	private List<String> paths = null;
 	private String rootPath = "/sdcard";
 	private String curPath = "/sdcard"; // TODO 此处设置网盘缓存文件路径
+	
+	private ProgressDialog mLoadingDialog;
 	
 	private PopupWindow overflowMenu;
 	private PopupWindow newFolderDialog;
@@ -62,6 +85,8 @@ public class ShowFileActivity extends Activity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_showfile);
+		
+		mApp = (SVNApplication)getApplication();
 		
 		btn_naviationPrevious = (Button)findViewById(R.id.btn_naviationPrevious);
 		btn_newFile = (Button)findViewById(R.id.btn_uploadFile);
@@ -121,21 +146,35 @@ public class ShowFileActivity extends Activity
 				}
 			});
 		 
-		 getFileDir(rootPath);
+//		 getFileDir(rootPath);
+		 
+		 mDirCache = new ArrayList<List<SVNDirEntry>>();
+		 updateDataAndList();
 		 
 		 lv_showFile.setOnItemClickListener(new OnItemClickListener()
 			{
 				public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 				{
-					File file = new File(paths.get(position));
-					if(file.isDirectory())
+//					File file = new File(paths.get(position));
+//					if(file.isDirectory())
+//					{
+//						curPath = paths.get(position);
+////						getFileDir(paths.get(position));
+//						updateDataAndList();
+//					}
+//					else
+//					{
+//						//此处添加对文件的操作
+//					}
+					
+					SVNDirEntry entry = mDirs.get(position);
+					if (entry.getKind().compareTo(SVNNodeKind.DIR) == 0)
 					{
-						curPath = paths.get(position);
-						getFileDir(paths.get(position));
+						mCurDir = mCurDir + entry.getName() + "/";
+						updateDataAndList();
 					}
-					else
+					else if (entry.getKind().compareTo(SVNNodeKind.FILE) == 0)
 					{
-						//此处添加对文件的操作
 					}
 				}
 			 	
@@ -147,12 +186,22 @@ public class ShowFileActivity extends Activity
 			@Override
 			public void onClick(View v)
 			{
-				Log.i(TAG, "当前路径：" + curPath);
-				File curFile = new File(curPath);
-				curPath = curFile.getParent();
-				Log.i(TAG, "上层路径：" + curPath);
+//				Log.i(TAG, "当前路径：" + curPath);
+//				File curFile = new File(curPath);
+//				curPath = curFile.getParent();
+//				Log.i(TAG, "上层路径：" + curPath);
+//				
+//				getFileDir(curPath);
+//				updateDataAndList();
 				
-				getFileDir(curPath);
+				do
+				{
+					mCurDir = mCurDir.substring(0, mCurDir.length() - 1);
+				}
+				while (mCurDir.endsWith("/") == false && mCurDir.compareTo("") != 0);
+			
+				mDirs = mDirCache.remove(mDirCache.size() - 1);
+				updateList();
 			}
 		 });
 		 //为overflow设置监听器
@@ -177,42 +226,43 @@ public class ShowFileActivity extends Activity
 		 
 	}
 	
-	private void getFileDir(String filePath)
-	{
-		items = new ArrayList<String>();
-		paths = new ArrayList<String>();
-		
-		File f = new File(filePath);
-		
-		
-		Log.i(TAG, "filePath=" + filePath + "&rootPath=" + rootPath);
-		
-		//当前目录为根目录时
-		if(filePath.equals(rootPath))
-		{
-			Log.i(TAG, "filePath == rootPath");
-			tv_showFolderName.setText(R.string.mywebdisk);
-			btn_naviationPrevious.setEnabled(false);
-			btn_naviationPrevious.setBackgroundResource(R.drawable.icon_navigation_previous_item_disable);
-		}
-		else
-		{
-			tv_showFolderName.setText(f.getName());
-			btn_naviationPrevious.setEnabled(true);
-			btn_naviationPrevious.setBackgroundResource(R.drawable.icon_navigation_previous_item);
-		}
-		
-		File[] files = f.listFiles();
-		
-		for(int i = 0; i < files.length; i++)
-		{
-			File file = files[i];
-			items.add(file.getName());
-			paths.add(file.getPath());
-		}
-		
-		lv_showFile.setAdapter(new ShowFileListAdapter(this, items, paths));
-	}
+//	private void getFileDir(String filePath)
+//	{
+//		items = new ArrayList<String>();
+//		paths = new ArrayList<String>();
+//		
+//		File f = new File(filePath);
+//		
+//		
+//		Log.i(TAG, "filePath=" + filePath + "&rootPath=" + rootPath);
+//		
+//		//当前目录为根目录时
+//		if(filePath.equals(rootPath))
+//		{
+//			Log.i(TAG, "filePath == rootPath");
+//			tv_showFolderName.setText(R.string.mywebdisk);
+//			btn_naviationPrevious.setEnabled(false);
+//			btn_naviationPrevious.setBackgroundResource(R.drawable.icon_navigation_previous_item_disable);
+//		}
+//		else
+//		{
+//			tv_showFolderName.setText(f.getName());
+//			btn_naviationPrevious.setEnabled(true);
+//			btn_naviationPrevious.setBackgroundResource(R.drawable.icon_navigation_previous_item);
+//		}
+//		
+//		File[] files = f.listFiles();
+//		
+//		for(int i = 0; i < files.length; i++)
+//		{
+//			File file = files[i];
+//			items.add(file.getName());
+//			paths.add(file.getPath());
+//		}
+//		
+//		mAdapter = new ShowFileListAdapter(ShowFileActivity.this, mDirs);
+//		lv_showFile.setAdapter(mAdapter);
+//	}
 	
 	private void showOverflowMenu(final View parent) 
 	{
@@ -287,27 +337,53 @@ public class ShowFileActivity extends Activity
 		//设置实体返回按键动作
 		if(keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN)
 		{
-			//当前为根目录时，连按返回键退出程序
-			if(curPath.equals(rootPath))
+//			//当前为根目录时，连按返回键退出程序
+//			if(curPath.equals(rootPath))
+//			{
+//				if((System.currentTimeMillis() - exitTime) > 2000)
+//				{
+//					Toast.makeText(ShowFileActivity.this, R.string.confirm_quit, Toast.LENGTH_SHORT).show();
+//					exitTime = System.currentTimeMillis();
+//				}
+//				else
+//				{
+//					finish();
+//					System.exit(0);
+//				}
+//			}
+//			else//当前不为根目录时，返回上层
+//			{
+//				File curFile = new File(curPath);
+//				curPath = curFile.getParent();
+//				Log.i(TAG, "上层路径：" + curPath);
+//				
+////				getFileDir(curPath);
+//				updateDataAndList();
+//			}
+			
+			if (mCurDir.compareTo("") == 0)
 			{
 				if((System.currentTimeMillis() - exitTime) > 2000)
-				{
-					Toast.makeText(ShowFileActivity.this, R.string.confirm_quit, Toast.LENGTH_SHORT).show();
-					exitTime = System.currentTimeMillis();
-				}
-				else
-				{
-					finish();
-					System.exit(0);
-				}
+					{
+						Toast.makeText(ShowFileActivity.this, R.string.confirm_quit, Toast.LENGTH_SHORT).show();
+						exitTime = System.currentTimeMillis();
+					}
+					else
+					{
+						finish();
+						System.exit(0);
+					}
 			}
-			else//当前不为根目录时，返回上层
+			else
 			{
-				File curFile = new File(curPath);
-				curPath = curFile.getParent();
-				Log.i(TAG, "上层路径：" + curPath);
-				
-				getFileDir(curPath);
+				do
+				{
+					mCurDir = mCurDir.substring(0, mCurDir.length() - 1);
+				}
+				while (mCurDir.endsWith("/") == false && mCurDir.compareTo("") != 0);
+			
+				mDirs = mDirCache.remove(mDirCache.size() - 1);
+				updateList();
 			}
 			
 			return true;
@@ -374,9 +450,98 @@ public class ShowFileActivity extends Activity
 	}
 	
 	
+	//更新数据及ListView
+	private void updateDataAndList() 
+	{
+		mLoadingDialog = ProgressDialog.show(this, "", getResources().getString(R.string.loading), true, false);
+		
+		Thread thread = new Thread(this);
+		thread.start();
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void updateData() 
+	{
+		if (mDirCacheInit)
+			mDirCache.add(mDirs);
+		else
+			mDirCacheInit = true;
+		
+		mDirs = new ArrayList<SVNDirEntry>();
+		
+		try {
+			Collection<SVNDirEntry> coll = mApp.getAllDirectories(mCurRevision, mCurDir);
+			
+			if (coll != null) {
+				Iterator<SVNDirEntry> it = coll.iterator();
+			
+				if (it != null)
+					while (it.hasNext())
+						mDirs.add(it.next());
+			
+				Collections.sort(mDirs);
+			}
+			else {
+				mDirs.add(new SVNDirEntry(null, null, "- " + getResources().getString(R.string.empty) + " -", SVNNodeKind.NONE, 0, false, 0, null, "", ""));
+			}
+		}
+		catch(Exception e) 
+		{
+			// no ticket was selected go back to ticket screen
+			// tell the user we are going to work
+        	Toast toast=Toast.makeText(this, getString(R.string.no_connection_selected), 2500);
+    		toast.show();
+    		e.printStackTrace();
+    		this.finish();
+		}
+		
+	}
+	
+	private void updateList() 
+	{
+		//设置目录名
+		if (mCurDir.compareTo("") == 0)
+		{
+			tv_showFolderName.setText(R.string.mywebdisk);
+			btn_naviationPrevious.setEnabled(false);
+			btn_naviationPrevious.setBackgroundResource(R.drawable.icon_navigation_previous_item_disable);
+		}
+		else
+		{
+			String[] folders = mCurDir.split("/");
+			String title = folders[folders.length-1];
+			tv_showFolderName.setText(title);
+			
+			btn_naviationPrevious.setEnabled(true);
+			btn_naviationPrevious.setBackgroundResource(R.drawable.icon_navigation_previous_item);
+		}
+		
+		//设置ListView显示内容
+		mAdapter = new ShowFileListAdapter(ShowFileActivity.this, mDirs);
+		lv_showFile.setAdapter(mAdapter);
+	}
+	
+	public void run() 
+	{
+		updateData();
+		handler.sendEmptyMessage(0);
+	}
+		
+		
+	
+	private Handler handler = new Handler() {
+		@Override
+		public void handleMessage(Message msg)
+		{
+			mLoadingDialog.dismiss();
+			updateList();
+			
+		}
+	};
 	
 	
 	
+
 	
 	
 	
