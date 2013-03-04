@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content" 
+ 	android:padding="8dp">
+
+    <RelativeLayout 
+        android:layout_width="fill_parent"
+    	android:layout_height="wrap_content" 
+ 		android:background="@color/white">
+    
+        <TextView
+            android:id="@+id/tv_title_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:text="@string/delete_2" 
+            android:textSize="22sp"
+            android:textColor="@color/halo_darkblue"/>
+
+        <ImageView
+            android:id="@+id/iv_divider_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_margin="8dp"
+            android:layout_below="@+id/tv_title_delete"
+            android:src="@drawable/divider_darkblue" />
+
+        <TextView
+            android:id="@+id/tv_confirmDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/iv_divider_delete"
+            android:layout_below="@+id/iv_divider_delete"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/delete_file" 
+            android:textColor="@color/black"
+            android:textSize="18sp"/>
+
+        <ImageView
+            android:id="@+id/imageView1_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/tv_confirmDelete"
+            android:layout_marginTop="16dp"
+            android:src="@drawable/divider_lightblue_h" />
+
+        <ImageView
+            android:id="@+id/imageView2_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_below="@+id/imageView1_delete"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/divider_lightblue_v" />
+
+        <Button
+            android:id="@+id/btn_confirmDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignTop="@+id/imageView2_delete"
+            android:layout_toLeftOf="@+id/imageView2_delete"
+            android:background="@color/white"
+            android:text="@string/confirm" 
+            android:gravity="center"/>
+
+        <Button
+            android:id="@+id/btn_cancelDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_alignBaseline="@+id/btn_confirmDelete"
+            android:layout_alignBottom="@+id/btn_confirmDelete"
+            android:layout_alignParentRight="true"
+            android:layout_toRightOf="@+id/imageView2_delete"
+            android:text="@string/cancel" 
+            android:background="@color/white" />
+	</RelativeLayout>
+</LinearLayout>
+
+    

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="48dp"
+    android:orientation="vertical" 
+    android:padding="8dp">
+
+    <ImageView
+        android:id="@+id/iv_row_showFileImage"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"/>
+
+    <TextView
+        android:id="@+id/tv_row_showFileName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/iv_row_showFileImage"
+        android:layout_toRightOf="@+id/iv_row_showFileImage"
+        android:layout_marginLeft="8dp"
+        android:text="此处显示文件名"
+        android:textSize="14sp"
+        android:textColor="@color/black"/>
+
+    <TextView
+        android:id="@+id/tv_row_showFileInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tv_row_showFileName"
+        android:layout_alignParentBottom="true"
+        android:text="此处显示文件信息"
+        android:textSize="12sp" 
+        android:textColor="@color/gray"/>
+
+    <Button
+        android:id="@+id/btn_row_expandFileAction"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/icon_navigation_expand"
+        android:focusable="false"/>
+    
+</RelativeLayout>

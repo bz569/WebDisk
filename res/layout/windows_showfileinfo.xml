@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content" 
+ 	android:padding="8dp">
+
+    <RelativeLayout 
+        android:layout_width="fill_parent"
+    	android:layout_height="wrap_content" 
+ 		android:background="@color/white">
+    
+        <TextView
+            android:id="@+id/tv_title_fileInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:text="@string/fileinfo_2" 
+            android:textSize="22sp"
+            android:textColor="@color/halo_darkblue"/>
+
+        <ImageView
+            android:id="@+id/iv_divider_fileInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_margin="8dp"
+            android:layout_below="@+id/tv_title_fileInfo"
+            android:src="@drawable/divider_darkblue" />
+		
+        <TextView 
+            android:id="@+id/tv_showFileInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/iv_divider_fileInfo"
+            android:layout_alignLeft="@+id/iv_divider_fileInfo"
+            android:layout_marginLeft="8dp"
+            android:textSize="18sp"
+            android:textColor="@color/black"
+            />
+        
+        <ImageView
+            android:id="@+id/iv_divider_fileInfo2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/tv_showFileInfo"
+            android:layout_marginTop="16dp"
+            android:src="@drawable/divider_lightblue_h" />
+
+        <Button
+            android:id="@+id/btn_closeFileInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/iv_divider_fileInfo2"
+            android:layout_marginTop="1dp"
+            android:background="@color/white"
+            android:text="@string/close" 
+            android:gravity="center"/>
+
+      
+	</RelativeLayout>
+</LinearLayout>
+
+    

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content" 
+ 	android:padding="8dp">
+
+    <RelativeLayout 
+        android:layout_width="fill_parent"
+    	android:layout_height="wrap_content" 
+ 		android:background="@color/white">
+    
+        <TextView
+            android:id="@+id/tv_title_newFolder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:text="@string/newfolder" 
+            android:textSize="22sp"
+            android:textColor="@color/halo_darkblue"/>
+
+        <ImageView
+            android:id="@+id/iv_divider_newFolder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_margin="8dp"
+            android:layout_below="@+id/tv_title_newFolder"
+            android:src="@drawable/divider_darkblue" />
+
+        <TextView
+            android:id="@+id/tv_inputFolderName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/iv_divider_newFolder"
+            android:layout_below="@+id/iv_divider_newFolder"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/inputfoldername" 
+            android:textColor="@color/black"
+            android:textSize="18sp"/>
+
+        <EditText
+            android:id="@+id/et_folderName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_inputFolderName"
+            android:layout_alignRight="@+id/iv_divider_newFolder"
+            android:layout_below="@+id/tv_inputFolderName"
+            android:layout_marginRight="8dp"
+            android:ems="10" 
+            android:singleLine="true"
+            android:textSize="18sp"
+            android:focusable="true">
+
+            <requestFocus />
+        </EditText>
+
+        <ImageView
+            android:id="@+id/imageView1_newFolder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/et_folderName"
+            android:layout_marginTop="16dp"
+            android:src="@drawable/divider_lightblue_h" />
+
+        <ImageView
+            android:id="@+id/imageView2_newFolder"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_below="@+id/imageView1_newFolder"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/divider_lightblue_v" />
+
+        <Button
+            android:id="@+id/btn_confirmNewFolder"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignTop="@+id/imageView2_newFolder"
+            android:layout_toLeftOf="@+id/imageView2_newFolder"
+            android:background="@color/white"
+            android:text="@string/confirm" 
+            android:gravity="center"/>
+
+        <Button
+            android:id="@+id/btn_cancelNewFolder"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_alignBaseline="@+id/btn_confirmNewFolder"
+            android:layout_alignBottom="@+id/btn_confirmNewFolder"
+            android:layout_alignParentRight="true"
+            android:layout_toRightOf="@+id/imageView2_newFolder"
+            android:text="@string/cancel" 
+            android:background="@color/white" />
+	</RelativeLayout>
+</LinearLayout>
+
+    

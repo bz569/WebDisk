@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <RelativeLayout
+        android:id="@+id/download_actionbar_showFile"
+        android:layout_width="fill_parent"
+        android:layout_height="80dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:background="@color/halo_lightblue" >
+
+        <Button
+            android:id="@+id/btn_download_naviationPrevious"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/icon_navigation_previous_item" />
+        
+        <TextView
+            android:id="@+id/tv_download_showFolderName"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/btn_download_naviationPrevious"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:text="当前文件夹名"
+            android:textColor="@color/black"
+            android:textSize="22sp" 
+            android:gravity="center"/>
+        
+        <Button
+            android:id="@+id/btn_download_newfolder"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_margin="8dp"
+            android:background="@drawable/icon_newfolder" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="32dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:background="@color/halo_lightorange"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/tv_showdownloadFolderHint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/show_download_file" 
+                android:textColor="@color/black"
+                android:textSize="14sp"/>
+            
+            <TextView
+                android:id="@+id/tv_showdownloadFileName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="8dp"
+                android:text="下载的文件名" 
+                android:textColor="@color/black"
+                android:textSize="14sp"/>
+        </LinearLayout>
+        
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/download_actionbar_showFile"
+        android:background="@color/blue" >
+
+        <ListView
+            android:id="@+id/lv_download_showFile"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginBottom="48dp"
+            android:cacheColorHint="#00000000"
+            android:divider="@drawable/divider_listview"
+            android:drawSelectorOnTop="false"
+            android:listSelector="#00000000" >
+
+        </ListView>
+        
+        <ImageView
+            android:id="@+id/iv_download_lastdivider"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignBottom="@+id/lv_download_showFile"
+	        android:src="@drawable/divider_listview" />
+        
+        
+        
+        <LinearLayout
+            
+	        android:layout_width="fill_parent"
+	        android:layout_height="48dp"
+	        android:layout_alignParentLeft="true"
+	        android:layout_alignParentRight="true"
+	        android:layout_alignParentBottom="true"
+	        android:layout_below="@+id/iv_download_lastdivider"
+	        android:background="@color/black" >
+
+	        <Button
+	            android:id="@+id/btn_download"
+	            android:layout_width="wrap_content"
+	            android:layout_height="32dp"
+	            android:layout_margin="8dp"
+	            android:layout_weight="1"
+	            android:background="@color/halo_lightblue"
+	            android:text="@string/download" />
+	        
+	        <Button
+	            android:id="@+id/btn_download_cancel"
+	    		android:layout_weight="1"
+	            android:layout_width="wrap_content"
+	            android:layout_height="32dp"
+	            android:layout_margin="8dp"
+	            android:background="@color/halo_lightblue"
+	            android:text="@string/cancel" />
+
+    </LinearLayout>
+        
+    </RelativeLayout>
+    
+</RelativeLayout>

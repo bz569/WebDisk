@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="halo_lightblue">#33B5E5</color><!--Halo浅蓝 -->
+    <color name="halo_darkblue">#0099CC</color><!--Halo深蓝 -->
+    <color name="halo_lightorange">#FFBB33</color><!--Halo浅橘黄 -->
+    <color name="halo_darkorange">#FF8800</color><!--Halo深橘黄 -->
+    <color name="blue">#E2F4FB</color><!--浅蓝（背景） -->
+    <color name="white">#FFFFFF</color><!--白色 -->
+    <color name="black">#000000</color><!--黑色 -->
+   	<color name="gray">#333333</color><!--灰色 -->
+   	<color name="filelist_selected">#8bd5f0</color>
+   	<color name="halo_darkpurple">#9933CC</color>
+    
+    
+</resources>

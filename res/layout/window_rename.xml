@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content" 
+ 	android:padding="8dp">
+
+    <RelativeLayout 
+        android:layout_width="fill_parent"
+    	android:layout_height="wrap_content" 
+ 		android:background="@color/white">
+    
+        <TextView
+            android:id="@+id/tv_title_rename"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:text="@string/rename" 
+            android:textSize="22sp"
+            android:textColor="@color/halo_darkblue"/>
+
+        <ImageView
+            android:id="@+id/iv_divider_rename"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_margin="8dp"
+            android:layout_below="@+id/tv_title_rename"
+            android:src="@drawable/divider_darkblue" />
+
+        <TextView
+            android:id="@+id/tv_inputNewFileName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/iv_divider_rename"
+            android:layout_below="@+id/iv_divider_rename"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/input_new_file_name" 
+            android:textColor="@color/black"
+            android:textSize="18sp"/>
+
+        <EditText
+            android:id="@+id/et_newFileName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_inputNewFileName"
+            android:layout_alignRight="@+id/iv_divider_rename"
+            android:layout_below="@+id/tv_inputNewFileName"
+            android:layout_marginRight="8dp"
+            android:ems="10" 
+            android:singleLine="true"
+            android:textSize="18sp"
+            android:focusable="true">
+
+            <requestFocus />
+        </EditText>
+
+        <ImageView
+            android:id="@+id/imageView1_rename"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/et_newFileName"
+            android:layout_marginTop="16dp"
+            android:src="@drawable/divider_lightblue_h" />
+
+        <ImageView
+            android:id="@+id/imageView2_rename"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_below="@+id/imageView1_rename"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/divider_lightblue_v" />
+
+        <Button
+            android:id="@+id/btn_confirmRename"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignTop="@+id/imageView2_rename"
+            android:layout_toLeftOf="@+id/imageView2_rename"
+            android:background="@color/white"
+            android:text="@string/confirm" />
+
+        <Button
+            android:id="@+id/btn_cancelRename"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_alignBaseline="@+id/btn_confirmRename"
+            android:layout_alignBottom="@+id/btn_confirmRename"
+            android:layout_alignParentRight="true"
+            android:layout_toRightOf="@+id/imageView2_rename"
+            android:text="@string/cancel" 
+            android:background="@color/white" />
+	</RelativeLayout>
+</LinearLayout>
+
+    
