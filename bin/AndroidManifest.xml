@@ -30,6 +30,7 @@
         <activity android:name="com.webdisk.activity.PasteActivity"></activity>
         <activity android:name="com.webdisk.activity.UploadActivity"></activity>
         <activity android:name="com.webdisk.activity.DownloadActivity"></activity>
+        <service android:name="com.webdisk.service.DownloadService"></service>
     </application>
     
 

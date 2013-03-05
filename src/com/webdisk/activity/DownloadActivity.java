@@ -7,6 +7,7 @@ import java.util.List;
 import com.webdisk.R;
 import com.webdisk.adapter.UploadFileListAdapter;
 import com.webdisk.application.SVNApplication;
+import com.webdisk.service.DownloadService;
 import com.webdisk.util.DownloadUtil;
 
 import android.app.Activity;
@@ -209,8 +210,14 @@ public class DownloadActivity extends Activity
 			@Override
 			public void onClick(View arg0)
 			{
-				DownloadUtil downloaderUtil = new DownloadUtil(mApp, mHandler, filePath, curPath);
-				downloaderUtil.startDownload();
+//				DownloadUtil downloaderUtil = new DownloadUtil(mApp, mHandler, filePath, curPath);
+//				downloaderUtil.startDownload();
+//				finish();
+				//开始后台下载
+				Intent intent = new Intent(DownloadActivity.this, DownloadService.class);
+				intent.putExtra("SRC_PATH", filePath);
+				intent.putExtra("DES_PATH", curPath);
+				startService(intent);
 				finish();
 			}
 		});
