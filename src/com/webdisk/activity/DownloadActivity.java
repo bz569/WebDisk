@@ -6,11 +6,16 @@ import java.util.List;
 
 import com.webdisk.R;
 import com.webdisk.adapter.UploadFileListAdapter;
+import com.webdisk.application.SVNApplication;
+import com.webdisk.util.DownloadUtil;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -32,6 +37,8 @@ public class DownloadActivity extends Activity
 	
 	private final static String TAG = "DownloadActivity";
 	
+	private SVNApplication mApp;
+	
 	private Button btn_naviationPrevious;
 	private TextView tv_showFolderName;
 	private TextView tv_showDownloadFile;
@@ -45,14 +52,32 @@ public class DownloadActivity extends Activity
 	private String rootPath = "/sdcard";
 	private String curPath = "/sdcard"; // TODO 此处设置网盘缓存文件路径
 	
+	private String filePath = null;//要下载的文件路径
+	
 	private PopupWindow newFolderDialog;
 	private View view;
+	
+	private Handler mHandler = new Handler(){
+		@Override
+		public void handleMessage(Message msg)
+		{
+			super.handleMessage(msg);
+		}
+		
+	};
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_download);
+		
+		mApp = (SVNApplication)getApplication();
+		
+		Intent intent = getIntent();
+		filePath = intent.getStringExtra("FILE_PATH");
+		Log.i(TAG, "filePath=" + filePath);
 		
 		btn_naviationPrevious = (Button) findViewById(R.id.btn_download_naviationPrevious);
 		btn_download = (Button) findViewById(R.id.btn_download);
@@ -175,6 +200,18 @@ public class DownloadActivity extends Activity
 			public void onClick(View v)
 			{
 				showNewFolderDialog(v);
+			}
+		});
+		 
+		 //为download按钮设置onClickListener
+		 btn_download.setOnClickListener(new Button.OnClickListener()
+		{
+			@Override
+			public void onClick(View arg0)
+			{
+				DownloadUtil downloaderUtil = new DownloadUtil(mApp, mHandler, filePath, curPath);
+				downloaderUtil.startDownload();
+				finish();
 			}
 		});
 		 

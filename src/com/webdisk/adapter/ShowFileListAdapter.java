@@ -40,7 +40,8 @@ import com.webdisk.activity.ShowFileActivity;
 
 public class ShowFileListAdapter extends BaseAdapter
 {
-
+	private static final String TAG = "ShowFileListAdapter";
+	
 	private LayoutInflater mInflater;
 	private Bitmap icon_file;
 	private Bitmap icon_folder;
@@ -91,7 +92,7 @@ public class ShowFileListAdapter extends BaseAdapter
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent)
+	public View getView(final int position, View convertView, ViewGroup parent)
 	{
 		ViewHolder holder;
 		
@@ -160,7 +161,7 @@ public class ShowFileListAdapter extends BaseAdapter
 			@Override
 			public void onClick(View v)
 			{
-				showActionMenu(v);
+				showActionMenu(v, position);
 			}
 		});
 		
@@ -175,7 +176,7 @@ public class ShowFileListAdapter extends BaseAdapter
 		Button btn_fileAction;
 	  }
 	
-	private void showActionMenu(final View parent) 
+	private void showActionMenu(final View parent, final int position) 
 	{
 
 		if (actionMenu == null) {
@@ -291,7 +292,12 @@ public class ShowFileListAdapter extends BaseAdapter
 					actionMenu.dismiss();
 				}
 				
+				SVNDirEntry entry = mdir.get(position);
+				String filePath = entry.getURL().toString();
+//				Log.i(TAG, "filePath=" + filePath);
+				
 				Intent intent = new Intent(context, DownloadActivity.class);
+				intent.putExtra("FILE_PATH", filePath);
 				context.startActivity(intent);
 			}
 		});

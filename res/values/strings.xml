@@ -31,13 +31,14 @@
 	<string name="delete_folder">确定要删除此文件夹吗？</string>
 	<string name="login_error">用户名或密码输入错误，请重新输入</string>
 	
+	
 	<string name="FILE">FILE</string>
     <string name="directory_created">Directory is created</string>
 	<string name="error">Error</string>
 	<string name="verify">Verify</string>
     <string name="exception">Exception</string>
     <string name="success">Success</string>
-    <string name="loading">正在加载...</string>
+    <string name="loading">正在加&#8230;</string>
     <string name="empty">此目录没有文件</string>
     <string name="no_connection_selected">连接中断，请重新连接</string>
     
