@@ -32,6 +32,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class DownloadActivity extends Activity
 {
@@ -244,7 +245,7 @@ public class DownloadActivity extends Activity
 		if(filePath.equals(rootPath))
 		{
 			Log.i(TAG, "filePath == rootPath");
-			tv_showFolderName.setText(R.string.mywebdisk);
+			tv_showFolderName.setText(R.string.sdcard);
 			btn_naviationPrevious.setEnabled(false);
 			btn_naviationPrevious.setBackgroundResource(R.drawable.icon_navigation_previous_item_disable);
 		}
@@ -298,7 +299,7 @@ public class DownloadActivity extends Activity
 	
 	private void showNewFolderDialog(View parent) 
 	{
-		EditText et_folderName;
+		final EditText et_folderName;
 		Button btn_confirm;
 		Button btn_cancel;
 		
@@ -338,6 +339,37 @@ public class DownloadActivity extends Activity
 			btn_cancel.setOnTouchListener(mOnTouchListener);
 			
 			// TODO 添加操作按钮的OnclickListener,添加新建文件夹操作，此处为向系统目录新建文件夹
+			btn_cancel.setOnClickListener(new Button.OnClickListener()
+			{
+				@Override
+				public void onClick(View v)
+				{
+					newFolderDialog.dismiss();
+				}
+			});
+			
+			btn_confirm.setOnClickListener(new Button.OnClickListener()
+			{
+				@Override
+				public void onClick(View v)
+				{
+					String newFolderPath = curPath + "/" +et_folderName.getText().toString();
+					Log.i(TAG, "newFolderPath=" + newFolderPath);
+					
+					File newFolder = new File(newFolderPath);
+					
+					if(newFolder.exists())//文件夹已经存在时
+					{
+						Toast.makeText(DownloadActivity.this, R.string.folder_exist, Toast.LENGTH_SHORT).show();
+					}
+					else
+					{
+						newFolder.mkdir();
+						getFileDir(curPath);
+						newFolderDialog.dismiss();
+					}
+				}
+			});
 		}
 
 		// 使其聚集

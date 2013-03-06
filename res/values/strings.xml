@@ -30,6 +30,8 @@
 	<string name="delete_file">确定要删除此文件吗？</string>
 	<string name="delete_folder">确定要删除此文件夹吗？</string>
 	<string name="login_error">用户名或密码输入错误，请重新输入</string>
+	<string name="folder_exist">文件夹已经存在，请重新输入文件夹名</string>
+	<string name="sdcard">SDCard</string>
 	
 	
 	<string name="FILE">FILE</string>
