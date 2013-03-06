@@ -38,7 +38,7 @@
 	<string name="verify">Verify</string>
     <string name="exception">Exception</string>
     <string name="success">Success</string>
-    <string name="loading">正在加&#8230;</string>
+    <string name="loading">正在加载&#8230;</string>
     <string name="empty">此目录没有文件</string>
     <string name="no_connection_selected">连接中断，请重新连接</string>
     

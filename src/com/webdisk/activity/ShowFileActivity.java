@@ -313,14 +313,15 @@ public class ShowFileActivity extends Activity implements Runnable
 					int position, long id) 
 			{
 
-				Toast.makeText(ShowFileActivity.this,
-						"groups.get(position)" + groups.get(position), Toast.LENGTH_SHORT)
-						.show();
 				
 				// TODO 为overflow菜单中各项添加监听器
 				if(groups.get(position).equals("新建文件夹"))
 				{
 					showNewFolderDialog(parent);
+				}
+				else if(groups.get(position).equals("刷新"))
+				{
+					refreshDataAndList();
 				}
 				
 				if (overflowMenu != null) 
@@ -459,6 +460,23 @@ public class ShowFileActivity extends Activity implements Runnable
 		thread.start();
 	}
 	
+	//刷新
+	private void refreshDataAndList()
+	{
+		mLoadingDialog = ProgressDialog.show(this, "", getResources().getString(R.string.loading), true, false);
+		
+		new Thread(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				Log.i(TAG, "开始刷新");
+				refreshData();
+				handler.sendEmptyMessage(0);
+			}
+		}).start();
+	}
+	
 	@SuppressWarnings("unchecked")
 	private void updateData() 
 	{
@@ -489,12 +507,44 @@ public class ShowFileActivity extends Activity implements Runnable
 		{
 			// no ticket was selected go back to ticket screen
 			// tell the user we are going to work
-        	Toast toast=Toast.makeText(this, getString(R.string.no_connection_selected), 2500);
+        	Toast toast=Toast.makeText(this, getString(R.string.no_connection_selected), Toast.LENGTH_SHORT);
     		toast.show();
     		e.printStackTrace();
     		this.finish();
 		}
 		
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void refreshData() 
+	{
+		mDirs = new ArrayList<SVNDirEntry>();
+		
+		try {
+			Collection<SVNDirEntry> coll = mApp.getAllDirectories(mCurRevision, mCurDir);
+			
+			if (coll != null) {
+				Iterator<SVNDirEntry> it = coll.iterator();
+			
+				if (it != null)
+					while (it.hasNext())
+						mDirs.add(it.next());
+			
+				Collections.sort(mDirs);
+			}
+			else {
+				mDirs.add(new SVNDirEntry(null, null, "- " + getResources().getString(R.string.empty) + " -", SVNNodeKind.NONE, 0, false, 0, null, "", ""));
+			}
+		}
+		catch(Exception e) 
+		{
+			// no ticket was selected go back to ticket screen
+			// tell the user we are going to work
+        	Toast toast=Toast.makeText(this, getString(R.string.no_connection_selected), Toast.LENGTH_SHORT);
+    		toast.show();
+    		e.printStackTrace();
+    		this.finish();
+		}
 	}
 	
 	private void updateList() 

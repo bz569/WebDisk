@@ -58,15 +58,6 @@ public class DownloadActivity extends Activity
 	private PopupWindow newFolderDialog;
 	private View view;
 	
-	private Handler mHandler = new Handler(){
-		@Override
-		public void handleMessage(Message msg)
-		{
-			super.handleMessage(msg);
-		}
-		
-	};
-	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -222,8 +213,19 @@ public class DownloadActivity extends Activity
 			}
 		});
 		 
-		 // TODO textview显示下载文件文件
+		 //为cancle按钮设置onClickListener
+		 btn_cancel.setOnClickListener(new Button.OnClickListener()
+		{
+			@Override
+			public void onClick(View arg0)
+			{
+				finish();
+			}
+		});
 		 
+		 //textview显示下载文件文件
+		 String[] tmp = filePath.split("/");
+		 tv_showDownloadFile.setText(tmp[tmp.length-1]);
 		 
 		 
 	}
