@@ -301,7 +301,17 @@ public class ShowFileListAdapter extends BaseAdapter
 				context.startActivity(intent);
 			}
 		});
-
+		//如果目标为文件夹，禁止下载按钮
+		SVNDirEntry targetEntry = mdir.get(position);
+		if(targetEntry.getKind().compareTo(SVNNodeKind.DIR) == 0)
+		{
+			btn_download.setEnabled(false);
+		}
+		else if(targetEntry.getKind().compareTo(SVNNodeKind.FILE) == 0)
+		{
+			btn_download.setEnabled(true);
+		}
+		
 	}
 	
 	private void showReNameDialog(View parent) 
