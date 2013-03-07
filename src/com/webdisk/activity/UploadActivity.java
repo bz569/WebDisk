@@ -22,6 +22,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class UploadActivity extends Activity
 {
@@ -139,7 +140,40 @@ public class UploadActivity extends Activity
 					else
 					{
 						//获取上传文件的路径
-						srcFilePath = paths.get(position);
+//						srcFilePath = paths.get(position);
+						if(((ListView)parent).getTag() == null)
+						{
+							((ListView)parent).setTag(view);
+							view.setBackgroundResource(R.color.filelist_selected);
+							srcFilePath = paths.get(position);
+						}
+						else if(((View)((ListView)parent).getTag()).equals(view))//重复点选一个项目
+						{
+							srcFilePath = null;
+							((View)((ListView)parent).getTag()).setBackgroundDrawable(null);
+							((ListView)parent).setTag(null);
+						}
+						else
+						{
+							((View)((ListView)parent).getTag()).setBackgroundDrawable(null);
+							view.setBackgroundResource(R.color.filelist_selected);
+							srcFilePath = paths.get(position);
+							((ListView)parent).setTag(view);
+						}
+						
+						Log.i(TAG, "选取文件" + srcFilePath);
+//						if(((ListView)parent).getTag() != null)
+//						{
+//							((View)((ListView)parent).getTag()).setBackgroundDrawable(null);
+//							
+//					
+//						}
+//						else
+//						{
+//							((ListView)parent).setTag(view);
+//							view.setBackgroundResource(R.color.filelist_selected);
+//							srcFilePath = paths.get(position);
+//						}
 					}
 				}
 			 	
@@ -170,11 +204,18 @@ public class UploadActivity extends Activity
 //				mApp.doImport(srcFilePath, dstUrl);
 //				finish();
 				
-				Intent intent = new Intent(UploadActivity.this, UploadService.class);
-				intent.putExtra("SRC_FILE_PATH", srcFilePath);
-				intent.putExtra("DST_URL", dstUrl);
-				startService(intent);
-				finish();
+				if(srcFilePath != null)
+				{
+					Intent intent = new Intent(UploadActivity.this, UploadService.class);
+					intent.putExtra("SRC_FILE_PATH", srcFilePath);
+					intent.putExtra("DST_URL", dstUrl);
+					startService(intent);
+					finish();
+				}
+				else
+				{
+					Toast.makeText(UploadActivity.this, R.string.please_select_file, Toast.LENGTH_SHORT).show();
+				}
 			}
 		 });
 		 

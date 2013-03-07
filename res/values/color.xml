@@ -8,7 +8,7 @@
     <color name="white">#FFFFFF</color><!--白色 -->
     <color name="black">#000000</color><!--黑色 -->
    	<color name="gray">#333333</color><!--灰色 -->
-   	<color name="filelist_selected">#8bd5f0</color>
+   	<color name="filelist_selected">#ffe3a0</color>
    	<color name="halo_darkpurple">#9933CC</color>
     
     
