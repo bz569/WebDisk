@@ -633,6 +633,36 @@ public class SVNApplication extends Application
    		return getString(R.string.success);
    	}
     
+   	
+   	public void doImport(String srcFilePath, String dstPath)
+   	{
+   		File srcFile = new File(srcFilePath);
+   		SVNURL dstURL = null;
+   		try
+		{
+			dstURL = SVNURL.parseURIEncoded(dstPath + srcFile.getName());
+		} catch (SVNException e)
+		{
+			e.printStackTrace();
+			Log.i(TAG, "url encode error");
+		}
+   		String commitMsg = "upload file:" + srcFile.getName();
+   		Log.i(TAG, "commitMsg=" + commitMsg);
+   		try
+   		{
+   			// initialize the auth manager
+       		this.initAuthManager();
+       		
+       		//doImport
+       		SVNCommitInfo commitInfo = clientManager.getCommitClient().doImport(srcFile, dstURL, commitMsg, null, false, false, SVNDepth.FILES);
+       		Log.i(TAG, "commitInfo=" + commitInfo.toString());
+       		
+   		}catch(SVNException se)
+   		{
+   			String msg = se.getMessage();
+   			Log.i(TAG, "import_error:" + msg);
+   		}
+   	}
     
     
     

@@ -67,8 +67,6 @@ public class ShowFileActivity extends Activity implements Runnable
 	
 	private List<String> items = null;
 	private List<String> paths = null;
-	private String rootPath = Environment.getExternalStorageDirectory().toString();
-	private String curPath = Environment.getExternalStorageDirectory().toString(); // TODO 此处设置网盘缓存文件路径
 	
 	private ProgressDialog mLoadingDialog;
 	
@@ -94,7 +92,7 @@ public class ShowFileActivity extends Activity implements Runnable
 		btn_overfolw = (Button)findViewById(R.id.btn_overfolw);
 		tv_showFolderName = (TextView)findViewById(R.id.tv_showFolderName);
 		lv_showFile = (ListView)findViewById(R.id.lv_showFile);
-		
+
 		//为Button设置触摸效果
 		 btn_naviationPrevious.setOnTouchListener(new Button.OnTouchListener()
 			{
@@ -176,6 +174,7 @@ public class ShowFileActivity extends Activity implements Runnable
 					}
 					else if (entry.getKind().compareTo(SVNNodeKind.FILE) == 0)
 					{
+						// TODO 此处添加对文件的操作
 					}
 				}
 			 	
@@ -220,6 +219,7 @@ public class ShowFileActivity extends Activity implements Runnable
 			public void onClick(View v)
 			{
 				Intent intent = new Intent(ShowFileActivity.this, UploadActivity.class);
+				intent.putExtra("UPLOAD_DST_PATH", mCurDir);
 				startActivity(intent);
 				overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 			}

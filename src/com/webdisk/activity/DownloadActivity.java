@@ -15,6 +15,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -51,8 +52,10 @@ public class DownloadActivity extends Activity
 	
 	private List<String> items = null;
 	private List<String> paths = null;
-	private String rootPath = "/sdcard";
-	private String curPath = "/sdcard"; // TODO 此处设置网盘缓存文件路径
+//	private String rootPath = "/sdcard";
+//	private String curPath = "/sdcard"; // TODO 此处设置网盘缓存文件路径
+	private String rootPath = Environment.getExternalStorageDirectory().toString();
+	private String curPath = Environment.getExternalStorageDirectory().toString();
 	
 	private String filePath = null;//要下载的文件路径
 	

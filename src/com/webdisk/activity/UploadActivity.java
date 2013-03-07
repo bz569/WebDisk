@@ -6,9 +6,13 @@ import java.util.List;
 
 import com.webdisk.R;
 import com.webdisk.adapter.UploadFileListAdapter;
+import com.webdisk.application.SVNApplication;
+import com.webdisk.service.UploadService;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -24,6 +28,10 @@ public class UploadActivity extends Activity
 	
 	private final static String TAG = "UploadActivity";
 	
+	private final static String WEBDISK_ROOT_URL = "http://10.109.34.24/wangpan/";
+	
+	private SVNApplication mApp;
+	
 	private Button btn_naviationPrevious;
 	private TextView tv_showFolderName;
 	private TextView tv_showUploadPath;
@@ -33,15 +41,26 @@ public class UploadActivity extends Activity
 	
 	private List<String> items = null;
 	private List<String> paths = null;
-	private String rootPath = "/sdcard";
-	private String curPath = "/sdcard"; // TODO 此处设置网盘缓存文件路径
+//	private String rootPath = "/sdcard";
+//	private String curPath = "/sdcard"; // TODO 此处设置网盘缓存文件路径
+	private String rootPath = Environment.getExternalStorageDirectory().toString();
+	private String curPath = Environment.getExternalStorageDirectory().toString(); // TODO 此处设置网盘缓存文件路径
 	
-
+	private String srcFilePath;
+	private String dstPath;
+	private String dstUrl;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_upload);
+		
+		mApp = (SVNApplication)getApplication();
+		
+		Intent intent = getIntent();
+		dstPath = intent.getStringExtra("UPLOAD_DST_PATH");
+		dstUrl = WEBDISK_ROOT_URL + mApp.getCurrentConnection().getUsername() + "/" + dstPath;
 		
 		btn_naviationPrevious = (Button) findViewById(R.id.btn_upload_naviationPrevious);
 		btn_upload = (Button) findViewById(R.id.btn_upload);
@@ -119,7 +138,8 @@ public class UploadActivity extends Activity
 					}
 					else
 					{
-						//此处添加对文件的操作
+						//获取上传文件的路径
+						srcFilePath = paths.get(position);
 					}
 				}
 			 	
@@ -140,9 +160,26 @@ public class UploadActivity extends Activity
 			}
 		 });
 		 
+		 //为上传按钮设置OnclickListener
+		 btn_upload.setOnClickListener(new Button.OnClickListener()
+		 {
+			@Override
+			public void onClick(View v)
+			{
+				Log.i(TAG, "上传文件src=" + srcFilePath + ";dst=" + dstUrl);
+//				mApp.doImport(srcFilePath, dstUrl);
+//				finish();
+				
+				Intent intent = new Intent(UploadActivity.this, UploadService.class);
+				intent.putExtra("SRC_FILE_PATH", srcFilePath);
+				intent.putExtra("DST_URL", dstUrl);
+				startService(intent);
+				finish();
+			}
+		 });
+		 
 		 // TODO textview显示上传文件目录
-		 
-		 
+		 tv_showUploadPath.setText(dstPath);
 		 
 	}
 	

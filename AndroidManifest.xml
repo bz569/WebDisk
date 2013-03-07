@@ -31,6 +31,7 @@
         <activity android:name="com.webdisk.activity.UploadActivity"></activity>
         <activity android:name="com.webdisk.activity.DownloadActivity"></activity>
         <service android:name="com.webdisk.service.DownloadService"></service>
+        <service android:name="com.webdisk.service.UploadService"></service>
     </application>
     
 
