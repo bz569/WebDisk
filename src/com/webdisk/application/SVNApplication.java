@@ -601,7 +601,7 @@ public class SVNApplication extends Application
    				
    				// log this failure
    				Log.i(TAG, msg);
-
+   				
    				return msg;
    			}
    			catch (VerifyError ve)

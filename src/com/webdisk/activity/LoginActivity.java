@@ -11,6 +11,7 @@ import com.webdisk.application.SVNApplication;
 import com.webdisk.model.Connection;
 
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.app.Activity;
@@ -31,7 +32,9 @@ public class LoginActivity extends Activity {
 	private static final String TAG = "LoginActivity";
 	
 	private static final int LOGIN_SUCCESS = 101;
-	private static final int LOGIN_ERROR = 100;
+	private static final int LOGIN_AUTH_ERROR = 100;
+	private static final int LOGIN_NO_CONNECTION = 99;
+	
 	
 	private SVNApplication app;
 
@@ -57,11 +60,19 @@ public class LoginActivity extends Activity {
 					finish();
 					break;
 				}
-				case LOGIN_ERROR:
+				case LOGIN_AUTH_ERROR:
 				{
 					Log.i(TAG, "login error");
 					
-					Toast.makeText(LoginActivity.this, R.string.login_error, Toast.LENGTH_SHORT).show();
+					Toast.makeText(LoginActivity.this, R.string.login_auth_error, Toast.LENGTH_SHORT).show();
+					et_psw.setText("");
+					break;
+				}
+				case LOGIN_NO_CONNECTION:
+				{
+					Log.i(TAG, "login error");
+					
+					Toast.makeText(LoginActivity.this, R.string.login_no_connection, Toast.LENGTH_SHORT).show();
 					et_psw.setText("");
 					break;
 				}
@@ -127,7 +138,9 @@ public class LoginActivity extends Activity {
 			{
 				final String userName = et_accountName.getText().toString();
 				final String password = et_psw.getText().toString();
-				final String cachePath = "/mnt/sdcard/Webdisk/cache/";// TODO 此路径需要修改
+				final String cachePath = Environment.getExternalStorageDirectory() + "/Webdisk/cache/";// TODO 此路径需要修改
+				
+				Log.i(TAG, "cachePath=" + cachePath);
 				
 				final File cacheFolder = new File(cachePath);
 				if(!cacheFolder.exists())
@@ -201,15 +214,19 @@ public class LoginActivity extends Activity {
 						if("svn: Authentication required for '<http://10.109.34.24:80> hello svn'".equals(login_info))//登录失败
 						{
 							Message message = new Message();
-
-							message.what = LOGIN_ERROR;
+							message.what = LOGIN_AUTH_ERROR;
+							mHandler.sendMessage(message);
+						}
+						else if((getString(R.string.success)).equals(login_info))
+						{
+							Message message = new Message();
+							message.what = LOGIN_SUCCESS;
 							mHandler.sendMessage(message);
 						}
 						else
 						{
 							Message message = new Message();
-
-							message.what= LOGIN_SUCCESS;
+							message.what= LOGIN_NO_CONNECTION;
 							mHandler.sendMessage(message);
 						}
 					}
