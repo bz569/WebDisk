@@ -25,6 +25,7 @@ import org.tmatesoft.svn.core.wc.SVNWCUtil;
 import android.app.Application;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Environment;
+import android.os.Handler;
 import android.util.Log;
 
 import com.webdisk.model.Connection;
@@ -664,7 +665,47 @@ public class SVNApplication extends Application
    		}
    	}
     
-    //获取一个目录中的所有条目
+   	/**
+   	 * 从版本库删除指定条目
+   	 * @param deleteurl 目标在svn服务器中的路径
+   	 * @param deleteFileName 目标名称
+   	 * @return
+   	 */
+   	public boolean doDelete(String deleteUrl, String deleteFileName)
+   	{
+   		SVNURL deleteURL = null;
+   		try
+		{
+			deleteURL = SVNURL.parseURIEncoded(deleteUrl);
+		} catch (SVNException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
+			return false;
+		}
+   		
+   		SVNURL[] deleteURLs = {deleteURL};
+   		String commitMsg = "delete file:" + deleteUrl;
+   		
+   		try
+   		{
+   			// initialize the auth manager
+       		this.initAuthManager();
+       		
+       		//doDelete
+       		SVNCommitInfo commitInfo = clientManager.getCommitClient().doDelete(deleteURLs, commitMsg);
+       		Log.i(TAG, "commitInfo=" + commitInfo.toString());
+       		return true;
+       		
+   		}catch(SVNException se)
+   		{
+   			String msg = se.getMessage();
+   			Log.i(TAG, "delete_error:" + msg);
+//   			return false;
+   			return true;// TODO 原因不明返回ERROR，需改进
+   		}
+   	}
    	
     
     

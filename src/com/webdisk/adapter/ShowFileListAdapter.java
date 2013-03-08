@@ -13,6 +13,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Handler;
+import android.os.Message;
+import android.text.InputFilter.LengthFilter;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -37,16 +40,23 @@ import com.webdisk.R;
 import com.webdisk.activity.DownloadActivity;
 import com.webdisk.activity.PasteActivity;
 import com.webdisk.activity.ShowFileActivity;
+import com.webdisk.application.SVNApplication;
+import com.webdisk.util.DeleteUtil;
 
 public class ShowFileListAdapter extends BaseAdapter
 {
 	private static final String TAG = "ShowFileListAdapter";
+	
+	private final static int DELETE_MSG = 11;
+	private final static int DELETE_SUCCESS = 111;
+	private final static int DELETE_ERROR = 110;
 	
 	private LayoutInflater mInflater;
 	private Bitmap icon_file;
 	private Bitmap icon_folder;
 	private List<SVNDirEntry> mdir;
 	private Context context;
+	private Handler showFileHandler;
 	
 	private PopupWindow actionMenu;
 	private PopupWindow renameDialog;
@@ -62,10 +72,12 @@ public class ShowFileListAdapter extends BaseAdapter
 	private Button btn_delete;
 	private Button btn_download;
 	
-	public ShowFileListAdapter(Context context, List<SVNDirEntry> dirnames)
+	
+	public ShowFileListAdapter(Context context, Handler showFileHandler, List<SVNDirEntry> dirnames)
 	{
 		mInflater = LayoutInflater.from(context);
 		this.context = context;
+		this.showFileHandler = showFileHandler;
 		this.mdir = dirnames;
 		
 		icon_file = BitmapFactory.decodeResource(context.getResources(), R.drawable.icon_file);
@@ -270,10 +282,13 @@ public class ShowFileListAdapter extends BaseAdapter
 		//删除
 		btn_delete.setOnClickListener(new Button.OnClickListener()
 		{
+			SVNDirEntry entry = mdir.get(position);
+			String filePath = entry.getURL().toString();
+			
 			@Override
 			public void onClick(View v)
 			{
-				showDeleteDialog(parent);
+				showDeleteDialog(parent, filePath);
 				
 				if (actionMenu != null) 
 				{
@@ -281,6 +296,7 @@ public class ShowFileListAdapter extends BaseAdapter
 				}
 			}
 		});
+		
 		//下载
 		btn_download.setOnClickListener(new Button.OnClickListener()
 		{
@@ -301,15 +317,17 @@ public class ShowFileListAdapter extends BaseAdapter
 				context.startActivity(intent);
 			}
 		});
-		//如果目标为文件夹，禁止下载按钮
+		//如果目标为文件夹，禁止下载、删除按钮
 		SVNDirEntry targetEntry = mdir.get(position);
 		if(targetEntry.getKind().compareTo(SVNNodeKind.DIR) == 0)
 		{
 			btn_download.setEnabled(false);
+			btn_delete.setEnabled(false);
 		}
 		else if(targetEntry.getKind().compareTo(SVNNodeKind.FILE) == 0)
 		{
 			btn_download.setEnabled(true);
+			btn_delete.setEnabled(true);
 		}
 		
 	}
@@ -420,13 +438,13 @@ public class ShowFileListAdapter extends BaseAdapter
 
 	}
 	
-	private void showDeleteDialog(View parent) 
+	private void showDeleteDialog(View parent, final String deleteFilePath) 
 	{
 		TextView tv_showInfo;
 		Button btn_confirm;
 		Button btn_cancel;
 		
-		if (deleteDialog == null) {
+//		if (deleteDialog == null) {
 			LayoutInflater layoutInflater = (LayoutInflater) LayoutInflater.from(context);
 					
 			view = layoutInflater.inflate(R.layout.window_delete, null);
@@ -461,9 +479,45 @@ public class ShowFileListAdapter extends BaseAdapter
 			btn_cancel.setOnTouchListener(mOnTouchListener);
 			
 			// TODO 在此处设置删除对话框提示内容（file/folder）
-			tv_showInfo.setText(R.string.delete_file);
+			String[] tmp = deleteFilePath.split("/");
+			String hint = context.getString(R.string.delete_file) + tmp[tmp.length-1];
+			tv_showInfo.setText(hint);
 			
-		}
+			//为delete按钮设置onclickListener
+			btn_confirm.setOnClickListener(new Button.OnClickListener()
+			{
+				@Override
+				public void onClick(View v)
+				{
+					Log.i(TAG, "To Delete：" + deleteFilePath);
+//					SVNApplication deleteApp = (SVNApplication) context.getApplicationContext();
+//					DeleteUtil deleter = new DeleteUtil(deleteApp, deleteFilePath);
+					Log.i(TAG, "start delete");
+//					if(deleter.doDeleteFormSVN())
+//					{
+//						Toast.makeText(context, R.string.delete_success, Toast.LENGTH_SHORT).show();
+//					}
+//					else
+//					{
+//						Toast.makeText(context, R.string.delete_error, Toast.LENGTH_SHORT).show();
+//					}
+					
+					new deleteThread(deleteFilePath).start();
+					
+					deleteDialog.dismiss();
+				}
+			});
+			
+			btn_cancel.setOnClickListener(new Button.OnClickListener()
+			{
+				@Override
+				public void onClick(View v)
+				{
+					deleteDialog.dismiss();
+				}
+			});
+			
+//		}
 
 		// 使其聚集
 		deleteDialog.setFocusable(true);
@@ -474,5 +528,40 @@ public class ShowFileListAdapter extends BaseAdapter
 		
 		deleteDialog.showAtLocation(parent, Gravity.CENTER, 0, 0);
 
+	}
+	
+	
+	private class deleteThread extends Thread
+	{
+		private String deleteFilePath;
+
+		public deleteThread(String deleteFilePath)
+		{
+			this.deleteFilePath = deleteFilePath;
+		}
+		
+		@Override
+		public void run()
+		{
+			SVNApplication deleteApp = (SVNApplication) context.getApplicationContext();
+			DeleteUtil deleter = new DeleteUtil(deleteApp, deleteFilePath);
+			
+			Message deleteMsg = new Message();
+			deleteMsg.what = DELETE_MSG;
+			
+			if(deleter.doDeleteFormSVN())
+			{
+				deleteMsg.arg1 = DELETE_SUCCESS;
+			}
+			else
+			{
+				deleteMsg.arg1 = DELETE_ERROR;
+			}
+			
+			showFileHandler.sendMessage(deleteMsg);
+			
+			super.run();
+		}
+		
 	}
 }

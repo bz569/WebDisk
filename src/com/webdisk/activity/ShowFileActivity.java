@@ -51,6 +51,11 @@ public class ShowFileActivity extends Activity implements Runnable
 	
 	private final static String TAG = "ShowFileActivity";
 	
+	
+	private final static int DELETE_MSG = 11;
+	private final static int DELETE_SUCCESS = 111;
+	private final static int DELETE_ERROR = 110;
+	
 	private SVNApplication mApp;
 	
 	private List<SVNDirEntry> mDirs;
@@ -79,6 +84,36 @@ public class ShowFileActivity extends Activity implements Runnable
 	private List<String> groups;
 	
 	private long exitTime = 0;
+	
+	public Handler showFileHandler = new Handler()
+	{
+		@Override
+		public void handleMessage(Message msg)
+		{
+			switch(msg.what)
+			{
+				case DELETE_MSG:
+				{
+					if(msg.arg1 == DELETE_SUCCESS)
+					{
+						Toast.makeText(ShowFileActivity.this, R.string.delete_success, Toast.LENGTH_SHORT).show();
+					}
+					else if(msg.arg1 == DELETE_ERROR)
+					{
+						Toast.makeText(ShowFileActivity.this, R.string.delete_error, Toast.LENGTH_SHORT).show();
+					}
+					
+					refreshDataAndList();
+				}
+			}
+			
+			
+			
+			
+			super.handleMessage(msg);
+		}
+		
+	};
 	
 
 	@Override
@@ -584,7 +619,7 @@ public class ShowFileActivity extends Activity implements Runnable
 		}
 		
 		//…Ë÷√ListViewœ‘ æƒ⁄»›
-		mAdapter = new ShowFileListAdapter(ShowFileActivity.this, mDirs);
+		mAdapter = new ShowFileListAdapter(ShowFileActivity.this, showFileHandler, mDirs);
 		lv_showFile.setAdapter(mAdapter);
 	}
 	
