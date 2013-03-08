@@ -19,8 +19,10 @@ import com.webdisk.application.SVNApplication;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Environment;
@@ -107,13 +109,22 @@ public class ShowFileActivity extends Activity implements Runnable
 				}
 			}
 			
-			
-			
-			
 			super.handleMessage(msg);
 		}
 		
 	};
+	
+	//设置broadcat receiver接收广播消息
+	BroadcastReceiver mReceiver=new BroadcastReceiver(){
+		public void onReceive(Context context, Intent intent) 
+		{
+			if(intent.getAction().equals("com.webdisk.broadcast.UPLOAD_FINISH"))//收到上传完成的广播
+			{
+				refreshDataAndList();
+			}
+		}
+	};
+	
 	
 
 	@Override
@@ -121,6 +132,9 @@ public class ShowFileActivity extends Activity implements Runnable
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_showfile);
+		
+		IntentFilter intentFilter = new IntentFilter("com.webdisk.broadcast.UPLOAD_FINISH");  
+		registerReceiver(mReceiver, intentFilter);  
 		
 		mApp = (SVNApplication)getApplication();
 		
