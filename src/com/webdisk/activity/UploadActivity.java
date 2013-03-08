@@ -42,6 +42,7 @@ public class UploadActivity extends Activity
 	
 	private List<String> items = null;
 	private List<String> paths = null;
+	private ArrayList<String> svnItemList = null;
 //	private String rootPath = "/sdcard";
 //	private String curPath = "/sdcard"; // TODO 此处设置网盘缓存文件路径
 	private String rootPath = Environment.getExternalStorageDirectory().toString();
@@ -50,6 +51,8 @@ public class UploadActivity extends Activity
 	private String srcFilePath;
 	private String dstPath;
 	private String dstUrl;
+	
+	private boolean isExist;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -60,6 +63,7 @@ public class UploadActivity extends Activity
 		mApp = (SVNApplication)getApplication();
 		
 		Intent intent = getIntent();
+		svnItemList = intent.getStringArrayListExtra("SVN_DIR_FILES");
 		dstPath = intent.getStringExtra("UPLOAD_DST_PATH");
 		dstUrl = WEBDISK_ROOT_URL + mApp.getCurrentConnection().getUsername() + "/" + dstPath;
 		
@@ -201,16 +205,35 @@ public class UploadActivity extends Activity
 			public void onClick(View v)
 			{
 				Log.i(TAG, "上传文件src=" + srcFilePath + ";dst=" + dstUrl);
+				isExist = false;
 //				mApp.doImport(srcFilePath, dstUrl);
 //				finish();
 				
 				if(srcFilePath != null)
 				{
-					Intent intent = new Intent(UploadActivity.this, UploadService.class);
-					intent.putExtra("SRC_FILE_PATH", srcFilePath);
-					intent.putExtra("DST_URL", dstUrl);
-					startService(intent);
-					finish();
+					String fileName = new File(srcFilePath).getName();
+					//判断目标文件夹中是否有重名文件
+					for(String tmp:svnItemList)
+					{
+						if(fileName.equals(tmp))
+						{
+							isExist = true;
+						}
+						Log.i(TAG, "tmp=" + tmp + ";isExist=" + isExist);
+					}
+					
+					if(isExist)
+					{
+						Toast.makeText(UploadActivity.this, R.string.file_exist, Toast.LENGTH_SHORT).show();
+					}
+					else
+					{
+						Intent intent = new Intent(UploadActivity.this, UploadService.class);
+						intent.putExtra("SRC_FILE_PATH", srcFilePath);
+						intent.putExtra("DST_URL", dstUrl);
+						startService(intent);
+						finish();
+					}
 				}
 				else
 				{
@@ -218,6 +241,17 @@ public class UploadActivity extends Activity
 				}
 			}
 		 });
+		 
+		 //为cancle按钮设置onclickListener
+		 btn_cancel.setOnClickListener(new Button.OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				finish();
+				overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+			}
+		});
 		 
 		 // TODO textview显示上传文件目录
 		 tv_showUploadPath.setText(dstPath);

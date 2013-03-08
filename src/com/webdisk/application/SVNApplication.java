@@ -633,7 +633,7 @@ public class SVNApplication extends Application
    		return getString(R.string.success);
    	}
     
-   	
+   	//一个文件直接上传至版本库中
    	public void doImport(String srcFilePath, String dstPath)
    	{
    		File srcFile = new File(srcFilePath);
@@ -664,7 +664,8 @@ public class SVNApplication extends Application
    		}
    	}
     
-    
+    //获取一个目录中的所有条目
+   	
     
     
     

@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.tmatesoft.svn.core.SVNDirEntry;
 import org.tmatesoft.svn.core.SVNNodeKind;
+import org.tmatesoft.svn.core.internal.wc.admin.SVNEntry;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import com.webdisk.R;
@@ -219,8 +220,22 @@ public class ShowFileActivity extends Activity implements Runnable
 			@Override
 			public void onClick(View v)
 			{
+				//罗列当前目录中的项目,传入下一个Activity
+				ArrayList<String> itemNameList = new ArrayList<String>();
+				SVNDirEntry tmpEntry = null;
+				for(int i=0; i < mDirs.size(); i++)
+				{
+					tmpEntry = mDirs.get(i);
+					if(tmpEntry.getKind().compareTo(SVNNodeKind.FILE) == 0)
+					{
+						itemNameList.add(tmpEntry.getName());
+					}
+				}
+				
+				
 				Intent intent = new Intent(ShowFileActivity.this, UploadActivity.class);
 				intent.putExtra("UPLOAD_DST_PATH", mCurDir);
+				intent.putStringArrayListExtra("SVN_DIR_FILES", itemNameList);
 				startActivity(intent);
 				overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 			}

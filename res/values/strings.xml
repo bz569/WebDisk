@@ -34,6 +34,8 @@
 	<string name="folder_exist">文件夹已经存在，请重新输入文件夹名</string>
 	<string name="please_select_file">请选择需要上传的文件</string>
 	<string name="sdcard">SDCard</string>
+	<string name="file_exist">文件已在网盘中存在</string>
+	
 	
 	
 	<string name="FILE">FILE</string>
