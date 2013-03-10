@@ -153,7 +153,7 @@ public class LoginActivity extends Activity {
 				try
 				{
 					// TODO 需要修改为邮箱的映射文件
-					fileUrl = SVNURL.parseURIEncoded("http://10.109.34.24/wangpan/2574402613.qq.com/test.txt");
+					fileUrl = SVNURL.parseURIEncoded("http://10.109.34.24/wangpan/" + userName + "/.config.db");
 				} catch (SVNException e)
 				{
 					// TODO Auto-generated catch block
