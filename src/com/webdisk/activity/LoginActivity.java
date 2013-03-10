@@ -27,6 +27,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -66,6 +67,40 @@ public class LoginActivity extends Activity {
 				case LOGIN_SUCCESS:
 				{
 					Log.i(TAG, "login success");
+					//在SharedPreference中保存密码保存这次的用户名
+					Editor editor = sharedPreferences.edit();
+			        editor.putString("userName", et_accountName.getText().toString()).commit();
+					//勾选自动登录的相关设置
+			        if(cb_autoLogin.isChecked())
+			        {
+			        	cb_savePsw.setChecked(true);
+			        	editor.putBoolean("AUTO_LOGIN_ISCHECK", true).commit();
+			        }
+			        else
+			        {
+			        	editor.putBoolean("AUTO_LOGIN_ISCHECK", false).commit();
+			        }
+			        
+					//如果勾选记住密码，在SharedPreference中保存密码
+					if(cb_savePsw.isChecked())
+					{
+//						editor.putString("password", password).commit();
+						try
+						{
+							editor.putString("password", AESUtil.encrypt(et_accountName.getText().toString(), et_psw.getText().toString())).commit();
+						} catch (Exception e)
+						{
+							e.printStackTrace();
+							Log.i(TAG, "AES加密错误");
+						}
+		                editor.putBoolean("SAVEPSW_ISCHECK", true).commit(); 
+					}
+					else//如果没有勾选，清楚之前保存的项目
+					{
+						editor.putString("password", "").commit();
+		                editor.putBoolean("SAVEPSW_ISCHECK", false).commit(); 
+					}
+					
 					Intent intent = new Intent(LoginActivity.this, ShowFileActivity.class);
 					startActivity(intent);
 					finish();
@@ -139,6 +174,13 @@ public class LoginActivity extends Activity {
         	cb_savePsw.setChecked(true);
         }
         
+        //是否自动登录
+        if(sharedPreferences.getBoolean("AUTO_LOGIN_ISCHECK", false))
+        {
+        	cb_autoLogin.setChecked(true);
+        	login();
+        }
+        
         
         //为两个按钮设置按下效果
         btn_login.setOnTouchListener(new Button.OnTouchListener()
@@ -175,6 +217,19 @@ public class LoginActivity extends Activity {
 			}
 		});
         
+        // TODO 设置自动登录checkbox的监听器
+        cb_autoLogin.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
+		{
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+			{
+				if(isChecked)
+				{
+					cb_savePsw.setChecked(true);
+				}
+			}
+		});
+        
         //为登陆按钮设置按下时的监听器
         btn_login.setOnClickListener(new Button.OnClickListener()
 		{
@@ -184,135 +239,183 @@ public class LoginActivity extends Activity {
 				final String userName = et_accountName.getText().toString();
 				final String password = et_psw.getText().toString();
 				final String cachePath = Environment.getExternalStorageDirectory() + "/Webdisk/cache/";// TODO 此路径需要修改
-				
-				//在SharedPreference中保存密码保存这次的用户名
-				Editor editor = sharedPreferences.edit();
-		        editor.putString("userName", userName).commit();
-				//如果勾选记住密码，在SharedPreference中保存密码
-				if(cb_savePsw.isChecked())
-				{
-//					editor.putString("password", password).commit();
-					try
-					{
-						editor.putString("password", AESUtil.encrypt(userName, password)).commit();
-					} catch (Exception e)
-					{
-						e.printStackTrace();
-						Log.i(TAG, "AES加密错误");
-					}
-	                editor.putBoolean("SAVEPSW_ISCHECK", true).commit(); 
-				}
-				else//如果没有勾选，清楚之前保存的项目
-				{
-					editor.putString("password", "").commit();
-	                editor.putBoolean("SAVEPSW_ISCHECK", false).commit(); 
-				}
-				
 				Log.i(TAG, "cachePath=" + cachePath);
-				
 				final File cacheFolder = new File(cachePath);
-				if(!cacheFolder.exists())
-				{
-					cacheFolder.mkdir();
-				}
-					
-				try
-				{
-					// TODO 需要修改为邮箱的映射文件
-					fileUrl = SVNURL.parseURIEncoded("http://10.109.34.24/wangpan/" + userName + "/.config.db");
-				} catch (SVNException e)
-				{
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-				final String url = "http://10.109.34.24/wangpan/" + userName;
-				Log.i(TAG, "URL=" + url);
-				
-//				Connection thisConnection = new Connection();
-//				
-//				// prep data for connection
-//				thisConnection.setName("webdisk");
-//				thisConnection.setUrl(url);
-//				thisConnection.setUsername(userName);
-//				thisConnection.setPassword(password);
-//				
-//				app.setCurrentConnection(thisConnection);
-//				
-//				app.initAuthManager();
-				
-//				String login_info = app.doExport(SVNRevision.HEAD, new File("/mnt/sdcard/test"), fileUrl);
-//				
-//				if("svn: Authentication required for '<http://10.109.34.24:80> hello svn'".equals(login_info))//登录失败
+//				//在SharedPreference中保存密码保存这次的用户名
+//				Editor editor = sharedPreferences.edit();
+//		        editor.putString("userName", userName).commit();
+		        
+//		        //勾选自动登录的相关设置
+//		        if(cb_autoLogin.isChecked())
+//		        {
+//		        	cb_savePsw.setChecked(true);
+//		        	editor.putBoolean("AUTO_LOGIN_ISCHECK", true).commit();
+//		        }
+//		        else
+//		        {
+//		        	editor.putBoolean("AUTO_LOGIN_ISCHECK", false).commit();
+//		        }
+//		        
+//				//如果勾选记住密码，在SharedPreference中保存密码
+//				if(cb_savePsw.isChecked())
 //				{
-//					Log.i(TAG, "login error");
+////					editor.putString("password", password).commit();
+//					try
+//					{
+//						editor.putString("password", AESUtil.encrypt(userName, password)).commit();
+//					} catch (Exception e)
+//					{
+//						e.printStackTrace();
+//						Log.i(TAG, "AES加密错误");
+//					}
+//	                editor.putBoolean("SAVEPSW_ISCHECK", true).commit(); 
+//				}
+//				else//如果没有勾选，清楚之前保存的项目
+//				{
+//					editor.putString("password", "").commit();
+//	                editor.putBoolean("SAVEPSW_ISCHECK", false).commit(); 
+//				}
+				
+				login();
+				
+//				if(!cacheFolder.exists())
+//				{
+//					cacheFolder.mkdir();
+//				}
 //					
-//					Toast.makeText(LoginActivity.this, R.string.login_error, Toast.LENGTH_SHORT).show();
-//					et_psw.setText("");
-//				}
-//				else
+//				try
 //				{
-//					Log.i(TAG, "login success");
-//					Intent intent = new Intent(LoginActivity.this, ShowFileActivity.class);
-//					startActivity(intent);
-//					finish();
+//					// TODO 需要修改为邮箱的映射文件
+//					fileUrl = SVNURL.parseURIEncoded("http://10.109.34.24/wangpan/" + userName + "/.config.db");
+//				} catch (SVNException e)
+//				{
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
 //				}
-				
-				new Thread(new Runnable()
-				{
-					@Override
-					public void run()
-					{
-						Message loginStartMsg = new Message();
-						loginStartMsg.what = LOGIN_START;
-						mHandler.sendMessage(loginStartMsg);
-						
-						Connection thisConnection = new Connection();
-						
-						// prep data for connection
-						thisConnection.setName("webdisk");
-						thisConnection.setUrl(url);
-						thisConnection.setUsername(userName);
-						thisConnection.setPassword(password);
-						
-						app.setCurrentConnection(thisConnection);
-						
-						app.initAuthManager();
-						
-						String login_info = app.doExport(SVNRevision.HEAD, cacheFolder, fileUrl);
-						
-						if("svn: Authentication required for '<http://10.109.34.24:80> hello svn'".equals(login_info))//登录失败
-						{
-							Message message = new Message();
-							message.what = LOGIN_AUTH_ERROR;
-							mHandler.sendMessage(message);
-						}
-						else if((getString(R.string.success)).equals(login_info))
-						{
-							Message message = new Message();
-							message.what = LOGIN_SUCCESS;
-							mHandler.sendMessage(message);
-						}
-						else
-						{
-							Message message = new Message();
-							message.what= LOGIN_NO_CONNECTION;
-							mHandler.sendMessage(message);
-						}
-					}
-				}).start();
+//				
+//				final String url = "http://10.109.34.24/wangpan/" + userName;
+//				Log.i(TAG, "URL=" + url);
+//				
+//				
+//				new Thread(new Runnable()
+//				{
+//					@Override
+//					public void run()
+//					{
+//						Message loginStartMsg = new Message();
+//						loginStartMsg.what = LOGIN_START;
+//						mHandler.sendMessage(loginStartMsg);
+//						
+//						Connection thisConnection = new Connection();
+//						
+//						// prep data for connection
+//						thisConnection.setName("webdisk");
+//						thisConnection.setUrl(url);
+//						thisConnection.setUsername(userName);
+//						thisConnection.setPassword(password);
+//						
+//						app.setCurrentConnection(thisConnection);
+//						
+//						app.initAuthManager();
+//						
+//						String login_info = app.doExport(SVNRevision.HEAD, cacheFolder, fileUrl);
+//						
+//						if("svn: Authentication required for '<http://10.109.34.24:80> hello svn'".equals(login_info))//登录失败
+//						{
+//							Message message = new Message();
+//							message.what = LOGIN_AUTH_ERROR;
+//							mHandler.sendMessage(message);
+//						}
+//						else if((getString(R.string.success)).equals(login_info))
+//						{
+//							Message message = new Message();
+//							message.what = LOGIN_SUCCESS;
+//							mHandler.sendMessage(message);
+//						}
+//						else
+//						{
+//							Message message = new Message();
+//							message.what= LOGIN_NO_CONNECTION;
+//							mHandler.sendMessage(message);
+//						}
+//					}
+//				}).start();
 			}
 		});
         
         
     }
 
-
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.main, menu);
-//        return true;
-//    }
+	private void login()
+	{
+		final String userName = et_accountName.getText().toString();
+		final String password = et_psw.getText().toString();
+		final String cachePath = Environment.getExternalStorageDirectory() + "/Webdisk/cache/";// TODO 此路径需要修改
+		Log.i(TAG, "cachePath=" + cachePath);
+		final File cacheFolder = new File(cachePath);
+		
+		if(!cacheFolder.exists())
+		{
+			cacheFolder.mkdir();
+		}
+			
+		try
+		{
+			// TODO 需要修改为邮箱的映射文件
+			fileUrl = SVNURL.parseURIEncoded("http://10.109.34.24/wangpan/" + userName + "/.config.db");
+		} catch (SVNException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		final String url = "http://10.109.34.24/wangpan/" + userName;
+		Log.i(TAG, "URL=" + url);
+		
+		
+		new Thread(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				Message loginStartMsg = new Message();
+				loginStartMsg.what = LOGIN_START;
+				mHandler.sendMessage(loginStartMsg);
+				
+				Connection thisConnection = new Connection();
+				
+				// prep data for connection
+				thisConnection.setName("webdisk");
+				thisConnection.setUrl(url);
+				thisConnection.setUsername(userName);
+				thisConnection.setPassword(password);
+				
+				app.setCurrentConnection(thisConnection);
+				
+				app.initAuthManager();
+				
+				String login_info = app.doExport(SVNRevision.HEAD, cacheFolder, fileUrl);
+				
+				if("svn: Authentication required for '<http://10.109.34.24:80> hello svn'".equals(login_info))//登录失败
+				{
+					Message message = new Message();
+					message.what = LOGIN_AUTH_ERROR;
+					mHandler.sendMessage(message);
+				}
+				else if((getString(R.string.success)).equals(login_info))
+				{
+					Message message = new Message();
+					message.what = LOGIN_SUCCESS;
+					mHandler.sendMessage(message);
+				}
+				else
+				{
+					Message message = new Message();
+					message.what= LOGIN_NO_CONNECTION;
+					mHandler.sendMessage(message);
+				}
+			}
+		}).start();
+	}
     
 }

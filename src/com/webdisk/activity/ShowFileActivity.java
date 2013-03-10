@@ -23,6 +23,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Environment;
@@ -52,13 +54,14 @@ public class ShowFileActivity extends Activity implements Runnable
 {
 	
 	private final static String TAG = "ShowFileActivity";
-	
+	private static final String mPREFERENCES = "userInfo";
 	
 	private final static int DELETE_MSG = 11;
 	private final static int DELETE_SUCCESS = 111;
 	private final static int DELETE_ERROR = 110;
 	
 	private SVNApplication mApp;
+	private SharedPreferences sharedPreferences;
 	
 	private List<SVNDirEntry> mDirs;
 	private List<List<SVNDirEntry>> mDirCache;
@@ -133,10 +136,11 @@ public class ShowFileActivity extends Activity implements Runnable
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_showfile);
 		
-		IntentFilter intentFilter = new IntentFilter("com.webdisk.broadcast.UPLOAD_FINISH");  
-		registerReceiver(mReceiver, intentFilter);  
+//		IntentFilter intentFilter = new IntentFilter("com.webdisk.broadcast.UPLOAD_FINISH");  
+//		registerReceiver(mReceiver, intentFilter);  
 		
 		mApp = (SVNApplication)getApplication();
+		sharedPreferences = this.getSharedPreferences(mPREFERENCES,Context.MODE_WORLD_READABLE);  
 		
 		btn_naviationPrevious = (Button)findViewById(R.id.btn_naviationPrevious);
 		btn_newFile = (Button)findViewById(R.id.btn_uploadFile);
@@ -343,6 +347,7 @@ public class ShowFileActivity extends Activity implements Runnable
 			groups = new ArrayList<String>();
 			groups.add("刷新");
 			groups.add("新建文件夹");
+			groups.add("注销");
 
 			OverflowMenuAdapter groupAdapter = new OverflowMenuAdapter(this, groups);
 			lv_group.setAdapter(groupAdapter);
@@ -388,6 +393,17 @@ public class ShowFileActivity extends Activity implements Runnable
 				else if(groups.get(position).equals("刷新"))
 				{
 					refreshDataAndList();
+				}
+				else if(groups.get(position).equals("注销"))
+				{
+					// TODO 注销时删除cache文件
+					//取消sharedpreferences中自动登录的设置
+					Editor editor = sharedPreferences.edit();
+					editor.putBoolean("AUTO_LOGIN_ISCHECK", false).commit();
+					//跳转到登陆界面
+					Intent intent = new Intent(ShowFileActivity.this, LoginActivity.class);
+					startActivity(intent);
+					finish();
 				}
 				
 				if (overflowMenu != null) 
@@ -654,6 +670,25 @@ public class ShowFileActivity extends Activity implements Runnable
 			
 		}
 	};
+
+
+
+	@Override
+	protected void onStart()
+	{
+		super.onStart();
+		//注册receiver
+		IntentFilter intentFilter = new IntentFilter("com.webdisk.broadcast.UPLOAD_FINISH");  
+		registerReceiver(mReceiver, intentFilter); 
+	}
+
+	@Override
+	protected void onStop()
+	{
+		super.onStop();
+		//注销receiver
+		unregisterReceiver(mReceiver);
+	}
 	
 	
 	
