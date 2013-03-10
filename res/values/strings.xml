@@ -37,6 +37,9 @@
 	<string name="file_exist">文件已在网盘中存在</string>
 	<string name="delete_success">文件已删除</string>
 	<string name="delete_error">文件删除失败，请重试</string>
+	<string name="save_Psw">记住密码</string>
+	<string name="auto_login">自动登录</string>
+	<string name="logining">正在登陆&#8230;</string>
 	
 	
 	
