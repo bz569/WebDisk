@@ -28,4 +28,6 @@ public class DeleteUtil
 		Log.i(TAG, "Delete " + this.deleteFileName + " from " + this.deleteUrl);
 		return deleteApp.doDelete(deleteUrl, deleteFileName);
 	}
+	
+	// TODO Delete From Mail
 }

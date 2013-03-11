@@ -199,7 +199,7 @@ public final class R {
         public static final int main=0x7f080000;
     }
     public static final class string {
-        public static final int FILE=0x7f060027;
+        public static final int FILE=0x7f06002b;
         public static final int account_name=0x7f060002;
         public static final int account_psw=0x7f060003;
         public static final int action_settings=0x7f060001;
@@ -216,18 +216,18 @@ public final class R {
         public static final int delete_file=0x7f06001a;
         public static final int delete_folder=0x7f06001b;
         public static final int delete_success=0x7f060022;
-        public static final int directory_created=0x7f060028;
+        public static final int directory_created=0x7f06002c;
         public static final int download=0x7f060008;
-        public static final int empty=0x7f06002e;
-        public static final int error=0x7f060029;
-        public static final int exception=0x7f06002b;
+        public static final int empty=0x7f060032;
+        public static final int error=0x7f06002d;
+        public static final int exception=0x7f06002f;
         public static final int file_exist=0x7f060021;
         public static final int fileinfo=0x7f060009;
         public static final int fileinfo_2=0x7f060017;
         public static final int folder_exist=0x7f06001e;
         public static final int input_new_file_name=0x7f060016;
         public static final int inputfoldername=0x7f06000f;
-        public static final int loading=0x7f06002d;
+        public static final int loading=0x7f060031;
         public static final int login=0x7f060004;
         public static final int login_auth_error=0x7f06001c;
         public static final int login_no_connection=0x7f06001d;
@@ -235,18 +235,22 @@ public final class R {
         public static final int move=0x7f06000c;
         public static final int mywebdisk=0x7f060006;
         public static final int newfolder=0x7f06000e;
-        public static final int no_connection_selected=0x7f06002f;
+        public static final int no_connection_selected=0x7f060033;
         public static final int paste=0x7f060012;
+        public static final int please_input_new_name=0x7f060027;
         public static final int please_select_file=0x7f06001f;
         public static final int reg_now=0x7f060005;
         public static final int rename=0x7f06000b;
+        public static final int rename_error=0x7f060029;
+        public static final int rename_success=0x7f060028;
+        public static final int renaming=0x7f06002a;
         public static final int save_Psw=0x7f060024;
         public static final int sdcard=0x7f060020;
         public static final int show_download_file=0x7f060015;
         public static final int show_upload_folder=0x7f060014;
-        public static final int success=0x7f06002c;
+        public static final int success=0x7f060030;
         public static final int upload=0x7f060013;
-        public static final int verify=0x7f06002a;
+        public static final int verify=0x7f06002e;
     }
     public static final class style {
         /** 

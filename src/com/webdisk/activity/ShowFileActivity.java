@@ -59,6 +59,9 @@ public class ShowFileActivity extends Activity implements Runnable
 	private final static int DELETE_MSG = 11;
 	private final static int DELETE_SUCCESS = 111;
 	private final static int DELETE_ERROR = 110;
+	private final static int RENAME_MSG = 12;
+	private final static int RENAME_SUCCESS = 121;
+	private final static int RENAME_ERROR = 120;
 	
 	private SVNApplication mApp;
 	private SharedPreferences sharedPreferences;
@@ -109,6 +112,21 @@ public class ShowFileActivity extends Activity implements Runnable
 					}
 					
 					refreshDataAndList();
+					break;
+				}
+				case RENAME_MSG:
+				{
+					if(msg.arg1 == RENAME_SUCCESS)
+					{
+						Toast.makeText(ShowFileActivity.this, R.string.rename_success, Toast.LENGTH_SHORT).show();
+					}
+					else if(msg.arg1 == RENAME_ERROR)
+					{
+						Toast.makeText(ShowFileActivity.this, R.string.rename_error, Toast.LENGTH_SHORT).show();
+					}
+					
+					refreshDataAndList();
+					break;
 				}
 			}
 			

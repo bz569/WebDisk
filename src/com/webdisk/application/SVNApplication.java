@@ -17,6 +17,7 @@ import org.tmatesoft.svn.core.wc.SVNClientManager;
 import org.tmatesoft.svn.core.wc.SVNConflictChoice;
 import org.tmatesoft.svn.core.wc.SVNConflictDescription;
 import org.tmatesoft.svn.core.wc.SVNConflictReason;
+import org.tmatesoft.svn.core.wc.SVNCopySource;
 import org.tmatesoft.svn.core.wc.SVNMergeFileSet;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 import org.tmatesoft.svn.core.wc.SVNStatus;
@@ -707,7 +708,56 @@ public class SVNApplication extends Application
    		}
    	}
    	
-    
+    /**
+     * 在版本库中重命名文件
+     * @param mExternalStorageAvailable
+     */
+   	public boolean doRename(String srcPath, String newName)
+   	{
+   		SVNURL srcURL = null;
+   		SVNURL dstURL = null;
+   		try
+		{
+			srcURL = SVNURL.parseURIEncoded(srcPath);
+		} catch (SVNException e)
+		{
+			e.printStackTrace();
+		}
+   		
+   		SVNCopySource mRenameSrc = new SVNCopySource(SVNRevision.UNDEFINED, SVNRevision.HEAD, srcURL);
+   		SVNCopySource[] sources = {mRenameSrc};
+   		
+   		String dstPath = srcPath.substring(0, srcPath.lastIndexOf("/")+1) + newName;
+    	try
+		{
+			dstURL = SVNURL.parseURIEncoded(dstPath);
+		} catch (SVNException e)
+		{
+			e.printStackTrace();
+		}
+    	
+    	String commitMsg = "Rename File " + srcPath + " as " + newName;
+    	Log.i(TAG, commitMsg);
+    	
+    	try
+   		{
+   			// initialize the auth manager
+       		this.initAuthManager();
+       		
+       		//doDelete
+       		SVNCommitInfo commitInfo = clientManager.getCopyClient().doCopy(sources, dstURL, true, false,
+       																		true, commitMsg, null);
+       		Log.i(TAG, "commitInfo=" + commitInfo.toString());
+       		return true;
+       		
+   		}catch(SVNException se)
+   		{
+   			String msg = se.getMessage();
+   			Log.i(TAG, "delete_error:" + msg);
+   			return false;
+   		}
+   		
+   	}
     
     
     

@@ -1,6 +1,8 @@
 package com.webdisk.adapter;
 
 import java.io.File;
+import java.io.FilePermission;
+import java.security.acl.LastOwnerException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,6 +52,9 @@ public class ShowFileListAdapter extends BaseAdapter
 	private final static int DELETE_MSG = 11;
 	private final static int DELETE_SUCCESS = 111;
 	private final static int DELETE_ERROR = 110;
+	private final static int RENAME_MSG = 12;
+	private final static int RENAME_SUCCESS = 121;
+	private final static int RENAME_ERROR = 120;
 	
 	private LayoutInflater mInflater;
 	private Bitmap icon_file;
@@ -253,10 +258,13 @@ public class ShowFileListAdapter extends BaseAdapter
 		//重命名
 		btn_rename.setOnClickListener(new Button.OnClickListener()
 		{
+			SVNDirEntry entry = mdir.get(position);
+			String filePath = entry.getURL().toString();
+			
 			@Override
 			public void onClick(View v)
 			{
-				showReNameDialog(parent);
+				showReNameDialog(parent, filePath);
 				
 				if (actionMenu != null) 
 				{
@@ -332,13 +340,13 @@ public class ShowFileListAdapter extends BaseAdapter
 		
 	}
 	
-	private void showReNameDialog(View parent) 
+	private void showReNameDialog(View parent, final String srcFilePath) 
 	{
-		EditText et_NewName;
+		final EditText et_newName;
 		Button btn_confirm;
 		Button btn_cancel;
+		final String srcFileName = srcFilePath.substring(srcFilePath.lastIndexOf("/")+1, srcFilePath.length());
 		
-		if (renameDialog == null) {
 			LayoutInflater layoutInflater = (LayoutInflater) LayoutInflater.from(context);
 					
 			view = layoutInflater.inflate(R.layout.window_rename, null);
@@ -346,10 +354,12 @@ public class ShowFileListAdapter extends BaseAdapter
 			renameDialog = new PopupWindow(view, LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 			
 			// TODO 添加操作按钮的OnclickListener,添加新建文件夹操作
-			et_NewName = (EditText) view.findViewById(R.id.et_newFileName);
+			et_newName = (EditText) view.findViewById(R.id.et_newFileName);
 			btn_confirm = (Button) view.findViewById(R.id.btn_confirmRename);
 			btn_cancel = (Button) view.findViewById(R.id.btn_cancelRename);
 			
+			//设置et_newName内容为原文件名
+			et_newName.setText(srcFileName.substring(0, srcFileName.lastIndexOf(".")));
 			
 			//为两个按钮设置OnTouchListener
 			OnTouchListener mOnTouchListener = new Button.OnTouchListener()
@@ -372,8 +382,55 @@ public class ShowFileListAdapter extends BaseAdapter
 			btn_confirm.setOnTouchListener(mOnTouchListener);
 			btn_cancel.setOnTouchListener(mOnTouchListener);
 			
-		}
-
+			btn_confirm.setOnClickListener(new Button.OnClickListener()
+			{
+				@Override
+				public void onClick(View v)
+				{
+//					String srcFileName = srcFilePath.substring(srcFilePath.lastIndexOf("/")+1, srcFilePath.length());
+					String suffix = srcFileName.substring(srcFileName.lastIndexOf("."), srcFileName.length());
+					final String newName = et_newName.getText().toString() + suffix;
+//					Log.i(TAG, "Rename file " + srcFilePath + " as " + newName);
+					
+					if(et_newName.getText().toString().equals(""))
+					{
+						Toast.makeText(context, R.string.input_new_file_name, Toast.LENGTH_SHORT).show();
+					}
+					else if(newName.equals(srcFileName))
+					{
+						renameDialog.dismiss();
+					}
+					else
+					{
+						Log.i(TAG, "Rename file " + srcFilePath + " as " + newName);
+						Toast.makeText(context, R.string.renaming, Toast.LENGTH_SHORT).show();
+						new Thread(new Runnable()
+						{
+							@Override
+							public void run()
+							{
+								Message renameMsg = new Message();
+								renameMsg.what = RENAME_MSG;
+								
+								SVNApplication renameApp= (SVNApplication) context.getApplicationContext();
+								if(renameApp.doRename(srcFilePath, newName))
+								{
+									renameMsg.arg1 = RENAME_SUCCESS;
+								}
+								else
+								{
+									renameMsg.arg1 = RENAME_ERROR;
+								}
+								showFileHandler.sendMessage(renameMsg);
+							}
+						}).start();
+						
+						renameDialog.dismiss();
+					}
+				}
+			});
+			
+			
 		// 使其聚集
 		renameDialog.setFocusable(true);
 		// 设置允许在外点击消失
@@ -444,7 +501,6 @@ public class ShowFileListAdapter extends BaseAdapter
 		Button btn_confirm;
 		Button btn_cancel;
 		
-//		if (deleteDialog == null) {
 			LayoutInflater layoutInflater = (LayoutInflater) LayoutInflater.from(context);
 					
 			view = layoutInflater.inflate(R.layout.window_delete, null);
