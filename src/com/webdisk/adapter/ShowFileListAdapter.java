@@ -317,7 +317,7 @@ public class ShowFileListAdapter extends BaseAdapter
 				}
 				
 				SVNDirEntry entry = mdir.get(position);
-				String filePath = entry.getURL().toString();
+				String filePath = entry.getURL().toDecodedString();
 //				Log.i(TAG, "filePath=" + filePath);
 				
 				Intent intent = new Intent(context, DownloadActivity.class);

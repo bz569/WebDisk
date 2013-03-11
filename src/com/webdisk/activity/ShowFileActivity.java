@@ -595,7 +595,13 @@ public class ShowFileActivity extends Activity implements Runnable
 			
 				if (it != null)
 					while (it.hasNext())
-						mDirs.add(it.next());
+					{
+						SVNDirEntry tmpEntry = it.next();
+						if(!tmpEntry.getName().startsWith("."))
+						{
+							mDirs.add(tmpEntry);
+						}
+					}
 			
 				Collections.sort(mDirs);
 			}
@@ -607,8 +613,8 @@ public class ShowFileActivity extends Activity implements Runnable
 		{
 			// no ticket was selected go back to ticket screen
 			// tell the user we are going to work
-        	Toast toast=Toast.makeText(this, getString(R.string.no_connection_selected), Toast.LENGTH_SHORT);
-    		toast.show();
+//        	Toast toast=Toast.makeText(this, getString(R.string.no_connection_selected), Toast.LENGTH_SHORT);
+//    		toast.show();
     		e.printStackTrace();
     		this.finish();
 		}
@@ -628,7 +634,13 @@ public class ShowFileActivity extends Activity implements Runnable
 			
 				if (it != null)
 					while (it.hasNext())
-						mDirs.add(it.next());
+					{
+						SVNDirEntry tmpEntry = it.next();
+						if(!tmpEntry.getName().startsWith("."))
+						{
+							mDirs.add(tmpEntry);
+						}
+					}
 			
 				Collections.sort(mDirs);
 			}
@@ -640,8 +652,8 @@ public class ShowFileActivity extends Activity implements Runnable
 		{
 			// no ticket was selected go back to ticket screen
 			// tell the user we are going to work
-        	Toast toast=Toast.makeText(this, getString(R.string.no_connection_selected), Toast.LENGTH_SHORT);
-    		toast.show();
+//        	Toast toast=Toast.makeText(this, getString(R.string.no_connection_selected), Toast.LENGTH_SHORT);
+//    		toast.show();
     		e.printStackTrace();
     		this.finish();
 		}
