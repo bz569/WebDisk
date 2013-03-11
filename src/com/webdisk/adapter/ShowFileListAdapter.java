@@ -138,7 +138,7 @@ public class ShowFileListAdapter extends BaseAdapter
 					return false;
 				}
 			});
-		
+			
 			convertView.setTag(holder);
 		}
 		else
@@ -166,6 +166,9 @@ public class ShowFileListAdapter extends BaseAdapter
 		if (entry.getKind().compareTo(SVNNodeKind.DIR) == 0) //当前为文件夹时
 		{
 			holder.iv_showFileImage.setImageBitmap(icon_folder);
+			//对文件夹禁止fileAction按钮
+			holder.btn_fileAction.setEnabled(false);
+			holder.btn_fileAction.setVisibility(View.GONE);
 		}
 		else if (entry.getKind().compareTo(SVNNodeKind.FILE) == 0) //当前为文件时
 		{
@@ -227,10 +230,15 @@ public class ShowFileListAdapter extends BaseAdapter
 		//复制
 		btn_copy.setOnClickListener(new Button.OnClickListener()
 		{
+			SVNDirEntry entry = mdir.get(position);
+			String filePath = entry.getURL().toDecodedString();
+			
 			@Override
 			public void onClick(View v)
 			{
 				Intent intent = new Intent(context, PasteActivity.class);
+				intent.putExtra("IS_MOVE", false);
+				intent.putExtra("SRC_FILE_PATH", filePath);
 				context.startActivity(intent);
 				
 				if (actionMenu != null) 
@@ -325,18 +333,18 @@ public class ShowFileListAdapter extends BaseAdapter
 				context.startActivity(intent);
 			}
 		});
-		//如果目标为文件夹，禁止下载、删除按钮
-		SVNDirEntry targetEntry = mdir.get(position);
-		if(targetEntry.getKind().compareTo(SVNNodeKind.DIR) == 0)
-		{
-			btn_download.setEnabled(false);
-			btn_delete.setEnabled(false);
-		}
-		else if(targetEntry.getKind().compareTo(SVNNodeKind.FILE) == 0)
-		{
-			btn_download.setEnabled(true);
-			btn_delete.setEnabled(true);
-		}
+//		//如果目标为文件夹，禁止下载、删除、移动、复制、详情按钮
+//		SVNDirEntry targetEntry = mdir.get(position);
+//		if(targetEntry.getKind().compareTo(SVNNodeKind.DIR) == 0)
+//		{
+//			btn_download.setEnabled(false);
+//			btn_delete.setEnabled(false);
+//		}
+//		else if(targetEntry.getKind().compareTo(SVNNodeKind.FILE) == 0)
+//		{
+//			btn_download.setEnabled(true);
+//			btn_delete.setEnabled(true);
+//		}
 		
 	}
 	
@@ -382,6 +390,7 @@ public class ShowFileListAdapter extends BaseAdapter
 			btn_confirm.setOnTouchListener(mOnTouchListener);
 			btn_cancel.setOnTouchListener(mOnTouchListener);
 			
+			//为重命名按钮设置onclickListener
 			btn_confirm.setOnClickListener(new Button.OnClickListener()
 			{
 				@Override
@@ -427,6 +436,16 @@ public class ShowFileListAdapter extends BaseAdapter
 						
 						renameDialog.dismiss();
 					}
+				}
+			});
+			
+			//为取消按钮设置onclickListener
+			btn_cancel.setOnClickListener(new Button.OnClickListener()
+			{
+				@Override
+				public void onClick(View v)
+				{
+					renameDialog.dismiss();
 				}
 			});
 			

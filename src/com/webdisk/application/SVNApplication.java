@@ -759,7 +759,51 @@ public class SVNApplication extends Application
    		
    	}
     
+   	/**
+   	 * 在版本库中复制文件
+   	 * @param srcPath
+   	 * @param dstPath
+   	 */
+    public boolean doCopy(String srcPath, String dstPath)
+    {
+    	SVNURL srcURL = null;
+    	SVNURL dstURL = null;
     
+    	try
+		{
+			srcURL = SVNURL.parseURIEncoded(srcPath);
+	    	dstURL = SVNURL.parseURIEncoded(dstPath);
+
+		} catch (SVNException e)
+		{
+			e.printStackTrace();
+		}
+    	
+    	SVNCopySource mRenameSrc = new SVNCopySource(SVNRevision.UNDEFINED, SVNRevision.HEAD, srcURL);
+   		SVNCopySource[] sources = {mRenameSrc};
+    	
+    	String commitMsg = "copy file " + srcPath + " to " + dstPath;
+    	Log.i(TAG, commitMsg);
+    	
+    	try
+   		{
+   			// initialize the auth manager
+       		this.initAuthManager();
+       		
+       		//doDelete
+       		SVNCommitInfo commitInfo = clientManager.getCopyClient().doCopy(sources, dstURL, false, false,
+       																		true, commitMsg, null);
+       		Log.i(TAG, "commitInfo=" + commitInfo.toString());
+       		return true;
+       		
+   		}catch(SVNException se)
+   		{
+   			String msg = se.getMessage();
+   			Log.i(TAG, "copy_error:" + msg);
+   			return false;
+   		}
+    	
+    }
     
     
     

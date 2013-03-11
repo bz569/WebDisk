@@ -1,6 +1,5 @@
 package com.webdisk.activity;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -9,7 +8,6 @@ import java.util.List;
 
 import org.tmatesoft.svn.core.SVNDirEntry;
 import org.tmatesoft.svn.core.SVNNodeKind;
-import org.tmatesoft.svn.core.internal.wc.admin.SVNEntry;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import com.webdisk.R;
@@ -27,10 +25,8 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.text.AndroidCharacter;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -42,7 +38,6 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -79,9 +74,6 @@ public class ShowFileActivity extends Activity implements Runnable
 	private Button btn_newFile;
 	private Button btn_overfolw;
 	private ListView lv_showFile;
-	
-	private List<String> items = null;
-	private List<String> paths = null;
 	
 	private ProgressDialog mLoadingDialog;
 	
@@ -139,7 +131,7 @@ public class ShowFileActivity extends Activity implements Runnable
 	BroadcastReceiver mReceiver=new BroadcastReceiver(){
 		public void onReceive(Context context, Intent intent) 
 		{
-			if(intent.getAction().equals("com.webdisk.broadcast.UPLOAD_FINISH"))//收到上传完成的广播
+			if(intent.getAction().equals("com.webdisk.broadcast.REFRESH"))//收到上传完成的广播
 			{
 				refreshDataAndList();
 			}
@@ -708,7 +700,7 @@ public class ShowFileActivity extends Activity implements Runnable
 	{
 		super.onStart();
 		//注册receiver
-		IntentFilter intentFilter = new IntentFilter("com.webdisk.broadcast.UPLOAD_FINISH");  
+		IntentFilter intentFilter = new IntentFilter("com.webdisk.broadcast.REFRESH");  
 		registerReceiver(mReceiver, intentFilter); 
 	}
 

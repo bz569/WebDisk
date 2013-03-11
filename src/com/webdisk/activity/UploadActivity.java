@@ -218,6 +218,7 @@ public class UploadActivity extends Activity
 						if(fileName.equals(tmp))
 						{
 							isExist = true;
+							break;
 						}
 						Log.i(TAG, "tmp=" + tmp + ";isExist=" + isExist);
 					}

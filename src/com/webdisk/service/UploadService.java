@@ -64,7 +64,7 @@ public class UploadService extends IntentService
 					{
 						Log.i(TAG, "上传完成");
 						showImportNotification(true);
-						stopSelf();
+//						stopSelf();
 						
 						//通过broadcast发送消息
 						Intent intent = new Intent().setAction("com.webdisk.broadcast.UPLOAD_FINISH");
@@ -76,6 +76,7 @@ public class UploadService extends IntentService
 				}
 			}
 			
+			stopSelf();
 			super.handleMessage(msg);
 		}
 	};
@@ -111,12 +112,12 @@ public class UploadService extends IntentService
 			if (!finish)
 			{
 				notification = new Notification(R.drawable.ic_launcher, "正在上传", System.currentTimeMillis());
-				notification.setLatestEventInfo(this, "上传", "正在上传:" + fileName, contentIntent);
+				notification.setLatestEventInfo(this, "CyberBox", "正在上传:" + fileName, contentIntent);
 			}
 			else
 			{
 				notification = new Notification(R.drawable.ic_launcher, "上传完成", System.currentTimeMillis());
-				notification.setLatestEventInfo(this, "上传", fileName + "上传完成", contentIntent);
+				notification.setLatestEventInfo(this, "CyberBox", fileName + "上传完成", contentIntent);
 			}
 //			notification.defaults=Notification.DEFAULT_LIGHTS;
 			manager.notify(R.layout.activity_download, notification);

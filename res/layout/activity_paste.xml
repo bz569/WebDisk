@@ -6,7 +6,7 @@
     <RelativeLayout
         android:id="@+id/paste_actionbar_showFile"
         android:layout_width="fill_parent"
-        android:layout_height="48dp"
+        android:layout_height="80dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
@@ -45,6 +45,33 @@
             android:layout_margin="8dp"
             android:background="@drawable/icon_newfolder" />
 
+	<LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="32dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:background="@color/halo_lightorange"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/tv_showCopyFileHint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/show_copy_file" 
+                android:textColor="@color/black"
+                android:textSize="14sp"/>
+            
+            <TextView
+                android:id="@+id/tv_showCopyFileName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="8dp"
+                android:text="复制的文件名" 
+                android:textColor="@color/black"
+                android:textSize="14sp"/>
+        </LinearLayout> 
     </RelativeLayout>
 
     <RelativeLayout
