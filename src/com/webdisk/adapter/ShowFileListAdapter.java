@@ -259,7 +259,7 @@ public class ShowFileListAdapter extends BaseAdapter
 		btn_rename.setOnClickListener(new Button.OnClickListener()
 		{
 			SVNDirEntry entry = mdir.get(position);
-			String filePath = entry.getURL().toString();
+			String filePath = entry.getURL().toDecodedString();
 			
 			@Override
 			public void onClick(View v)
@@ -291,7 +291,7 @@ public class ShowFileListAdapter extends BaseAdapter
 		btn_delete.setOnClickListener(new Button.OnClickListener()
 		{
 			SVNDirEntry entry = mdir.get(position);
-			String filePath = entry.getURL().toString();
+			String filePath = entry.getURL().toDecodedString();
 			
 			@Override
 			public void onClick(View v)
