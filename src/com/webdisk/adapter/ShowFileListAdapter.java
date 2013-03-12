@@ -251,10 +251,15 @@ public class ShowFileListAdapter extends BaseAdapter
 		//ÒÆ¶¯
 		btn_move.setOnClickListener(new Button.OnClickListener()
 		{
+			SVNDirEntry entry = mdir.get(position);
+			String filePath = entry.getURL().toDecodedString();
+			
 			@Override
 			public void onClick(View v)
 			{
 				Intent intent = new Intent(context, PasteActivity.class);
+				intent.putExtra("IS_MOVE", true);
+				intent.putExtra("SRC_FILE_PATH", filePath);
 				context.startActivity(intent);
 				
 				if (actionMenu != null) 

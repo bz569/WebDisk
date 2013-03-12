@@ -276,13 +276,30 @@ public class PasteActivity extends Activity
 					}
 					else
 					{
-						if(!isMove)
+						if(!isMove)//复制
 						{
 							Intent intent = new Intent(PasteActivity.this, CopyService.class);
 							intent.putExtra("SRC_FILE_PATH", srcFilePath);
 							intent.putExtra("DST_PATH", dstPath);
 							intent.putExtra("FILE_NAME", fileName);
 							startService(intent);
+						}
+						else//移动
+						{
+							new Thread(new Runnable()
+							{
+								@Override
+								public void run()
+								{
+									mApp.doMove(srcFilePath, dstPath);
+									
+									//通过broadcast发送消息
+									Intent intent = new Intent().setAction("com.webdisk.broadcast.REFRESH");
+									intent.putExtra("MSG", "move_finish");
+									sendBroadcast(intent);
+									Log.i(TAG, "send msg by broadcast");
+								}
+							}).start();
 						}
 						
 						finish();

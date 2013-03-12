@@ -46,6 +46,7 @@
 	<string name="rename_success">重命名成功</string>
 	<string name="rename_error">重命名失败，请重试</string>
 	<string name="renaming">正在重命名，请稍后&#8230;</string>
+	<string name="move_finish">文件已移动</string>
 	
 	
 	

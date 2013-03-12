@@ -273,7 +273,7 @@ public class UploadActivity extends Activity
 		if(filePath.equals(rootPath))
 		{
 			Log.i(TAG, "filePath == rootPath");
-			tv_showFolderName.setText(R.string.mywebdisk);
+			tv_showFolderName.setText(R.string.sdcard);
 			btn_naviationPrevious.setEnabled(false);
 			btn_naviationPrevious.setBackgroundResource(R.drawable.icon_navigation_previous_item_disable);
 		}

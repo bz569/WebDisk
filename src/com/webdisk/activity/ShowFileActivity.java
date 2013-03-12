@@ -133,8 +133,18 @@ public class ShowFileActivity extends Activity implements Runnable
 		{
 			if(intent.getAction().equals("com.webdisk.broadcast.REFRESH"))//收到上传完成的广播
 			{
+				if(intent.getStringExtra("MSG") != null && intent.getStringExtra("MSG").equals("move_finish"))
+				{
+					Toast.makeText(ShowFileActivity.this, R.string.move_finish, Toast.LENGTH_SHORT).show();
+				}
+				
 				refreshDataAndList();
 			}
+//			if(intent.getAction().equals("com.webdisk.broadcast.MOVE_FINISH"))
+//			{
+//				Toast.makeText(ShowFileActivity.this, R.string.move_finish, Toast.LENGTH_SHORT).show();
+//				refreshDataAndList();
+//			}
 		}
 	};
 	
@@ -481,7 +491,10 @@ public class ShowFileActivity extends Activity implements Runnable
 			
 			return true;
 		}
-		
+		if(keyCode == KeyEvent.KEYCODE_MENU && event.getAction() == KeyEvent.ACTION_DOWN)
+		{
+			showOverflowMenu(btn_overfolw);
+		}
 		return super.onKeyDown(keyCode, event);
 		
 		
