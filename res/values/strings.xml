@@ -47,6 +47,8 @@
 	<string name="rename_error">重命名失败，请重试</string>
 	<string name="renaming">正在重命名，请稍后&#8230;</string>
 	<string name="move_finish">文件已移动</string>
+	<string name="new_folder_success">新建文件夹成功</string>
+	<string name="new_folder_error">新建文件夹失败</string>
 	
 	
 	

@@ -119,7 +119,7 @@ public class ShowFileListAdapter extends BaseAdapter
 			holder = new ViewHolder();
 			holder.btn_fileAction = (Button)convertView.findViewById(R.id.btn_row_expandFileAction);
 			holder.iv_showFileImage = (ImageView)convertView.findViewById(R.id.iv_row_showFileImage);
-			holder.tv_fileInfo = (TextView)convertView.findViewById(R.id.tv_row_showFileInfo);
+//			holder.tv_fileInfo = (TextView)convertView.findViewById(R.id.tv_row_showFileInfo);
 			holder.tv_fileName = (TextView)convertView.findViewById(R.id.tv_row_showFileName);
 			
 			holder.btn_fileAction.setOnTouchListener(new Button.OnTouchListener()

@@ -805,7 +805,12 @@ public class SVNApplication extends Application
     	
     }
     
-    
+    /**
+     * 在版本库中移动文件
+     * @param srcPath
+     * @param dstPath
+     * @return
+     */
     public boolean doMove(String srcPath, String dstPath)
     {
     	SVNURL srcURL = null;
@@ -847,6 +852,40 @@ public class SVNApplication extends Application
     	
     }
     
+    
+    public boolean doMkDir(String newDirPath)
+    {
+    	SVNURL newDirURL = null;
+    	try
+		{
+			newDirURL = SVNURL.parseURIEncoded(newDirPath);
+		} catch (SVNException e)
+		{
+			e.printStackTrace();
+		}
+    	
+    	SVNURL[] newDirURLs = {newDirURL};
+    	
+    	String commitMsg = "mkDir at " + newDirPath;
+    	Log.i(TAG, commitMsg);
+    	
+    	try
+   		{
+   			// initialize the auth manager
+       		this.initAuthManager();
+       		
+       		SVNCommitInfo commitInfo = clientManager.getCommitClient().doMkDir(newDirURLs, commitMsg);
+       		Log.i(TAG, "commitInfo=" + commitInfo.toString());
+       		return true;
+       		
+   		}catch(SVNException se)
+   		{
+   			String msg = se.getMessage();
+   			Log.i(TAG, "copy_error:" + msg);
+   			return false;
+   		}
+    	
+    }
     
     
     
