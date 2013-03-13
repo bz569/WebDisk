@@ -306,7 +306,8 @@ public class DownloadActivity extends Activity
 		Button btn_confirm;
 		Button btn_cancel;
 		
-		if (newFolderDialog == null) {
+		if (newFolderDialog == null) 
+		{
 			LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 					
 			view = layoutInflater.inflate(R.layout.window_newfolder, null);

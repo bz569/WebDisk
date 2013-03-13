@@ -53,7 +53,7 @@ public class PasteActivity extends Activity
 	
 	private Button btn_naviationPrevious;
 	private TextView tv_showFolderName;
-	private Button btn_newFolder;
+//	private Button btn_newFolder;
 	private ListView lv_showFile;
 	private Button btn_paste;
 	private Button btn_cancel;
@@ -91,7 +91,7 @@ public class PasteActivity extends Activity
 		isMove = intent.getBooleanExtra("IS_MOVE", false);
 		
 		btn_naviationPrevious = (Button)findViewById(R.id.btn_paste_naviationPrevious);
-		btn_newFolder = (Button)findViewById(R.id.btn_paste_newfolder);
+//		btn_newFolder = (Button)findViewById(R.id.btn_paste_newfolder);
 		btn_paste = (Button) findViewById(R.id.btn_paste);
 		btn_cancel = (Button) findViewById(R.id.btn_paste_cancel);
 		tv_showFolderName = (TextView)findViewById(R.id.tv_paste_showFolderName);
@@ -132,22 +132,22 @@ public class PasteActivity extends Activity
 				}
 			});
 		 
-		 btn_newFolder.setOnTouchListener(new Button.OnTouchListener()
-			{
-				public boolean onTouch(View v, MotionEvent event)
-				{
-					if(event.getAction() == MotionEvent.ACTION_DOWN)
-					{
-						v.setBackgroundResource(R.drawable.icon_newfolder_touched);
-					}
-					else if(event.getAction() == MotionEvent.ACTION_UP)
-					{
-						v.setBackgroundResource(R.drawable.icon_newfolder);
-					}
-					
-					return false;
-				}
-			});
+//		 btn_newFolder.setOnTouchListener(new Button.OnTouchListener()
+//			{
+//				public boolean onTouch(View v, MotionEvent event)
+//				{
+//					if(event.getAction() == MotionEvent.ACTION_DOWN)
+//					{
+//						v.setBackgroundResource(R.drawable.icon_newfolder_touched);
+//					}
+//					else if(event.getAction() == MotionEvent.ACTION_UP)
+//					{
+//						v.setBackgroundResource(R.drawable.icon_newfolder);
+//					}
+//					
+//					return false;
+//				}
+//			});
 		 
 		 btn_paste.setOnTouchListener(new Button.OnTouchListener()
 			{
@@ -226,15 +226,15 @@ public class PasteActivity extends Activity
 			}
 		 });
 		 
-		 //为newfolder按钮设置OnclickListener
-		 btn_newFolder.setOnClickListener(new Button.OnClickListener()
-		{
-			@Override
-			public void onClick(View v)
-			{
-				showNewFolderDialog(v);
-			}
-		});
+//		 //为newfolder按钮设置OnclickListener
+//		 btn_newFolder.setOnClickListener(new Button.OnClickListener()
+//		{
+//			@Override
+//			public void onClick(View v)
+//			{
+//				showNewFolderDialog(v);
+//			}
+//		});
 		 
 		 //为cancle按钮设置onclickListener
 		 btn_cancel.setOnClickListener(new Button.OnClickListener()
@@ -350,60 +350,60 @@ public class PasteActivity extends Activity
 		return super.onKeyDown(keyCode, event);
 	}
 	
-	private void showNewFolderDialog(View parent) 
-	{
-		EditText et_folderName;
-		Button btn_confirm;
-		Button btn_cancel;
-		
-		if (newFolderDialog == null) {
-			LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-					
-			view = layoutInflater.inflate(R.layout.window_newfolder, null);
-
-			newFolderDialog = new PopupWindow(view, LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-			
-			// TODO 添加操作按钮的OnclickListener,添加新建文件夹操作
-			et_folderName = (EditText) view.findViewById(R.id.et_folderName);
-			btn_confirm = (Button) view.findViewById(R.id.btn_confirmNewFolder);
-			btn_cancel = (Button) view.findViewById(R.id.btn_cancelNewFolder);
-			
-			Log.i(TAG, "et_folderName=" + et_folderName);
-			et_folderName.setText(R.string.newfolder);
-			
-			//为两个按钮设置OnTouchListener
-			OnTouchListener mOnTouchListener = new Button.OnTouchListener()
-			{
-				public boolean onTouch(View v, MotionEvent event)
-				{
-					if(event.getAction() == MotionEvent.ACTION_DOWN)
-					{
-						v.setBackgroundResource(R.color.halo_lightblue);
-					}
-					else if(event.getAction() == MotionEvent.ACTION_UP)
-					{
-						v.setBackgroundResource(R.color.white);
-					}
-					
-					return false;
-				}
-			};
-			
-			btn_confirm.setOnTouchListener(mOnTouchListener);
-			btn_cancel.setOnTouchListener(mOnTouchListener);
-			
-		}
-
-		// 使其聚集
-		newFolderDialog.setFocusable(true);
-		// 设置允许在外点击消失
-		newFolderDialog.setOutsideTouchable(false);
-		// 这个是为了点击“返回Back”也能使其消失，并且并不会影响你的背景
-		newFolderDialog.setBackgroundDrawable(new BitmapDrawable());
-		
-		newFolderDialog.showAtLocation(parent, Gravity.CENTER, 0, 0);
-
-	}
+//	private void showNewFolderDialog(View parent) 
+//	{
+//		EditText et_folderName;
+//		Button btn_confirm;
+//		Button btn_cancel;
+//		
+//		if (newFolderDialog == null) {
+//			LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//					
+//			view = layoutInflater.inflate(R.layout.window_newfolder, null);
+//
+//			newFolderDialog = new PopupWindow(view, LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+//			
+//			// TODO 添加操作按钮的OnclickListener,添加新建文件夹操作
+//			et_folderName = (EditText) view.findViewById(R.id.et_folderName);
+//			btn_confirm = (Button) view.findViewById(R.id.btn_confirmNewFolder);
+//			btn_cancel = (Button) view.findViewById(R.id.btn_cancelNewFolder);
+//			
+//			Log.i(TAG, "et_folderName=" + et_folderName);
+//			et_folderName.setText(R.string.newfolder);
+//			
+//			//为两个按钮设置OnTouchListener
+//			OnTouchListener mOnTouchListener = new Button.OnTouchListener()
+//			{
+//				public boolean onTouch(View v, MotionEvent event)
+//				{
+//					if(event.getAction() == MotionEvent.ACTION_DOWN)
+//					{
+//						v.setBackgroundResource(R.color.halo_lightblue);
+//					}
+//					else if(event.getAction() == MotionEvent.ACTION_UP)
+//					{
+//						v.setBackgroundResource(R.color.white);
+//					}
+//					
+//					return false;
+//				}
+//			};
+//			
+//			btn_confirm.setOnTouchListener(mOnTouchListener);
+//			btn_cancel.setOnTouchListener(mOnTouchListener);
+//			
+//		}
+//
+//		// 使其聚集
+//		newFolderDialog.setFocusable(true);
+//		// 设置允许在外点击消失
+//		newFolderDialog.setOutsideTouchable(false);
+//		// 这个是为了点击“返回Back”也能使其消失，并且并不会影响你的背景
+//		newFolderDialog.setBackgroundDrawable(new BitmapDrawable());
+//		
+//		newFolderDialog.showAtLocation(parent, Gravity.CENTER, 0, 0);
+//
+//	}
 	
 	//更新数据及ListView
 		private void updateDataAndList() 
