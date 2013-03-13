@@ -217,7 +217,7 @@ public class LoginActivity extends Activity {
 			}
 		});
         
-        // TODO 设置自动登录checkbox的监听器
+        // 设置自动登录checkbox的监听器
         cb_autoLogin.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
 		{
 			@Override
@@ -285,11 +285,9 @@ public class LoginActivity extends Activity {
 //					
 //				try
 //				{
-//					// TODO 需要修改为邮箱的映射文件
 //					fileUrl = SVNURL.parseURIEncoded("http://10.109.34.24/wangpan/" + userName + "/.config.db");
 //				} catch (SVNException e)
 //				{
-//					// TODO Auto-generated catch block
 //					e.printStackTrace();
 //				}
 //				
@@ -365,7 +363,6 @@ public class LoginActivity extends Activity {
 			fileUrl = SVNURL.parseURIEncoded("http://10.109.34.24/wangpan/" + userName + "/.config.db");
 		} catch (SVNException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

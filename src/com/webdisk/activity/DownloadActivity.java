@@ -2,6 +2,8 @@ package com.webdisk.activity;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import com.webdisk.R;
@@ -52,8 +54,6 @@ public class DownloadActivity extends Activity
 	
 	private List<String> items = null;
 	private List<String> paths = null;
-//	private String rootPath = "/sdcard";
-//	private String curPath = "/sdcard"; // TODO 此处设置网盘缓存文件路径
 	private String rootPath = Environment.getExternalStorageDirectory().toString();
 	private String curPath = Environment.getExternalStorageDirectory().toString();
 	
@@ -263,10 +263,16 @@ public class DownloadActivity extends Activity
 		
 		for(int i = 0; i < files.length; i++)
 		{
-			File file = files[i];
-			items.add(file.getName());
-			paths.add(file.getPath());
+			if(!files[i].getName().startsWith("."))
+			{
+				File file = files[i];
+				items.add(file.getName());
+				paths.add(file.getPath());
+			}
 		}
+		
+//		Collections.sort(items);
+//		Collections.sort(paths);
 		
 		lv_showFile.setAdapter(new UploadFileListAdapter(this, items, paths));
 	}
@@ -342,7 +348,6 @@ public class DownloadActivity extends Activity
 			btn_confirm.setOnTouchListener(mOnTouchListener);
 			btn_cancel.setOnTouchListener(mOnTouchListener);
 			
-			// TODO 添加操作按钮的OnclickListener,添加新建文件夹操作，此处为向系统目录新建文件夹
 			btn_cancel.setOnClickListener(new Button.OnClickListener()
 			{
 				@Override

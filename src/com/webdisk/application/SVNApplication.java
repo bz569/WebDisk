@@ -264,7 +264,7 @@ public class SVNApplication extends Application
 	}
 	
 	
-	// TODO 不知道这个做什么
+	//  不知道这个做什么
 	/**
 	 * Creates path of File path given.  Will look backwards through the 
 	 * path to create the entire folder structure needed, not just the 
@@ -438,7 +438,6 @@ public class SVNApplication extends Application
 		}
 		catch (SVNException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		catch (VerifyError ve)
@@ -628,7 +627,6 @@ public class SVNApplication extends Application
    		}
    		catch (Exception e)
    		{
-   			// TODO Auto-generated catch block
    			e.printStackTrace();
    			return e.getMessage();
    		}
@@ -680,7 +678,6 @@ public class SVNApplication extends Application
 			deleteURL = SVNURL.parseURIEncoded(deleteUrl);
 		} catch (SVNException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			
 			return false;

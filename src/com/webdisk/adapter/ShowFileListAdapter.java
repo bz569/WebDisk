@@ -206,7 +206,7 @@ public class ShowFileListAdapter extends BaseAdapter
 
 			actionMenu = new PopupWindow(view, LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 			
-			// TODO 初始化各按钮
+			//  初始化各按钮
 			btn_copy = (Button) view.findViewById(R.id.btn_copy);
 			btn_move = (Button) view.findViewById(R.id.btn_move);
 			btn_rename = (Button) view.findViewById(R.id.btn_rename);
@@ -222,11 +222,10 @@ public class ShowFileListAdapter extends BaseAdapter
 		// 这个是为了点击“返回Back”也能使其消失，并且并不会影响你的背景
 		actionMenu.setBackgroundDrawable(new BitmapDrawable());
 
-		// TODO 下面哪种菜单出现方式好
 //		actionMenu.showAsDropDown(parent, 0, 0);
 		actionMenu.showAtLocation(parent, Gravity.CENTER, 0, 0);
 		
-		// TODO 添加操作按钮的OnclickListener
+		//  添加操作按钮的OnclickListener
 		//复制
 		btn_copy.setOnClickListener(new Button.OnClickListener()
 		{
@@ -366,7 +365,6 @@ public class ShowFileListAdapter extends BaseAdapter
 
 			renameDialog = new PopupWindow(view, LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 			
-			// TODO 添加操作按钮的OnclickListener,添加新建文件夹操作
 			et_newName = (EditText) view.findViewById(R.id.et_newFileName);
 			btn_confirm = (Button) view.findViewById(R.id.btn_confirmRename);
 			btn_cancel = (Button) view.findViewById(R.id.btn_cancelRename);
@@ -478,7 +476,6 @@ public class ShowFileListAdapter extends BaseAdapter
 
 			showFileInfoDialg = new PopupWindow(view, LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 			
-			// TODO 添加操作按钮的OnclickListener,添加新建文件夹操作
 			tv_showFileInfo = (TextView) view.findViewById(R.id.tv_showFileInfo);
 			btn_close = (Button) view.findViewById(R.id.btn_closeFileInfo);
 			
@@ -531,7 +528,6 @@ public class ShowFileListAdapter extends BaseAdapter
 
 			deleteDialog = new PopupWindow(view, LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 			
-			// TODO 添加操作按钮的OnclickListener,添加新建文件夹操作
 			btn_confirm = (Button) view.findViewById(R.id.btn_confirmDelete);
 			btn_cancel = (Button) view.findViewById(R.id.btn_cancelDelete);
 			tv_showInfo = (TextView) view.findViewById(R.id.tv_confirmDelete);

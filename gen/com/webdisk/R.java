@@ -34,6 +34,7 @@ public final class R {
         /** Halo深蓝 
          */
         public static final int halo_lightorange=0x7f040002;
+        public static final int no_color=0x7f04000a;
         /** 浅蓝（背景） 
          */
         public static final int white=0x7f040005;
@@ -50,38 +51,39 @@ public final class R {
         public static final int group_item_height=0x7f050002;
     }
     public static final class drawable {
-        public static final int bg_login=0x7f020000;
-        public static final int divider_darkblue=0x7f020001;
-        public static final int divider_lightblue_h=0x7f020002;
-        public static final int divider_lightblue_v=0x7f020003;
-        public static final int divider_listview=0x7f020004;
-        public static final int group_bg=0x7f020005;
-        public static final int group_divider=0x7f020006;
-        public static final int grouplist_fixed_item_bg=0x7f020007;
-        public static final int grouplist_item_bg=0x7f020008;
-        public static final int grouplist_item_bg_sel=0x7f020009;
-        public static final int ic_launcher=0x7f02000a;
-        public static final int icon_action_overflow=0x7f02000b;
-        public static final int icon_action_overflow_touched=0x7f02000c;
-        public static final int icon_content_new=0x7f02000d;
-        public static final int icon_content_new_touched=0x7f02000e;
-        public static final int icon_copy=0x7f02000f;
-        public static final int icon_delete=0x7f020010;
-        public static final int icon_download=0x7f020011;
-        public static final int icon_download_text=0x7f020012;
-        public static final int icon_file=0x7f020013;
-        public static final int icon_folder=0x7f020014;
-        public static final int icon_info=0x7f020015;
-        public static final int icon_info_text=0x7f020016;
-        public static final int icon_move=0x7f020017;
-        public static final int icon_navigation_expand=0x7f020018;
-        public static final int icon_navigation_expand_touched=0x7f020019;
-        public static final int icon_navigation_previous_item=0x7f02001a;
-        public static final int icon_navigation_previous_item_disable=0x7f02001b;
-        public static final int icon_navigation_previous_item_touched=0x7f02001c;
-        public static final int icon_newfolder=0x7f02001d;
-        public static final int icon_newfolder_touched=0x7f02001e;
-        public static final int icon_rename=0x7f02001f;
+        public static final int bg_list_item=0x7f020000;
+        public static final int bg_login=0x7f020001;
+        public static final int divider_darkblue=0x7f020002;
+        public static final int divider_lightblue_h=0x7f020003;
+        public static final int divider_lightblue_v=0x7f020004;
+        public static final int divider_listview=0x7f020005;
+        public static final int group_bg=0x7f020006;
+        public static final int group_divider=0x7f020007;
+        public static final int grouplist_fixed_item_bg=0x7f020008;
+        public static final int grouplist_item_bg=0x7f020009;
+        public static final int grouplist_item_bg_sel=0x7f02000a;
+        public static final int ic_launcher=0x7f02000b;
+        public static final int icon_action_overflow=0x7f02000c;
+        public static final int icon_action_overflow_touched=0x7f02000d;
+        public static final int icon_content_new=0x7f02000e;
+        public static final int icon_content_new_touched=0x7f02000f;
+        public static final int icon_copy=0x7f020010;
+        public static final int icon_delete=0x7f020011;
+        public static final int icon_download=0x7f020012;
+        public static final int icon_download_text=0x7f020013;
+        public static final int icon_file=0x7f020014;
+        public static final int icon_folder=0x7f020015;
+        public static final int icon_info=0x7f020016;
+        public static final int icon_info_text=0x7f020017;
+        public static final int icon_move=0x7f020018;
+        public static final int icon_navigation_expand=0x7f020019;
+        public static final int icon_navigation_expand_touched=0x7f02001a;
+        public static final int icon_navigation_previous_item=0x7f02001b;
+        public static final int icon_navigation_previous_item_disable=0x7f02001c;
+        public static final int icon_navigation_previous_item_touched=0x7f02001d;
+        public static final int icon_newfolder=0x7f02001e;
+        public static final int icon_newfolder_touched=0x7f02001f;
+        public static final int icon_rename=0x7f020020;
     }
     public static final class id {
         public static final int action_settings=0x7f09005c;

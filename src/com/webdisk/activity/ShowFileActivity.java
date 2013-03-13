@@ -38,6 +38,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -272,7 +273,15 @@ public class ShowFileActivity extends Activity implements Runnable
 					updateDataAndList();
 				} else if (entry.getKind().compareTo(SVNNodeKind.FILE) == 0)
 				{
-					// TODO 此处添加对文件的操作
+					// 此处添加对文件的操作如果是文件，弹出下载界面
+					SVNDirEntry entry1 = mDirs.get(position);
+					String filePath = entry1.getURL().toDecodedString();
+					Log.i(TAG, "filePath=" + filePath);
+					view.setBackgroundDrawable(null);
+					Intent intent = new Intent(ShowFileActivity.this, DownloadActivity.class);
+					intent.putExtra("FILE_PATH", filePath);
+					startActivity(intent);
+					
 				}
 			}
 
@@ -432,7 +441,7 @@ public class ShowFileActivity extends Activity implements Runnable
 					int position, long id)
 			{
 
-				// TODO 为overflow菜单中各项添加监听器
+				//  为overflow菜单中各项添加监听器
 				if (groups.get(position).equals("新建文件夹"))
 				{
 					showNewFolderDialog(parent);
@@ -540,7 +549,7 @@ public class ShowFileActivity extends Activity implements Runnable
 		newFolderDialog = new PopupWindow(view, LayoutParams.FILL_PARENT,
 				LayoutParams.WRAP_CONTENT);
 
-		// TODO 添加操作按钮的OnclickListener,添加新建文件夹操作
+		//  添加操作按钮的OnclickListener,添加新建文件夹操作
 		et_folderName = (EditText) view.findViewById(R.id.et_folderName);
 		btn_confirm = (Button) view.findViewById(R.id.btn_confirmNewFolder);
 		btn_cancel = (Button) view.findViewById(R.id.btn_cancelNewFolder);

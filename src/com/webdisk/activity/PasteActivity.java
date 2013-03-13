@@ -201,7 +201,7 @@ public class PasteActivity extends Activity
 					}
 					else if (entry.getKind().compareTo(SVNNodeKind.FILE) == 0)
 					{
-						// TODO 此处添加对文件的操作
+						//  文件无操作
 					}
 				}
 			 	
@@ -363,7 +363,7 @@ public class PasteActivity extends Activity
 //
 //			newFolderDialog = new PopupWindow(view, LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 //			
-//			// TODO 添加操作按钮的OnclickListener,添加新建文件夹操作
+//			//  添加操作按钮的OnclickListener,添加新建文件夹操作
 //			et_folderName = (EditText) view.findViewById(R.id.et_folderName);
 //			btn_confirm = (Button) view.findViewById(R.id.btn_confirmNewFolder);
 //			btn_cancel = (Button) view.findViewById(R.id.btn_cancelNewFolder);

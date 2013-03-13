@@ -3,7 +3,8 @@
     android:layout_width="fill_parent"
     android:layout_height="48dp"
     android:orientation="vertical" 
-    android:padding="8dp">
+    android:padding="8dp"
+    android:background="@drawable/bg_list_item">
 
     <ImageView
         android:id="@+id/iv_row_showFileImage"

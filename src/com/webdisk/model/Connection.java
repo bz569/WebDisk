@@ -111,15 +111,6 @@ public class Connection extends SVNModel
 			}
 		}
 		
-		// TODO OASVN_Connection.java 229 ¿ªÊ¼
-		
-		
-		
-		
-		
-		
-		
-		
 		
 		
 		// getters and setters

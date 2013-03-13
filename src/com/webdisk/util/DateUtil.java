@@ -65,7 +65,6 @@ public class DateUtil {
 		  try {
 			return sdf.parse(getGMTStringNow());
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		}

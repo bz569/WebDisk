@@ -43,10 +43,8 @@ public class UploadActivity extends Activity
 	private List<String> items = null;
 	private List<String> paths = null;
 	private ArrayList<String> svnItemList = null;
-//	private String rootPath = "/sdcard";
-//	private String curPath = "/sdcard"; // TODO 此处设置网盘缓存文件路径
 	private String rootPath = Environment.getExternalStorageDirectory().toString();
-	private String curPath = Environment.getExternalStorageDirectory().toString(); // TODO 此处设置网盘缓存文件路径
+	private String curPath = Environment.getExternalStorageDirectory().toString(); // 此处设置网盘缓存文件路径
 	
 	private String srcFilePath;
 	private String dstPath;
@@ -254,7 +252,7 @@ public class UploadActivity extends Activity
 			}
 		});
 		 
-		 // TODO textview显示上传文件目录
+		 //  textview显示上传文件目录
 		 tv_showUploadPath.setText(dstPath);
 		 
 	}

@@ -10,6 +10,8 @@
    	<color name="gray">#333333</color><!--灰色 -->
    	<color name="filelist_selected">#ffe3a0</color>
    	<color name="halo_darkpurple">#9933CC</color>
+   	<color name="no_color">#00000000</color>
+   	
     
     
 </resources>
