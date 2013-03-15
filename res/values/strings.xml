@@ -25,12 +25,13 @@
 	<string name="show_download_file">将下载文件：</string>
 	<string name="show_copy_file">复制文件：</string>
 	<string name="show_move_file">移动文件：</string>
+	<string name="show_move_folder">移动文件夹：</string>
 	<string name="input_new_file_name">请输入新的文件或文件夹名</string>
 	<string name="fileinfo_2">文件详情</string>
 	<string name="close">关&#160;&#160;闭</string>
 	<string name="delete_2">删&#160;&#160;&#160;&#160;除</string>
 	<string name="delete_file">确定要删除此文件：</string>
-	<string name="delete_folder">确定要删除此文件夹吗？</string>
+	<string name="delete_folder">确定要删除此文件夹:</string>
 	<string name="login_auth_error">用户名或密码输入错误，请重新输入</string>
 	<string name="login_no_connection">网络错误，请检查网络</string>
 	<string name="folder_exist">文件夹已经存在，请重新输入文件夹名</string>

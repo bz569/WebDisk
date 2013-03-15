@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/rl_popmenu_fileaction"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/group_bg"
+        android:padding="16dp" >
+
+        <Button
+            android:id="@+id/btn_folder_rename"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/icon_rename" />
+
+        <TextView
+            android:id="@+id/tv_folder_rename"
+            android:layout_width="48dp"
+            android:layout_height="16dp"
+            android:layout_alignLeft="@+id/btn_folder_rename"
+            android:layout_below="@+id/btn_folder_rename"
+            android:layout_marginLeft="4dp"
+            android:text="@string/rename" />
+
+        <Button
+            android:id="@+id/btn_folder_move"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignBaseline="@+id/btn_folder_rename"
+            android:layout_alignBottom="@+id/btn_folder_rename"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/icon_move" />
+
+        <TextView
+            android:id="@+id/tv_folder_move"
+            android:layout_width="32dp"
+            android:layout_height="16dp"
+            android:layout_alignBaseline="@+id/tv_folder_rename"
+            android:layout_alignBottom="@+id/tv_folder_rename"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="3dp"
+            android:text="@string/move" />
+
+        <Button
+            android:id="@+id/btn_folder_delete"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignBaseline="@+id/btn_folder_move"
+            android:layout_alignParentRight="true"
+            android:layout_alignBottom="@+id/btn_folder_move"
+            android:background="@drawable/icon_delete" />
+
+        <TextView
+            android:id="@+id/tv_delete"
+            android:layout_width="32dp"
+            android:layout_height="16dp"
+            android:layout_alignRight="@+id/btn_folder_delete"
+            android:layout_marginRight="5dp"
+            android:layout_below="@+id/btn_folder_delete"
+            android:text="@string/delete" />
+
+    </RelativeLayout>
+
+</LinearLayout>

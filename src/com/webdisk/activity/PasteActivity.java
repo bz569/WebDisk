@@ -72,6 +72,7 @@ public class PasteActivity extends Activity
 	
 	private String srcFilePath;
 	private boolean isMove;
+	private boolean isFolder;
 	private String dstPath;
 	private String fileName;
 	
@@ -89,6 +90,7 @@ public class PasteActivity extends Activity
 		Intent intent = getIntent();
 		srcFilePath = intent.getStringExtra("SRC_FILE_PATH");
 		isMove = intent.getBooleanExtra("IS_MOVE", false);
+		isFolder = intent.getBooleanExtra("IS_FOLDER", false);
 		
 		btn_naviationPrevious = (Button)findViewById(R.id.btn_paste_naviationPrevious);
 //		btn_newFolder = (Button)findViewById(R.id.btn_paste_newfolder);
@@ -102,7 +104,14 @@ public class PasteActivity extends Activity
 		//设置复制和移动功能不同的显示
 		if(isMove)
 		{
-			tv_showHint.setText(R.string.show_move_file);
+			if(isFolder)
+			{
+				tv_showHint.setText(R.string.show_move_folder);
+			}
+			else
+			{
+				tv_showHint.setText(R.string.show_move_file);
+			}
 			btn_paste.setText(R.string.move);
 		}
 		else
