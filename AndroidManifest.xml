@@ -20,11 +20,13 @@
         <activity
             android:name="com.webdisk.activity.LoginActivity"
             android:label="@string/app_name" >
+            <!-- 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+             -->
         </activity>
         <activity android:name="com.webdisk.activity.ShowFileActivity"></activity>
         <activity android:name="com.webdisk.activity.PasteActivity"></activity>
@@ -33,6 +35,12 @@
         <service android:name="com.webdisk.service.DownloadService"></service>
         <service android:name="com.webdisk.service.UploadService"></service>
         <service android:name="com.webdisk.service.CopyService"></service>
+        <activity android:name="com.webdisk.activity.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
     
 
