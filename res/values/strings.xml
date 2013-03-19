@@ -51,6 +51,8 @@
 	<string name="new_folder_success">新建文件夹成功</string>
 	<string name="new_folder_error">新建文件夹失败</string>
 	<string name="pls_input_loginInfo">请输入用户名或密码</string>
+	<string name="info_fileName">文&#160;&#160;件&#160;&#160;名：</string>
+	<string name="info_fileSuffix">文件类型：</string>
 	
 	
 	

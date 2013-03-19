@@ -48,7 +48,7 @@ import com.webdisk.util.DeleteUtil;
 public class ShowFileListAdapter extends BaseAdapter
 {
 	private static final String TAG = "ShowFileListAdapter";
-
+	
 	private final static int DELETE_MSG = 11;
 	private final static int DELETE_SUCCESS = 111;
 	private final static int DELETE_ERROR = 110;
@@ -171,8 +171,8 @@ public class ShowFileListAdapter extends BaseAdapter
 		{
 			holder.iv_showFileImage.setImageBitmap(icon_folder);
 			// 对文件夹禁止fileAction按钮
-//			holder.btn_fileAction.setEnabled(false);
-//			holder.btn_fileAction.setVisibility(View.GONE);
+			// holder.btn_fileAction.setEnabled(false);
+			// holder.btn_fileAction.setVisibility(View.GONE);
 		} else if (entry.getKind().compareTo(SVNNodeKind.FILE) == 0) // 当前为文件时
 		{
 			holder.iv_showFileImage.setImageBitmap(icon_file);
@@ -204,7 +204,7 @@ public class ShowFileListAdapter extends BaseAdapter
 		final SVNDirEntry entry = mdir.get(position);
 		final String filePath = entry.getURL().toDecodedString();
 
-		if (entry.getKind().compareTo(SVNNodeKind.FILE) == 0)//文件操作
+		if (entry.getKind().compareTo(SVNNodeKind.FILE) == 0)// 文件操作
 		{
 			// if (actionMenu == null) {
 			LayoutInflater layoutInflater = (LayoutInflater) LayoutInflater
@@ -301,7 +301,7 @@ public class ShowFileListAdapter extends BaseAdapter
 				@Override
 				public void onClick(View v)
 				{
-					showFileInfoDialog(parent);
+					showFileInfoDialog(parent, filePath);
 
 					if (actionMenu != null)
 					{
@@ -347,91 +347,90 @@ public class ShowFileListAdapter extends BaseAdapter
 					context.startActivity(intent);
 				}
 			});
-		}
-		else if(entry.getKind().compareTo(SVNNodeKind.DIR) == 0)//文件夹时
+		} else if (entry.getKind().compareTo(SVNNodeKind.DIR) == 0)// 文件夹时
 		{
 			// if (actionMenu == null) {
-						LayoutInflater layoutInflater = (LayoutInflater) LayoutInflater
-								.from(context);
+			LayoutInflater layoutInflater = (LayoutInflater) LayoutInflater
+					.from(context);
 
-						view = layoutInflater.inflate(R.layout.menu_folderaction, null);
+			view = layoutInflater.inflate(R.layout.menu_folderaction, null);
 
-						actionMenu = new PopupWindow(view, LayoutParams.FILL_PARENT,
-								LayoutParams.WRAP_CONTENT);
+			actionMenu = new PopupWindow(view, LayoutParams.FILL_PARENT,
+					LayoutParams.WRAP_CONTENT);
 
-						// 初始化各按钮
-						btn_move = (Button) view.findViewById(R.id.btn_folder_move);
-						btn_rename = (Button) view.findViewById(R.id.btn_folder_rename);
-						btn_delete = (Button) view.findViewById(R.id.btn_folder_delete);
-						// }
+			// 初始化各按钮
+			btn_move = (Button) view.findViewById(R.id.btn_folder_move);
+			btn_rename = (Button) view.findViewById(R.id.btn_folder_rename);
+			btn_delete = (Button) view.findViewById(R.id.btn_folder_delete);
+			// }
 
-						// 使其聚集
-						actionMenu.setFocusable(true);
-						// 设置允许在外点击消失
-						actionMenu.setOutsideTouchable(true);
-						// 这个是为了点击“返回Back”也能使其消失，并且并不会影响你的背景
-						actionMenu.setBackgroundDrawable(new BitmapDrawable());
+			// 使其聚集
+			actionMenu.setFocusable(true);
+			// 设置允许在外点击消失
+			actionMenu.setOutsideTouchable(true);
+			// 这个是为了点击“返回Back”也能使其消失，并且并不会影响你的背景
+			actionMenu.setBackgroundDrawable(new BitmapDrawable());
 
-						// actionMenu.showAsDropDown(parent, 0, 0);
-						actionMenu.showAtLocation(parent, Gravity.CENTER, 0, 0);
+			// actionMenu.showAsDropDown(parent, 0, 0);
+			actionMenu.showAtLocation(parent, Gravity.CENTER, 0, 0);
 
-						// 添加操作按钮的OnclickListener
-						// 移动
-						btn_move.setOnClickListener(new Button.OnClickListener()
-						{
-							SVNDirEntry entry = mdir.get(position);
-							String filePath = entry.getURL().toDecodedString();
+			// 添加操作按钮的OnclickListener
+			// 移动
+			btn_move.setOnClickListener(new Button.OnClickListener()
+			{
+				SVNDirEntry entry = mdir.get(position);
+				String filePath = entry.getURL().toDecodedString();
 
-							@Override
-							public void onClick(View v)
-							{
-								Intent intent = new Intent(context, PasteActivity.class);
-								intent.putExtra("IS_MOVE", true);
-								intent.putExtra("IS_FOLDER", true);
-								intent.putExtra("SRC_FILE_PATH", filePath);
-								context.startActivity(intent);
+				@Override
+				public void onClick(View v)
+				{
+					Intent intent = new Intent(context, PasteActivity.class);
+					intent.putExtra("IS_MOVE", true);
+					intent.putExtra("IS_FOLDER", true);
+					intent.putExtra("SRC_FILE_PATH", filePath);
+					context.startActivity(intent);
 
-								if (actionMenu != null)
-								{
-									actionMenu.dismiss();
-								}
-							}
-						});
-						// 重命名
-						btn_rename.setOnClickListener(new Button.OnClickListener()
-						{
-							// SVNDirEntry entry = mdir.get(position);
-							// String filePath = entry.getURL().toDecodedString();
+					if (actionMenu != null)
+					{
+						actionMenu.dismiss();
+					}
+				}
+			});
+			// 重命名
+			btn_rename.setOnClickListener(new Button.OnClickListener()
+			{
+				// SVNDirEntry entry = mdir.get(position);
+				// String filePath = entry.getURL().toDecodedString();
 
-							@Override
-							public void onClick(View v)
-							{
-								showReNameDialog(parent, filePath, true);
+				@Override
+				public void onClick(View v)
+				{
+					showReNameDialog(parent, filePath, true);
 
-								if (actionMenu != null)
-								{
-									actionMenu.dismiss();
-								}
+					if (actionMenu != null)
+					{
+						actionMenu.dismiss();
+					}
 
-							}
-						});
-						// 删除
-						btn_delete.setOnClickListener(new Button.OnClickListener()
-						{
-							// SVNDirEntry entry = mdir.get(position);
-							// String filePath = entry.getURL().toDecodedString();
+				}
+			});
+			// 删除
+			btn_delete.setOnClickListener(new Button.OnClickListener()
+			{
+				// SVNDirEntry entry = mdir.get(position);
+				// String filePath = entry.getURL().toDecodedString();
 
-							@Override
-							public void onClick(View v)
-							{
-								showDeleteDialog(parent, filePath, true);
+				@Override
+				public void onClick(View v)
+				{
+					showDeleteDialog(parent, filePath, true);
 
-								if (actionMenu != null)
-								{
-									actionMenu.dismiss();
-								}
-							}
-						});
+					if (actionMenu != null)
+					{
+						actionMenu.dismiss();
+					}
+				}
+			});
 
 		}
 		// //如果目标为文件夹，禁止下载、删除、移动、复制、详情按钮
@@ -449,7 +448,8 @@ public class ShowFileListAdapter extends BaseAdapter
 
 	}
 
-	private void showReNameDialog(View parent, final String srcFilePath, final boolean isFolder)
+	private void showReNameDialog(View parent, final String srcFilePath,
+			final boolean isFolder)
 	{
 		final EditText et_newName;
 		Button btn_confirm;
@@ -470,12 +470,11 @@ public class ShowFileListAdapter extends BaseAdapter
 		btn_cancel = (Button) view.findViewById(R.id.btn_cancelRename);
 
 		// 设置et_newName内容为原文件名
-		if(!isFolder)
+		if (!isFolder)
 		{
-		et_newName.setText(srcFileName.substring(0,
-				srcFileName.lastIndexOf(".")));
-		}
-		else
+			et_newName.setText(srcFileName.substring(0,
+					srcFileName.lastIndexOf(".")));
+		} else
 		{
 			et_newName.setText(srcFileName);
 		}
@@ -511,14 +510,14 @@ public class ShowFileListAdapter extends BaseAdapter
 				// srcFilePath.length());
 
 				final String newName;
-				if(!isFolder)
+				if (!isFolder)
 				{
 					String suffix = srcFileName.substring(
 							srcFileName.lastIndexOf("."), srcFileName.length());
 					newName = et_newName.getText().toString() + suffix;
-				// Log.i(TAG, "Rename file " + srcFilePath + " as " + newName);
-				}
-				else
+					// Log.i(TAG, "Rename file " + srcFilePath + " as " +
+					// newName);
+				} else
 				{
 					newName = et_newName.getText().toString();
 				}
@@ -582,48 +581,76 @@ public class ShowFileListAdapter extends BaseAdapter
 
 	}
 
-	private void showFileInfoDialog(View parent)
+	private void showFileInfoDialog(View parent, String filePath)
 	{
 		TextView tv_showFileInfo = null;
 		Button btn_close = null;
 
-		if (showFileInfoDialg == null)
+		LayoutInflater layoutInflater = (LayoutInflater) LayoutInflater
+				.from(context);
+
+		view = layoutInflater.inflate(R.layout.windows_showfileinfo, null);
+
+		showFileInfoDialg = new PopupWindow(view, LayoutParams.FILL_PARENT,
+				LayoutParams.WRAP_CONTENT);
+
+		tv_showFileInfo = (TextView) view.findViewById(R.id.tv_showFileInfo);
+		btn_close = (Button) view.findViewById(R.id.btn_closeFileInfo);
+
+		//设置显示内容
+		String fileName  = filePath.substring(filePath.lastIndexOf("/") + 1);
+		String showFileName = context.getString(R.string.info_fileName) + " " + fileName;
+		String suffix = fileName.substring(fileName.lastIndexOf("."));
+		String showFileKind = null;
+		
+		// TODO 添加其他文件类型
+		if(".txt".equals(suffix) || ".doc".equals(suffix) || ".pdf".equals(suffix))
 		{
-			LayoutInflater layoutInflater = (LayoutInflater) LayoutInflater
-					.from(context);
-
-			view = layoutInflater.inflate(R.layout.windows_showfileinfo, null);
-
-			showFileInfoDialg = new PopupWindow(view, LayoutParams.FILL_PARENT,
-					LayoutParams.WRAP_CONTENT);
-
-			tv_showFileInfo = (TextView) view
-					.findViewById(R.id.tv_showFileInfo);
-			btn_close = (Button) view.findViewById(R.id.btn_closeFileInfo);
-
-			// 为两个按钮设置OnTouchListener
-			OnTouchListener mOnTouchListener = new Button.OnTouchListener()
-			{
-				public boolean onTouch(View v, MotionEvent event)
-				{
-					if (event.getAction() == MotionEvent.ACTION_DOWN)
-					{
-						v.setBackgroundResource(R.color.halo_lightblue);
-					} else if (event.getAction() == MotionEvent.ACTION_UP)
-					{
-						v.setBackgroundResource(R.color.white);
-					}
-
-					return false;
-				}
-			};
-
-			btn_close.setOnTouchListener(mOnTouchListener);
-
-			// TODO 在此处设置用TextView显示文件信息(一定要在此处设置？)
-			tv_showFileInfo.setText("此处显示文件详细信息");
-
+			showFileKind = context.getString(R.string.info_fileSuffix) + " 文档文件(" + suffix + ")"; 
 		}
+		else if(".wma".equals(suffix) || ".mp3".equals(suffix) || ".wav".equals(suffix))
+		{
+			showFileKind = context.getString(R.string.info_fileSuffix) + " 声音文件(" + suffix + ")"; 
+		}
+		else if(".MP4".equals(suffix) || ".wmv".equals(suffix) || ".rmvb".equals(suffix))
+		{
+			showFileKind = context.getString(R.string.info_fileSuffix) + " 视频文件(" + suffix + ")"; 
+		}
+		else if(".jpg".equals(suffix) || ".png".equals(suffix) || ".bmp".equals(suffix))
+		{
+			showFileKind = context.getString(R.string.info_fileSuffix) + " 图片文件(" + suffix + ")"; 
+		}
+		else
+		{
+			showFileKind = context.getString(R.string.info_fileSuffix) + " 其他文件(" + suffix + ")"; 
+		}
+		
+		String fileInfo = showFileName + "\n" + showFileKind;
+		
+		tv_showFileInfo.setText(fileInfo);
+		
+		
+		// 为两个按钮设置OnTouchListener
+		OnTouchListener mOnTouchListener = new Button.OnTouchListener()
+		{
+			public boolean onTouch(View v, MotionEvent event)
+			{
+				if (event.getAction() == MotionEvent.ACTION_DOWN)
+				{
+					v.setBackgroundResource(R.color.halo_lightblue);
+				} else if (event.getAction() == MotionEvent.ACTION_UP)
+				{
+					v.setBackgroundResource(R.color.white);
+				}
+
+				return false;
+			}
+		};
+
+		btn_close.setOnTouchListener(mOnTouchListener);
+
+		// TODO 在此处设置用TextView显示文件信息(一定要在此处设置？)
+//		tv_showFileInfo.setText("此处显示文件详细信息");
 
 		// 使其聚集
 		showFileInfoDialg.setFocusable(true);
@@ -636,7 +663,8 @@ public class ShowFileListAdapter extends BaseAdapter
 
 	}
 
-	private void showDeleteDialog(View parent, final String deleteFilePath, final boolean isFolder)
+	private void showDeleteDialog(View parent, final String deleteFilePath,
+			final boolean isFolder)
 	{
 		TextView tv_showInfo;
 		Button btn_confirm;
@@ -675,18 +703,17 @@ public class ShowFileListAdapter extends BaseAdapter
 		btn_cancel.setOnTouchListener(mOnTouchListener);
 
 		// TODO 在此处设置删除对话框提示内容（file/folder）
-		if(!isFolder)
+		if (!isFolder)
 		{
 			String[] tmp = deleteFilePath.split("/");
-			String hint = context.getString(R.string.delete_file)
-					+ "\n" +tmp[tmp.length - 1];
+			String hint = context.getString(R.string.delete_file) + "\n"
+					+ tmp[tmp.length - 1];
 			tv_showInfo.setText(hint);
-		}
-		else
+		} else
 		{
 			String[] tmp = deleteFilePath.split("/");
-			String hint = context.getString(R.string.delete_folder)
-					+ "\n" +tmp[tmp.length - 1];
+			String hint = context.getString(R.string.delete_folder) + "\n"
+					+ tmp[tmp.length - 1];
 			tv_showInfo.setText(hint);
 		}
 
