@@ -8,22 +8,30 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 
+import javax.mail.NoSuchProviderException;
+
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
+import android.content.res.Resources.Theme;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
 import com.webdisk.application.SVNApplication;
+import com.webdisk.mail.CS_console_new;
 
 public class DownloadUtil
 {
 	private static final String TAG = "DownloadUtil";
 	
 	private static String CACHE_DIR = Environment.getExternalStorageDirectory() + "/Webdisk/cache/";
+	private static String[] USERNAME = {"cyberbox1@163.com","cyberbox2@163.com","cyberbox3@163.com","cyberbox4@163.com","cyberbox5@163.com"};
+	private static String[] PASSWORD = {"cyberbox","cyberbox","cyberbox","cyberbox","cyberbox"};
+	private static String SERVER = "imap.163.com";
+	private static String USER_ID = "363";
 	
 	private static final int EXPORT_START = 0;
 	private static final int EXPORT_FINISH = 2;
@@ -126,6 +134,8 @@ public class DownloadUtil
 		{
 			// TODO 从邮箱下载
 			Log.i(TAG, "从邮箱下载");
+			downloadFormMail(mId);
+			
 		}
 		else if(isMail.equals("PROP_NOT_EXSIT"))//从web端上传的文件没有svn properties
 		{
@@ -177,7 +187,36 @@ public class DownloadUtil
 			else
 			{
 				// TODO 从邮箱下载
-				Log.i(TAG, "从邮箱下载");
+				Log.i(TAG, "从邮箱下载web端上传的文件");
+				//从cacheFile获取id
+				try
+				{
+					FileReader fr = new FileReader(cacheFile);
+					BufferedReader br = new BufferedReader(fr);
+					String line = "";
+					while ((line=br.readLine())!=null) 
+					{
+						if(line.contains("magicgourd:id"))
+						{
+							String[] tmp = line.split("==");
+							mId = tmp[tmp.length-1];
+							break;
+						}
+			        }
+					
+					br.close();
+					fr.close();
+				} catch (FileNotFoundException e)
+				{
+					e.printStackTrace();
+				} catch (IOException e)
+				{
+					e.printStackTrace();
+				}
+				//下载文件
+				Log.i(TAG, "mID of file from WEB: " + mId);
+				downloadFormMail(mId);
+				cacheFile.delete();
 			}
 		}
 		
@@ -220,7 +259,32 @@ public class DownloadUtil
 		
 	}
 	
-	
+	private void downloadFormMail(final String mId)
+	{
+		new Thread(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				try
+				{
+					CS_console_new mMailDownloader = new CS_console_new(USERNAME, PASSWORD, SERVER);
+					mMailDownloader.receive(mId, CACHE_DIR, desPath, fileName);
+				} catch (NoSuchProviderException e)
+				{
+					e.printStackTrace();
+				} catch (IOException e)
+				{
+					e.printStackTrace();
+				}
+				
+				Message downloadFinishMsg = new Message();
+				downloadFinishMsg.what = EXPORT_FINISH;
+				downloadHandler.sendMessage(downloadFinishMsg);
+				
+			}
+		}).start();
+	}
 	
 	
 	

@@ -31,7 +31,6 @@ public class UploadUtil
 	private static String[] PASSWORD = {"cyberbox","cyberbox","cyberbox","cyberbox","cyberbox"};
 	private static String SERVER = "imap.163.com";
 	private static String USER_ID = "363";
-	private static int CHUNK_LENGTH = 1048576;
 	private static String CACHE_DIR = Environment.getExternalStorageDirectory() + "/Webdisk/cache/";
 	
 	

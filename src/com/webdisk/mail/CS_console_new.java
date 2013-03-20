@@ -50,7 +50,7 @@ public class CS_console_new {
 		if(file.length() <= chunkLength){
 			//new threadSampleSender(0 ,templeDir ,"_" + this.getFileName(dir) + ".part" + 0 ,Myid+":"+ 0 ,1 ).start();
 			SampleSend sender = new SampleSend(username[0],password[0],server,folderName);
-			if(sender.send(new File(dir),this.getFileName(dir),this.getFileName(dir),Myid,"1",""))
+			if(sender.send(new File(dir),this.getFileName(dir),this.getFileName(dir),Myid+":0","1",""))
 				Log.i("in","成功发送小文件");
 			else
 				Log.i("in","fail");
@@ -134,8 +134,7 @@ public class CS_console_new {
 		return nChunk;
 	}
 	
-	public void receive(String Myid , int nChunk , String templeDir  , String fileDir , String fileName) throws IOException{//暂时采用全部下载到临时文件夹后再拼装//,String templeName
-		String templeName = null;
+	public void receive(String Myid , String templeDir  , String fileDir , String fileName) throws IOException{//暂时采用全部下载到临时文件夹后再拼装//,String templeName
 		
 		
 		if(templeDir.charAt(templeDir.length() - 1) != '/')
@@ -148,39 +147,15 @@ public class CS_console_new {
 		files1.mkdirs();
 		
 		receiveThreads = new threadSampleReceiver[numOfEmailbox];
-		int startPos = nChunk % numOfEmailbox;
-		boolean notEnd = true;
-		int count = 0;
+		//int startPos = nChunk % numOfEmailbox;
 		int i = 0;
-		while(notEnd){
-			if(i < numOfEmailbox){
-				Log.i("in","开始下载i:" + i +"startPos:" +startPos);
-				String Myid_i = Myid + ":" + i;
-				templeName =  "." + fileName + ".part" + i;
-				receiveThreads[startPos] = new threadSampleReceiver(startPos , Myid_i ,templeDir,templeName);
-				receiveThreads[startPos].start();
+		while(i < numOfEmailbox){
+				//Log.i("in","开始下载i:" + i );
+				//String Myid_i = Myid + ":" + i;
+				//templeName =  "." + fileName + ".part" + i;
+				receiveThreads[i] = new threadSampleReceiver(i , Myid ,templeDir,fileName);
+				receiveThreads[i].start();
 				i++;
-				count++;
-			}
-			else if(i >= numOfEmailbox && i < nChunk){
-				if(!receiveThreads[startPos].isFinish())
-					continue;
-				else{
-					int last_i = receiveThreads[startPos].getNumOfMyid();
-					if(last_i + numOfEmailbox < nChunk){
-						int now_i = last_i + numOfEmailbox;
-						Log.i("in","开始下载:" + now_i);
-						String Myid_i = Myid + ":" + now_i;
-						templeName = "." + fileName + ".part" + now_i;
-						receiveThreads[startPos] = new threadSampleReceiver(startPos , Myid_i ,templeDir,templeName);
-						receiveThreads[startPos].start();
-						count++;
-					}	
-				}
-			}
-			startPos = (startPos + 1) % numOfEmailbox ; 
-			if(count >= nChunk)
-				notEnd = false;
 		}
 		int i1 = 0 ;
 		Log.i("in","判断是否结束");
@@ -192,9 +167,9 @@ public class CS_console_new {
 		}
 		Log.i("in","下载结束 开始整合");
 		//整合文件
-		install_random( templeDir ,fileName, nChunk ,fileDir + fileName);
-		Log.i("in","整合完毕");
-
+		install(templeDir ,fileName,fileDir + fileName);
+		//Log.i("in","整合完毕");
+	
 		/*
 		//删除文件：//已经迁移到整合文件的时候
 		for(int t = 0 ; t < nChunk ; t ++){
@@ -244,7 +219,7 @@ public class CS_console_new {
 		
 	}
 	//整合方法
-	public void install(String templeDir ,String fileName, int nChunk ,String fileAddress) throws IOException{//FileName为组装后的文件存入的位置+文件名 //,String templeName
+	public void install(String templeDir ,String fileName,String fileAddress) throws IOException{//FileName为组装后的文件存入的位置+文件名 //,String templeName
 		String path = getPath(fileAddress);
 		new File(path).mkdirs();
 		if(templeDir.charAt(templeDir.length() - 1) != '/')
@@ -252,7 +227,7 @@ public class CS_console_new {
 		File newFile = new File(fileAddress);
 		FileOutputStream fo = new FileOutputStream(newFile);
 		
-		for(int i = 0 ; i < nChunk ; i++){
+		for(int i = 0 ;  ; i++){
 			String templeLiitleName = templeDir + "." + fileName + ".part" + i;
 			File teFile = new File(templeLiitleName);
 			if(teFile.exists()){
@@ -267,21 +242,26 @@ public class CS_console_new {
 				fi.close();
 				new threadDelete(teFile).start();
 			}
+			else{
+				break;
+			}
 		}	
 		fo.close();
 	}
 
-	public void install_random(String templeDir , String fileName , int nChunk , String fileAddress) throws FileNotFoundException{
+	public void install_random(String templeDir , String fileName , String fileAddress) throws FileNotFoundException{
 		String path = getPath(fileAddress);
 			new File(path).mkdirs();
 		File outFile = new File(fileAddress);
 		if(templeDir.charAt(templeDir.length() - 1) != '/')
 			templeDir = templeDir + "/";
-		for(int i = 0 ; i < nChunk ; i++){
+		for(int i = 0 ;  ; i++){
 			String templeLiitleName = templeDir + "." + fileName + ".part" + i;
 			File inFile = new File(templeLiitleName);
 			if(inFile.exists())
 				new receiveThreadRandom(outFile,inFile,i).start();
+			else
+				break;
 		}	
 	}
 	class receiveThreadRandom extends Thread{
@@ -302,7 +282,7 @@ public class CS_console_new {
 					int startPos = chunkLength*i;
 					int c = 0 ;
 					out.seek(startPos);
-					Log.i("in",i+": start");
+					//Log.i("in",i+": start");
 					byte[] b = new byte[1024];
 					c = in.read(b);
 					while(c != -1){
@@ -375,20 +355,21 @@ public class CS_console_new {
 	//接收的进程
 	class threadSampleReceiver extends Thread{
 		private boolean flag= false , end = false; 
-		private int startPos;
-		private String Myid_i,storeDir,fileName;
-		public threadSampleReceiver(int startPos ,String Myid_i ,String storeDir, String fileName){//String Myid,String storeDir
-			this.startPos = startPos;
-			this.Myid_i= Myid_i;
+		private int i;
+		private String Myid,storeDir,fileName;
+		public threadSampleReceiver(int i ,String Myid ,String storeDir, String fileName){//String Myid,String storeDir
+			this.i = i;
+			this.Myid= Myid;
 			this.storeDir = storeDir;
 			this.fileName = fileName;
 		}
 		public void run(){
-			SampleReceive receiver = new SampleReceive(username[startPos] ,password[startPos] ,server,folderName);
-			Log.i("in",Myid_i + " 开始接收");
-			flag = receiver.receive(Myid_i,storeDir,fileName);
+			SampleReceive receiver = new SampleReceive(username[i] ,password[i] ,server,folderName);
+			Log.i("in","邮箱 " + username[i]+ " 开始接收");
+			receiver.receive(Myid,storeDir,fileName);
+			flag = receiver.isFinish();
 			end = true;
-			Log.i("in",Myid_i + " 接收完成 " +flag);
+			Log.i("in","邮箱 " + username[i]+ " 接收结束 " +flag);
 		}
 		
 		public boolean isFinish(){
@@ -397,10 +378,7 @@ public class CS_console_new {
 		public boolean isOK(){
 			return flag;
 		}
-		public int getNumOfMyid(){
-			String num = Myid_i.substring(Myid_i.lastIndexOf(":")+1);
-			return Integer.decode(num);
-		}
+		
 	}
 	//删除的进程
 	class threadDelete extends Thread{
@@ -423,10 +401,10 @@ public class CS_console_new {
 		
 		try {
 			CS_console_new cs = new CS_console_new(username,password,server);
-			//cs.send("19901111", 1024*1024, "E:/1/彩虹天堂.mp3", "E:/1/12"))
-			//cs.receive("19901111", 7, "E:/1/12",  "E:/1/123/" ,"彩虹天堂.mp3");
-			//cs.split("E:/1/lalala.mp3", "E:/1/12", 1024*1024);
-			//cs.install_random("E:/1/12", "lalala.mp3", 8, "E:/1/123/完美主义.mp3");
+			cs.send("19900517",  "E:/1/彩虹天堂.mp3", "E:/1/12");
+			//cs.receive("19901111", "E:/1/12",  "E:/1/123/" ,"彩虹天堂.mp3");
+			//cs.split("E:/1/lalala.mp3", "E:/1/12");
+			//cs.install_random("E:/1/12", "lalala.mp3", "E:/1/123/完美主义.mp3");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
