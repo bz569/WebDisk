@@ -23,6 +23,7 @@ import org.tmatesoft.svn.core.wc.SVNConflictDescription;
 import org.tmatesoft.svn.core.wc.SVNConflictReason;
 import org.tmatesoft.svn.core.wc.SVNCopySource;
 import org.tmatesoft.svn.core.wc.SVNMergeFileSet;
+import org.tmatesoft.svn.core.wc.SVNPropertyData;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 import org.tmatesoft.svn.core.wc.SVNStatus;
 import org.tmatesoft.svn.core.wc.SVNWCUtil;
@@ -956,6 +957,49 @@ public class SVNApplication extends Application
 		}
 
 	}
+	
+	//从SVN获取指定的property
+	public String doGetProperty(String filePath, String propName)
+	{
+		SVNURL fileURL = null;
+		try
+		{
+			fileURL = SVNURL.parseURIEncoded(filePath);
+		} catch (SVNException e)
+		{
+			e.printStackTrace();
+		}
+
+
+		try
+		{
+			// initialize the auth manager
+			this.initAuthManager();
+
+//			SVNCommitInfo commitInfo = clientManager.getCommitClient().doMkDir(
+//					newDirURLs, commitMsg);
+//			Log.i(TAG, "commitInfo=" + commitInfo.toString());
+			
+			SVNPropertyData propData= clientManager.getWCClient().doGetProperty(fileURL, propName, SVNRevision.UNDEFINED, SVNRevision.HEAD);
+			
+			if(propData != null)
+			{
+				return propData.getValue().toString();
+			}
+			else
+			{
+				return "PROP_NOT_EXSIT";
+			}
+		} catch (SVNException se)
+		{
+			String msg = se.getMessage();
+			Log.i(TAG, "copy_error:" + msg);
+			return msg;
+		}
+		
+	}
+	
+	
 
 	public void setmExternalStorageAvailable(boolean mExternalStorageAvailable)
 	{
