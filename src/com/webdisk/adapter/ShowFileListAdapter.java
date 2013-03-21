@@ -787,7 +787,7 @@ public class ShowFileListAdapter extends BaseAdapter
 			Message deleteMsg = new Message();
 			deleteMsg.what = DELETE_MSG;
 
-			if (deleter.doDeleteFormSVN())
+			if (deleter.doDelete())
 			{
 				deleteMsg.arg1 = DELETE_SUCCESS;
 			} else

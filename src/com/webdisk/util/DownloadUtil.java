@@ -2,9 +2,7 @@ package com.webdisk.util;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -14,7 +12,6 @@ import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
-import android.content.res.Resources.Theme;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
@@ -31,7 +28,6 @@ public class DownloadUtil
 	private static String[] USERNAME = {"cyberbox1@163.com","cyberbox2@163.com","cyberbox3@163.com","cyberbox4@163.com","cyberbox5@163.com"};
 	private static String[] PASSWORD = {"cyberbox","cyberbox","cyberbox","cyberbox","cyberbox"};
 	private static String SERVER = "imap.163.com";
-	private static String USER_ID = "363";
 	
 	private static final int EXPORT_START = 0;
 	private static final int EXPORT_FINISH = 2;

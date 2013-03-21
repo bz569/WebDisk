@@ -38,7 +38,16 @@ public class CS_console_new {
 		this.chunkLength = chunkLength;
 	}
 	
-	
+	public void delete(final String Myid ,boolean isFuzzy ){
+		if(isFuzzy){
+			for( int i = 0 ; i < numOfEmailbox ; i++)
+				new SampleDelete(username[i],password[i],server,folderName).deleteFuzzy(Myid);
+		}
+		else{
+			for( int i = 0 ; i < numOfEmailbox ; i++)
+				new SampleDelete(username[i],password[i],server,folderName).deleteDefine(Myid);
+		}
+	}
 	public int send(String Myid , String dir ,String templeDir){//暂时使用全部拆分完后再发送//还需要和pc端的附件名统一
 		//maxOfChunk：每块最大的长度	
 		Log.i("in","开始 ");
