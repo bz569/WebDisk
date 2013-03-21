@@ -1,7 +1,11 @@
 package com.webdisk.util;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -49,6 +53,8 @@ public class UploadUtil
 	private String fileID;
 	private SVNProperties mProperties;
 	
+//	private String props;
+	
 	private Handler uploadhandler;
 	
 	public UploadUtil(SVNApplication uploadApp, Handler uploadHandler, String srcFilePath, String dstUrl)
@@ -71,9 +77,10 @@ public class UploadUtil
 		mProperties.put("magicgourd:id", USER_ID + fileID);
 		mProperties.put("magicgourd:owner", uploadApp.getCurrentConnection().getUsername());
 		mProperties.put("magicgourd:size", Long.toString(srcFile.length()));
-			//生成timestamp
-		Timestamp t = new Timestamp(new Date().getTime());
-		mProperties.put("magicgourd:timestamp", t.toString());
+		mProperties.put("magicgourd:timestamp", Long.toString(System.currentTimeMillis()));
+		//生成文件内容中的props
+//		props = "\nmagicgourd:id==" + USER_ID + fileID + "\nmagicgourd:size==" + Long.toString(srcFile.length()) 
+//				+ "\nmagicgourd:timestamp==" + t.toString();
 		
 		Log.i(TAG, "UploadInfo:srcFilePath=" + srcFilePath + ";dstUrl=" + dstUrl + ";fileName=" + fileName
 					+ ";suffix=" + suffix);
@@ -86,11 +93,13 @@ public class UploadUtil
 				|| "ppt".equals(suffix) || "pptx".equals(suffix)))// TODO 直接上传到SVN服务器的文件类型
 		{
 			mProperties.put("magicgourd:ismail", Integer.toString(0));
+//			props = "magicgourd:ismail==" + Integer.toString(0) + props;
 			importToSVN();
 		}
 		else
 		{
 			mProperties.put("magicgourd:ismail", Integer.toString(1));
+//			props = "magicgourd:ismail==" + Integer.toString(1) + props;
 			uploadToMail();
 		}
 	}
@@ -139,6 +148,17 @@ public class UploadUtil
 		try
 		{
 			tmpFile.createNewFile();
+//			//将props写入文件
+//			FileWriter fw = new FileWriter(tmpFile);
+//			BufferedWriter buffw = new BufferedWriter(fw);
+//			PrintWriter pw = new PrintWriter(buffw);
+//			
+//			pw.println(props);
+//			
+//			pw.close();
+//			buffw.close();
+//			fw.close();
+			
 		} catch (IOException e1)
 		{
 			// TODO Auto-generated catch block

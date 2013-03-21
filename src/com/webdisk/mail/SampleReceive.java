@@ -87,8 +87,13 @@ public class SampleReceive {
 	}
 	*/
 	public int getNumOfMyid_i(String Myid_i){
-		String num = Myid_i.substring(Myid_i.lastIndexOf(":")+1);
-		return Integer.decode(num);
+		if(Myid_i.contains(":")){
+			String num = Myid_i.substring(Myid_i.lastIndexOf(":")+1);
+			return Integer.decode(num);
+		}
+		else
+			return 0;
+		
 	}
 	
 	private void saveAttchMent(Part part,String storeDir) throws UnsupportedEncodingException, MessagingException, IOException{

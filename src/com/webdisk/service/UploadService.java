@@ -67,7 +67,7 @@ public class UploadService extends IntentService
 //						stopSelf();
 						
 						//通过broadcast发送消息
-						Intent intent = new Intent().setAction("com.webdisk.broadcast.UPLOAD_FINISH");
+						Intent intent = new Intent().setAction("com.webdisk.broadcast.REFRESH");
 						sendBroadcast(intent);
 						Log.i(TAG, "send msg by broadcast");
 						
