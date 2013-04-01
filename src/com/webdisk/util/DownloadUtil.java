@@ -32,8 +32,6 @@ public class DownloadUtil
 	private static final int EXPORT_START = 0;
 	private static final int EXPORT_FINISH = 2;
 	
-	
-	
 	private SVNApplication downloadApp;
 	
 	private Handler downloadHandler;

@@ -25,7 +25,7 @@ public class CS_console_new {
 	private String folderName = "cyberbox";
 	private threadSampleSender[] sendThreads = null;
 	private threadSampleReceiver[] receiveThreads = null;
-	private int chunkLength = 1024*1024*5;
+	private int chunkLength = 1024*1024;
 	private boolean sendFlag = false , receiveFlag = false;
 	//public CS_console_new(){}//测试时使用
 	/**
@@ -154,7 +154,7 @@ public class CS_console_new {
 			else{
 			}
 			nowThread = (nowThread + 1) % numOfThread;
-			if(i >= numOfEmailbox)
+			if(i >= numOfEmailbox || i >= nChunk)
 				notEnd = false;
 		}
 		//判断上传是否已经结束
