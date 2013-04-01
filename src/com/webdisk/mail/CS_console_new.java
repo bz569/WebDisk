@@ -21,6 +21,7 @@ public class CS_console_new {
 	private String[] username,password;
 	private String server = null;
 	private int numOfEmailbox = 5;
+	private int numOfThread = 2;
 	private String folderName = "cyberbox";
 	private threadSampleSender[] sendThreads = null;
 	private threadSampleReceiver[] receiveThreads = null;
@@ -126,46 +127,39 @@ public class CS_console_new {
 		}
 		//发送文件
 		Log.i("in","开始 发送文件");
-		sendThreads = new threadSampleSender[numOfEmailbox];
+		sendThreads = new threadSampleSender[2];
 		boolean notEnd = true;
 		int i = 0;//i表示当前发送的模块id
-		int count = 0 ;//count表示开始(或者发送结束)的模块数
+		int nowThread = 0;
 		while(notEnd){
-			
-			if(i < numOfEmailbox && i < nChunk){
+			if(i < numOfThread && i < nChunk){
 				Log.i("in","开始上传:" + i);
-				String templeName = "." + fileName + ".part" + i;
-				new SampleSend(username[startPos],password[startPos],server,folderName).send(new File(templeDir+ templeName) ,templeName ,templeName ,Myid+":"+i,nChunk+"" ,"");
-				//sendThreads[startPos] = new threadSampleSender(startPos ,templeDir ,templeName ,Myid+":"+i ,nChunk );//int startPos , String templeDir , String templeName , String Myid_i , int nChunk
-//				sendThreads[startPos].start();
+				
+				sendThreads[nowThread] = new threadSampleSender(startPos ,templeDir ,fileName ,Myid ,nChunk ,i );//int startPos , String templeDir , String templeName , String Myid_i , int nChunk
+				sendThreads[nowThread].start();
 				i++;
-				count++;
+				startPos = (startPos + 1) % numOfEmailbox;
 			}
-			else if(i >= numOfEmailbox && i < nChunk){
-					if(!sendThreads[startPos].isFinish())
+			else if(i >= numOfThread && i < numOfEmailbox && i < nChunk){
+					if(!sendThreads[nowThread].isFinish())
 						continue;
 					else{
-						int last_i = sendThreads[startPos].getNumOfMyid();
-						if(last_i + numOfEmailbox < nChunk){
-							int now_i = last_i + numOfEmailbox;
-							Log.i("in","开始上传:" + now_i);
-							String templeName = "." + fileName + ".part" + now_i;
-							new SampleSend(username[startPos],password[startPos],server,folderName).send(new File(templeDir+ templeName) ,templeName ,templeName ,Myid+":"+i,nChunk+"" ,"");
-							//sendThreads[startPos] = new threadSampleSender(startPos ,templeDir ,templeName ,Myid+":"+now_i ,nChunk);//int startPos , String templeDir , String templeName , String Myid_i , int nChunk
-//							sendThreads[startPos].start();
-							count++;
-						}
+						Log.i("in","开始上传:" + i);
+						sendThreads[nowThread] = new threadSampleSender(startPos ,templeDir ,fileName ,Myid ,nChunk ,i );//int startPos , String templeDir , String templeName , String Myid_i , int nChunk
+						sendThreads[nowThread].start();
+						i++;
+						startPos = (startPos +1) % numOfEmailbox;
 					}
 			}
 			else{
 			}
-			startPos = (startPos + 1) % numOfEmailbox;
-			if(count >= nChunk || i > nChunk)
+			nowThread = (nowThread + 1) % numOfThread;
+			if(i >= numOfEmailbox)
 				notEnd = false;
 		}
 		//判断上传是否已经结束
 		int i1 = 0 ;
-		Log.i("in","最后一片已经开始上传 ，判断是否结束");
+		Log.i("in","最后一个邮箱已经开始上传 ，判断是否结束");
 		while(true){
 			if(sendThreads[i1] == null)
 				i1++;
@@ -173,7 +167,7 @@ public class CS_console_new {
 				if(sendThreads[i1].isFinish())
 					i1++;
 			}
-			if(i1 >= numOfEmailbox)
+			if(i1 >= numOfThread)
 				break;
 		}
 		Log.i("in","发送结束");
@@ -409,28 +403,34 @@ public class CS_console_new {
 	class threadSampleSender extends Thread
 	{
 		private boolean flag= false , end = false; 
-		private int startPos,nChunk;
-		private String templeDir,templeName,Myid_i;
-		public threadSampleSender(int startPos , String templeDir , String templeName , String Myid_i , int nChunk){
+		private int startPos,nChunk,init_i;
+		private String templeDir,fileName,Myid;
+		public threadSampleSender(int startPos , String templeDir , String fileName , String Myid , int nChunk , int init_i){
 			this.startPos = startPos;
 			this.templeDir = templeDir;
-			this.templeName = templeName;
-			this.Myid_i = Myid_i;
+			this.fileName = fileName;
+			this.Myid = Myid;
 			this.nChunk = nChunk;
+			this.init_i = init_i;
 			
 		}
 		public void run(){
 			SampleSend sender = new SampleSend(username[startPos],password[startPos],server,folderName);
-			File temFile = new File(templeDir + templeName);
-			if(temFile.exists()){
-				Log.i("in",templeDir + templeName +" is exists");
-				flag = sender.send(temFile ,templeName ,templeName ,Myid_i,nChunk+"" ,"");
-				temFile.delete();
-				
+			
+			int now_i = init_i;
+			while(now_i < nChunk){
+				String templeName = "." + fileName + ".part" + now_i;
+				File temFile = new File(templeDir + templeName);
+				if(temFile.exists()){
+					flag = sender.send(temFile ,templeName ,templeName ,Myid+":"+now_i,nChunk+"" ,"");
+					temFile.delete();	
+					Log.i("in",Myid+":"+now_i + "发送结束" +flag);
+				}
+			now_i = now_i + numOfEmailbox;
 			}
 			end = true;
 			
-			Log.i("in",Myid_i + "发送结束" +flag);
+			Log.i("in",username[startPos]+ "发送结束" );
 		}
 		public boolean isFinish(){
 			return end;
@@ -438,10 +438,12 @@ public class CS_console_new {
 		public boolean isOK(){
 			return flag;
 		}
+		/*
 		public int getNumOfMyid(){
 			String num = Myid_i.substring(Myid_i.lastIndexOf(":")+1);
 			return Integer.decode(num);
 		}
+		*/
 	}
 	/**
 	 * 用于接收过程的内部类  使接收可以多线程完成
