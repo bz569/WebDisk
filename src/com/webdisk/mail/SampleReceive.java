@@ -23,17 +23,36 @@ import javax.mail.internet.MimeUtility;
 
 import android.util.Log;
 
+/**
+ * 用于接收邮件的类
+ * @author forever_xuan7
+ *
+ */
 public class SampleReceive {
 	private String username,password,server,folderName;
 	private boolean finishFlag = false;
 	private String storeFileName = null;
+	/**
+	 * 构造方法
+	 * @param username 邮箱名
+	 * @param password 邮箱密码
+	 * @param server 邮箱服务器
+	 * @param folderName 邮箱的文件夹名
+	 */
 	public SampleReceive(String username,String password,String server,String folderName){
 		this.username = username;
 		this.password = password;
 		this.server = server;
 		this.folderName = folderName;
 	}
-	public void receive(String Myid,String storeDir,String storeFileName){//storeFileName作为附件的名字 注此处的Myid没有注明片数
+	
+	/**
+	 * 接收的方法
+	 * @param Myid 文件的id (注此处的Myid没有注明片数,即Myid不含有':')
+	 * @param storeDir 附件保存的位置
+	 * @param storeFileName 附件保存的名字
+	 */
+	public void receive(String Myid,String storeDir,String storeFileName){
 		
 		try {
 			Properties props = System.getProperties();
@@ -80,13 +99,8 @@ public class SampleReceive {
 		}
 		
 	}
-	/*
-	private boolean equalNoCaseLast(String Myid,String Myid_i){
-		String before = Myid_i.substring(0, Myid_i.lastIndexOf(':'));
-		return before.equals(Myid);
-	}
-	*/
-	public int getNumOfMyid_i(String Myid_i){
+	//从Myid_i中得到片的编号
+	private int getNumOfMyid_i(String Myid_i){
 		if(Myid_i.contains(":")){
 			String num = Myid_i.substring(Myid_i.lastIndexOf(":")+1);
 			return Integer.decode(num);
@@ -158,7 +172,7 @@ public class SampleReceive {
 	        }
 	        return flag;
 	    }
-	
+	//保存附件
 	private void saveFile(String storeDir , String fileName,InputStream in) throws IOException{
 		char last = storeDir.charAt(storeDir.length() - 1);
 		if(last != '/' || last != '\\')

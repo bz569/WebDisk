@@ -11,33 +11,66 @@ import java.io.RandomAccessFile;
 import javax.mail.*;
 
 import android.util.Log;
-
+/**
+ * 此类用于发送、接收和删除邮件
+ * @author forever_xuan7
+ *
+ */
 public class CS_console_new {
-	final public static int lengthOf1M = 1048576;
+	//final public static int lengthOf1M = 1024*1024;
 	private String[] username,password;
 	private String server = null;
 	private int numOfEmailbox = 5;
 	private String folderName = "cyberbox";
 	private threadSampleSender[] sendThreads = null;
 	private threadSampleReceiver[] receiveThreads = null;
-	private int chunkLength = 1024*1024;
+	private int chunkLength = 1024*1024*5;
 	private boolean sendFlag = false , receiveFlag = false;
 	//public CS_console_new(){}//测试时使用
+	/**
+	 * 构造方法
+	 * @param username 邮箱名的数组
+	 * @param password 邮箱密码的数组
+	 * @param server 服务器名
+	 * @throws NoSuchProviderException
+	 */
 	public CS_console_new(String[] username,String[] password,String server) throws NoSuchProviderException{
 		this.username = username;
 		this.password = password;
 		this.server = server;
 	}
+	
+	/**
+	 * 设置邮箱的个数
+	 * @param num 最大的个数
+	 */
 	public void setNumOfEmailBox(int num){
 		numOfEmailbox = num;
-	}
+	} 
+	
+	/**
+	 * 设置保存于邮箱中的文件夹名
+	 * @param folderName 文件夹名
+	 */
 	public void setFolderName(String folderName){
 		this.folderName = folderName;
 	}
+	
+	/**
+	 * 设置分片的大小  默认为1048576 * 5(5M)
+	 * @param chunkLength 分片的大小
+	 */
 	public void setChunkLength(int chunkLength){
 		this.chunkLength = chunkLength;
 	}
 	
+	/**
+	 * 按Myid删除删除邮件
+	 * @param Myid 邮件的Myid 
+	 * @param isFuzzy 是否采用模糊模式
+	 * true：删除所有邮件id中包含Myid的邮件(例：若Myid为28367298,邮件id为28367298:1,则该邮件将被删除)
+	 * false：删除指定Myid的邮件
+	 */
 	public void delete(final String Myid ,boolean isFuzzy ){
 		if(isFuzzy){
 			for( int i = 0 ; i < numOfEmailbox ; i++)
@@ -48,8 +81,15 @@ public class CS_console_new {
 				new SampleDelete(username[i],password[i],server,folderName).deleteDefine(Myid);
 		}
 	}
+	
+	/**
+	 * 发送文件至邮箱的方法
+	 * @param Myid 发送邮件添加的Myid
+	 * @param dir 文件所在位置
+	 * @param templeDir 临时文件存放打位置(因发送时可能会拆分,需临时文件夹存放临时文件,发送完毕后删除)
+	 * @return 返回发送的片数,0表示没有发送成功
+	 */
 	public int send(String Myid , String dir ,String templeDir){//暂时使用全部拆分完后再发送//还需要和pc端的附件名统一
-		//maxOfChunk：每块最大的长度	
 		Log.i("in","开始 ");
 		File file = new File(dir);
 		if(!file.exists()){
@@ -67,9 +107,10 @@ public class CS_console_new {
 			return 1;
 		}
 		int nChunk = (int)file.length() / chunkLength + 1;
-		int startPos = nChunk % numOfEmailbox;
+		int startPos = (int)(Long.parseLong(Myid) % numOfEmailbox);
+//		long startPos = (long)Integer.decode(Myid) % numOfEmailbox;
 		//创建目录:
-		Log.i("in","创建目录");
+		Log.i("in","创建目录 ___ startPos:" +startPos + "___nChunk:" + nChunk);
 		if(templeDir.charAt(templeDir.length() - 1) != '/')
 			templeDir = templeDir + "/";
 		File files = new File(templeDir + "/");
@@ -91,11 +132,12 @@ public class CS_console_new {
 		int count = 0 ;//count表示开始(或者发送结束)的模块数
 		while(notEnd){
 			
-			if(i < numOfEmailbox){
+			if(i < numOfEmailbox && i < nChunk){
 				Log.i("in","开始上传:" + i);
 				String templeName = "." + fileName + ".part" + i;
-				sendThreads[startPos] = new threadSampleSender(startPos ,templeDir ,templeName ,Myid+":"+i ,nChunk );//int startPos , String templeDir , String templeName , String Myid_i , int nChunk
-				sendThreads[startPos].start();
+				new SampleSend(username[startPos],password[startPos],server,folderName).send(new File(templeDir+ templeName) ,templeName ,templeName ,Myid+":"+i,nChunk+"" ,"");
+				//sendThreads[startPos] = new threadSampleSender(startPos ,templeDir ,templeName ,Myid+":"+i ,nChunk );//int startPos , String templeDir , String templeName , String Myid_i , int nChunk
+//				sendThreads[startPos].start();
 				i++;
 				count++;
 			}
@@ -108,8 +150,9 @@ public class CS_console_new {
 							int now_i = last_i + numOfEmailbox;
 							Log.i("in","开始上传:" + now_i);
 							String templeName = "." + fileName + ".part" + now_i;
-							sendThreads[startPos] = new threadSampleSender(startPos ,templeDir ,templeName ,Myid+":"+now_i ,nChunk);//int startPos , String templeDir , String templeName , String Myid_i , int nChunk
-							sendThreads[startPos].start();
+							new SampleSend(username[startPos],password[startPos],server,folderName).send(new File(templeDir+ templeName) ,templeName ,templeName ,Myid+":"+i,nChunk+"" ,"");
+							//sendThreads[startPos] = new threadSampleSender(startPos ,templeDir ,templeName ,Myid+":"+now_i ,nChunk);//int startPos , String templeDir , String templeName , String Myid_i , int nChunk
+//							sendThreads[startPos].start();
 							count++;
 						}
 					}
@@ -117,34 +160,37 @@ public class CS_console_new {
 			else{
 			}
 			startPos = (startPos + 1) % numOfEmailbox;
-			if(count >= nChunk)
+			if(count >= nChunk || i > nChunk)
 				notEnd = false;
 		}
 		//判断上传是否已经结束
 		int i1 = 0 ;
 		Log.i("in","最后一片已经开始上传 ，判断是否结束");
 		while(true){
-			if(sendThreads[i1].isFinish())
+			if(sendThreads[i1] == null)
 				i1++;
+			else{
+				if(sendThreads[i1].isFinish())
+					i1++;
+			}
 			if(i1 >= numOfEmailbox)
 				break;
 		}
 		Log.i("in","发送结束");
-		/*
-		//删除文件：//改为上传结束后删除
-		for(int t = 0 ; t < nChunk ; t ++){
-			String templeFile = templeDir + "_" + fileName + ".part" + t;
-			File tem = new File(templeFile);
-			if(tem.exists())
-				tem.delete();
-		}
-		*/
+
 		sendFlag = true;
 		return nChunk;
 	}
 	
+	/**
+	 * 从邮箱接收文件的方法
+	 * @param Myid 此文件的Myid
+	 * @param templeDir 临时文件夹
+	 * @param fileDir 存放文件的位置
+	 * @param fileName 保存文件的名字
+	 * @throws IOException
+	 */
 	public void receive(String Myid , String templeDir  , String fileDir , String fileName) throws IOException{//暂时采用全部下载到临时文件夹后再拼装//,String templeName
-		
 		
 		if(templeDir.charAt(templeDir.length() - 1) != '/')
 			templeDir = templeDir + "/";
@@ -175,24 +221,17 @@ public class CS_console_new {
 				break;
 		}
 		Log.i("in","下载结束 开始整合");
-		//整合文件
 		install(templeDir ,fileName,fileDir + fileName);
-		//Log.i("in","整合完毕");
-	
-		/*
-		//删除文件：//已经迁移到整合文件的时候
-		for(int t = 0 ; t < nChunk ; t ++){
-			templeName = templeDir + "_" + fileName + ".part" + t;
-			File tem = new File(templeName);
-			if(tem.exists())
-				tem.delete();
-		}
-		*/
 		receiveFlag = true;
 	}
 	
-	//拆分方法：
-	public void split(String fileAddress ,String templeDir ) throws Exception{
+	/**
+	 * 内部  拆分方法
+	 * @param fileAddress 文件的路径
+	 * @param templeDir 拆分后存放文件的位置
+	 * @throws Exception
+	 */
+	private void split(String fileAddress ,String templeDir ) throws Exception{
 		Log.i("in","0");
 		if(templeDir.charAt(templeDir.length() - 1) != '/')
 			templeDir = templeDir + "/";
@@ -205,7 +244,7 @@ public class CS_console_new {
 		boolean end = true;
 		int i = 0;
 		while(end){
-			Log.i("in","while" +i);
+			Log.i("in","while" +i+"___chunkLength:" + chunkLength);
 			int c = 0,count= 0;
 			templeAddress = templeDir + "." + name + ".part" + i;
 			File file2 = new File(templeAddress);
@@ -220,15 +259,22 @@ public class CS_console_new {
 				out.write(b,0,c);
 				c = in.read(b);
 			}
-			Log.i("in","while ok:" + i +""+templeAddress);
+			Log.i("in","while ok:" + i +"_"+count);
 			out.close();
 			i++;
 		}
 		in.close();
 		
 	}
-	//整合方法
-	public void install(String templeDir ,String fileName,String fileAddress) throws IOException{//FileName为组装后的文件存入的位置+文件名 //,String templeName
+
+	/**
+	 * 内部 整合方法
+	 * @param templeDir 临时文件夹的位置
+	 * @param fileName 临时文件的文件名(共有部分 .xxxxx.part1,.xxxxx.part2形式存在)
+	 * @param fileAddress 存放文件的路径
+	 * @throws IOException
+	 */
+	private void install(String templeDir ,String fileName,String fileAddress) throws IOException{//FileName为组装后的文件存入的位置+文件名 //,String templeName
 		String path = getPath(fileAddress);
 		new File(path).mkdirs();
 		if(templeDir.charAt(templeDir.length() - 1) != '/')
@@ -258,7 +304,15 @@ public class CS_console_new {
 		fo.close();
 	}
 
-	public void install_random(String templeDir , String fileName , String fileAddress) throws FileNotFoundException{
+	/**
+	 * 内部 另一种整合文件的方法 已废弃
+	 * @param templeDir 临时文件夹的位置
+	 * @param fileName 临时文件的文件名
+	 * @param fileAddress 存放文件的路径
+	 * @throws FileNotFoundException
+	 */
+	@SuppressWarnings("unused")
+	private void install_random(String templeDir , String fileName , String fileAddress) throws FileNotFoundException{
 		String path = getPath(fileAddress);
 			new File(path).mkdirs();
 		File outFile = new File(fileAddress);
@@ -273,13 +327,18 @@ public class CS_console_new {
 				break;
 		}	
 	}
+	
+	/**
+	 * 用于整合文件的方法 install_random 因方法已废弃 故此类也已废弃
+	 * @author forever_xuan7
+	 *
+	 */
 	class receiveThreadRandom extends Thread{
 		private RandomAccessFile out =null;
 		File outFile = null,inFile = null;
 		private InputStream in = null;
 		int i = 0 ;
 		public receiveThreadRandom(File outFile , File inFile,int i) throws FileNotFoundException{
-			//this.out = out;
 			this.outFile = outFile;
 			this.inFile = inFile;
 			this.i = i;
@@ -306,24 +365,47 @@ public class CS_console_new {
 		
 		}
 	}
-	//小方法
+
+	/**
+	 * 辅助方法 从路径中得到文件名
+	 * @param dir 路径
+	 * @return
+	 */
 	private String getFileName(String dir){
 		String name = dir.substring(dir.lastIndexOf("/")+1);
 		return name;
 	}
+	
+	/**
+	 * 辅助方法 从路径中得到文件夹的位置
+	 * @param dir 路径
+	 * @return
+	 */
 	public String getPath(String dir){
 		String path  = dir.substring(0, dir.lastIndexOf("/"));
 		return path;
 	}
+	/**
+	 * 得到发送的状态
+	 * @return 是否发送完成
+	 */
 	public boolean isSend(){
 		return sendFlag;
 	}
+	/**
+	 * 得到接收的状态
+	 * @return 是否接收完成
+	 */
 	public boolean isReceive(){
 		return receiveFlag;
 	}
 	
 	//内部类：
-	//发送的进程：
+	/**
+	 * 用于发送过程的内部类  使发送可以多线程完成
+	 * @author forever_xuan7
+	 *
+	 */
 	class threadSampleSender extends Thread
 	{
 		private boolean flag= false , end = false; 
@@ -361,7 +443,11 @@ public class CS_console_new {
 			return Integer.decode(num);
 		}
 	}
-	//接收的进程
+	/**
+	 * 用于接收过程的内部类  使接收可以多线程完成
+	 * @author forever_xuan7
+	 *
+	 */
 	class threadSampleReceiver extends Thread{
 		private boolean flag= false , end = false; 
 		private int i;
@@ -389,7 +475,11 @@ public class CS_console_new {
 		}
 		
 	}
-	//删除的进程
+	/**
+	 * 用于删除过程的内部类  使删除可以多线程完成
+	 * @author forever_xuan7
+	 *
+	 */
 	class threadDelete extends Thread{
 		private File file = null;
 		public threadDelete (File file){

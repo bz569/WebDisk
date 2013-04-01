@@ -14,15 +14,36 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
 import android.util.Log;
-
+/**
+ * 用于发送邮件的类
+ * @author forever_xuan7
+ *
+ */
 public class SampleSend {
 	private String username,password,server,folderName;
+	/**
+	 * 构造方法
+	 * @param username 邮箱名
+	 * @param password 邮箱密码
+	 * @param server 邮箱服务器
+	 * @param folderName 邮箱的文件夹名
+	 */
 	public SampleSend(String username,String password,String server,String folderName){
 		this.username = username;
 		this.password = password;
 		this.server = server;
 		this.folderName = folderName;
 	}
+	/**
+	 * 发送的方法
+	 * @param file 附件的file对象
+	 * @param fileName 附件的名字
+	 * @param subjectName 主题名
+	 * @param Myid Myid的String
+	 * @param nChunk 片数的String
+	 * @param content 文本内容
+	 * @return 是否发送成功
+	 */
 	public boolean send(File file, String fileName, String subjectName, String Myid, String nChunk, String content){//content 一般不用。
 		try{																										
 			Properties props = System.getProperties();

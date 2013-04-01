@@ -38,6 +38,10 @@ import com.webdisk.model.Connection;
 
 import com.webdisk.R;
 
+/**
+ * 实现与SVN相关的操作
+ * @author ZhangBoxuan
+ */
 public class SVNApplication extends Application
 {
 	/**
@@ -673,6 +677,12 @@ public class SVNApplication extends Application
 	}
 
 	// 一个文件直接上传至版本库中
+	/**
+	 * 一个文件直接上传至版本库中
+	 * @param srcFilePath
+	 * @param dstPath
+	 * @param mProperties
+	 */
 	public void doImport(String srcFilePath, String dstPath, SVNProperties mProperties)
    	{
    		Log.i(TAG, "magicgourd:id=" + mProperties.getStringValue("magicgourd:id"));
@@ -877,7 +887,7 @@ public class SVNApplication extends Application
 	 * 
 	 * @param srcPath
 	 * @param dstPath
-	 * @return
+	 * @return 
 	 */
 	public boolean doMove(String srcPath, String dstPath)
 	{
@@ -959,6 +969,12 @@ public class SVNApplication extends Application
 	}
 	
 	//从SVN获取指定的property
+	/**
+	 * 从SVN获取指定的property
+	 * @param filePath
+	 * @param propName
+	 * @return 属性值，属性不存在时返回PROP_NOT_EXSIT
+	 */
 	public String doGetProperty(String filePath, String propName)
 	{
 		SVNURL fileURL = null;
