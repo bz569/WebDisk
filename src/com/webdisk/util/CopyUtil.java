@@ -256,6 +256,7 @@ public class CopyUtil
 				mProperties.put("magicgourd:owner", copyApp.getCurrentConnection().getUsername());
 				mProperties.put("magicgourd:size", size);
 				mProperties.put("magicgourd:timestamp", Long.toString(System.currentTimeMillis()));
+				mProperties.put("magicgourd:ismail", Integer.toString(1));
 				
 				//上传至邮箱
 				CS_console_new mMailSender = null;
@@ -273,6 +274,9 @@ public class CopyUtil
 				//上传空文件至SVN
 				Log.i(TAG, "上传空文件至svn：" + tmpFilePath + "==>" + dstPath);
 				copyApp.doImport(tmpFilePath, dstPath.substring(0, dstPath.lastIndexOf("/") + 1), mProperties);
+				//删除生成的临时文件
+				File downloadFile = new File(CACHE_DIR + "copy_" + fileName);
+				downloadFile.delete();
 				File cacheFile = new File(tmpFilePath);
 				cacheFile.delete();
 				

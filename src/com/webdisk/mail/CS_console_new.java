@@ -25,7 +25,7 @@ public class CS_console_new {
 	private String folderName = "cyberbox";
 	private threadSampleSender[] sendThreads = null;
 	private threadSampleReceiver[] receiveThreads = null;
-	private int chunkLength = 1024*1024;
+	private int chunkLength = 1024*1024*5;
 	private boolean sendFlag = false , receiveFlag = false;
 	//public CS_console_new(){}//≤‚ ‘ ± π”√
 	/**
