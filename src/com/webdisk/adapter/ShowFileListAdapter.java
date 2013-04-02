@@ -648,6 +648,15 @@ public class ShowFileListAdapter extends BaseAdapter
 		};
 
 		btn_close.setOnTouchListener(mOnTouchListener);
+		
+		btn_close.setOnClickListener(new Button.OnClickListener()
+		{
+			@Override
+			public void onClick(View b)
+			{
+				showFileInfoDialg.dismiss();
+			}
+		});
 
 		// TODO 在此处设置用TextView显示文件信息(一定要在此处设置？)
 //		tv_showFileInfo.setText("此处显示文件详细信息");

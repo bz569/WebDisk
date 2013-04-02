@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">网盘</string>
+    <string name="app_name">CyberBox</string>
     <string name="action_settings">Settings</string>
     <string name="account_name">账 号</string>
     <string name="account_psw">密 码</string>
@@ -67,7 +67,4 @@
     <string name="empty">此目录没有文件</string>
     <string name="no_connection_selected">连接中断，请重新连接</string>
     
-    
-    
-	
 </resources>

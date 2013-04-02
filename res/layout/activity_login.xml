@@ -10,18 +10,27 @@
         android:layout_width="wrap_content"
         android:layout_height="60dp"
         android:background="@color/halo_lightblue" >
-
+<!--  
         <TextView
+            android:id="@+id/textView1"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_alignParentBottom="true"
             android:layout_alignParentTop="true"
             android:gravity="center"
             android:text="@string/app_name"
+            android:textColor="@color/black"
             android:textSize="30sp"
-            android:typeface="sans" 
-            android:textColor="@color/black"/>
-
+            android:typeface="sans" />
+-->
+        <ImageView
+            android:id="@+id/title"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentTop="true"
+            android:gravity="center"
+            android:src="@drawable/title" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -111,5 +120,13 @@
         </RelativeLayout>
 
     </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:src="@drawable/copyright" />
 
 </RelativeLayout>

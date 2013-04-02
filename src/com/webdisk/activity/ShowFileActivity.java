@@ -403,6 +403,7 @@ public class ShowFileActivity extends Activity implements Runnable
 			groups.add("刷新");
 			groups.add("新建文件夹");
 			groups.add("注销");
+			groups.add("退出");
 
 			OverflowMenuAdapter groupAdapter = new OverflowMenuAdapter(this,
 					groups);
@@ -459,7 +460,12 @@ public class ShowFileActivity extends Activity implements Runnable
 							LoginActivity.class);
 					startActivity(intent);
 					finish();
+				}else if (groups.get(position).equals("退出"))
+				{
+					finish();
+					System.exit(0);
 				}
+				
 
 				if (overflowMenu != null)
 				{
