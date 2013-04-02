@@ -889,10 +889,13 @@ public class SVNApplication extends Application
 	 * @param dstPath
 	 * @return 
 	 */
+	@SuppressWarnings("unchecked")
 	public boolean doMove(String srcPath, String dstPath)
 	{
 		SVNURL srcURL = null;
 		SVNURL dstURL = null;
+		
+		Boolean isNeedProps = true;
 
 		try
 		{
@@ -903,6 +906,27 @@ public class SVNApplication extends Application
 		{
 			e.printStackTrace();
 		}
+		
+		//读取原文件的props
+		String isMail = doGetProperty(srcPath, "magicgourd:ismail");
+		String mId = doGetProperty(srcPath, "magicgourd:id");
+		String size = doGetProperty(srcPath, "magicgourd:size");
+		String owner = doGetProperty(srcPath, "magicgourd:owner");
+		String timestamp = doGetProperty(srcPath, "magicgourd:timestamp");
+		
+		if (isMail.equals("PROP_NOT_EXSIT"))//从web端上传的文件
+		{
+			Log.i(TAG, "移动从web端上传的文件，不需要重新设置props，直接移动");
+			isNeedProps = false;
+		}
+		
+		SVNProperties mProperties = new SVNProperties();
+		mProperties.put("magicgourd:id", mId);
+		mProperties.put("magicgourd:owner", owner);
+		mProperties.put("magicgourd:size", size);
+		mProperties.put("magicgourd:timestamp", timestamp);
+		mProperties.put("magicgourd:ismail", isMail);
+		
 
 		SVNCopySource mRenameSrc = new SVNCopySource(SVNRevision.UNDEFINED,
 				SVNRevision.HEAD, srcURL);
@@ -921,6 +945,23 @@ public class SVNApplication extends Application
 			SVNCommitInfo commitInfo = clientManager.getCopyClient().doCopy(
 					sources, dstURL, true, false, true, commitMsg, null);
 			Log.i(TAG, "commitInfo=" + commitInfo.toString());
+			//为移动后的文件设置props
+			Set<String> nameSet = mProperties.nameSet();
+       		String propName = null;
+       		SVNPropertyValue propValue = null;
+       		
+       		if(isNeedProps)
+       		{
+       			for(Iterator it = nameSet.iterator();  it.hasNext();)
+           		{
+           			propName = it.next().toString();
+           			propValue = mProperties.getSVNPropertyValue(propName);
+           			
+           			commitInfo = clientManager.getWCClient().doSetProperty(dstURL, propName, propValue, SVNRevision.HEAD, "setProps", null, false, null);
+           			Log.i(TAG, "set prop: propName=" + propName + ";value=" + propValue.toString());
+           		}
+       		}
+       		
 			return true;
 
 		} catch (SVNException se)
