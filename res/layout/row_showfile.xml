@@ -15,12 +15,13 @@
 
     <TextView
         android:id="@+id/tv_row_showFileName"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/iv_row_showFileImage"
         android:layout_marginLeft="8dp" 
         android:text="此处显示文件名"
         android:layout_centerVertical="true"
+        android:singleLine="true"
         android:textSize="14sp"
         android:textColor="@color/black"/>
 

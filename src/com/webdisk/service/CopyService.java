@@ -97,17 +97,17 @@ public class CopyService extends IntentService
 		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 		if (status == COPY_START)
 		{
-		notification = new Notification(R.drawable.ic_launcher, "正在复制", System.currentTimeMillis());
+		notification = new Notification(R.drawable.ic_launcher_48, "正在复制", System.currentTimeMillis());
 		notification.setLatestEventInfo(this, "CyberBox", "正在复制:" + fileName, contentIntent);
 		}
 		else if(status == COPY_SUCCESS)
 		{
-			notification = new Notification(R.drawable.ic_launcher, "复制完成", System.currentTimeMillis());
+			notification = new Notification(R.drawable.ic_launcher_48, "复制完成", System.currentTimeMillis());
 			notification.setLatestEventInfo(this, "CyberBox", fileName + "复制完成", contentIntent);
 		}
 		else
 		{
-			notification = new Notification(R.drawable.ic_launcher, "复制失败", System.currentTimeMillis());
+			notification = new Notification(R.drawable.ic_launcher_48, "复制失败", System.currentTimeMillis());
 			notification.setLatestEventInfo(this, "CyberBox", fileName + "复制失败", contentIntent);
 		}
 //		notification.defaults=Notification.DEFAULT_LIGHTS;

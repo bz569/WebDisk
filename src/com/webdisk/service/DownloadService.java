@@ -85,12 +85,12 @@ public class DownloadService extends IntentService
 		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 		if (!finish)
 		{
-			notification = new Notification(R.drawable.ic_launcher, "正在下载", System.currentTimeMillis());
+			notification = new Notification(R.drawable.ic_launcher_48, "正在下载", System.currentTimeMillis());
 			notification.setLatestEventInfo(this, "CyberBox", "正在下载:" + fileName, contentIntent);
 		}
 		else
 		{
-			notification = new Notification(R.drawable.ic_launcher, "下载完毕", System.currentTimeMillis());
+			notification = new Notification(R.drawable.ic_launcher_48, "下载完毕", System.currentTimeMillis());
 			notification.setLatestEventInfo(this, "CyberBox", fileName + "下载完成", contentIntent);
 		}
 //		notification.defaults=Notification.DEFAULT_LIGHTS;

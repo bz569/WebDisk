@@ -111,12 +111,12 @@ public class UploadService extends IntentService
 			PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 			if (!finish)
 			{
-				notification = new Notification(R.drawable.ic_launcher, "正在上传", System.currentTimeMillis());
+				notification = new Notification(R.drawable.ic_launcher_48, "正在上传", System.currentTimeMillis());
 				notification.setLatestEventInfo(this, "CyberBox", "正在上传:" + fileName, contentIntent);
 			}
 			else
 			{
-				notification = new Notification(R.drawable.ic_launcher, "上传完成", System.currentTimeMillis());
+				notification = new Notification(R.drawable.ic_launcher_48, "上传完成", System.currentTimeMillis());
 				notification.setLatestEventInfo(this, "CyberBox", fileName + "上传完成", contentIntent);
 			}
 //			notification.defaults=Notification.DEFAULT_LIGHTS;
