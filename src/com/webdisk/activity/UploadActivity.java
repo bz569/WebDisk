@@ -253,7 +253,14 @@ public class UploadActivity extends Activity
 		});
 		 
 		 //  textview显示上传文件目录
-		 tv_showUploadPath.setText(dstPath);
+		 if(!dstPath.equals(""))
+		 {
+			 tv_showUploadPath.setText(dstPath);
+		 }
+		 else
+		 {
+			 tv_showUploadPath.setText(R.string.mywebdisk);
+		 }
 		 
 	}
 	
