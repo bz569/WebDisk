@@ -210,12 +210,26 @@ public class DownloadActivity extends Activity
 //				DownloadUtil downloaderUtil = new DownloadUtil(mApp, mHandler, filePath, curPath);
 //				downloaderUtil.startDownload();
 //				finish();
-				//开始后台下载
-				Intent intent = new Intent(DownloadActivity.this, DownloadService.class);
-				intent.putExtra("SRC_PATH", filePath);
-				intent.putExtra("DES_PATH", curPath);
-				startService(intent);
-				finish();
+				
+				String fileName = filePath.substring(filePath.lastIndexOf("/") + 1);
+				String tmpPath = curPath + "/" + fileName;
+				Log.i(TAG, "tmpPath=" + tmpPath);
+				
+				File tmpFile = new File(tmpPath);
+				
+				if(tmpFile.exists())
+				{
+					Toast.makeText(DownloadActivity.this, R.string.file_exist, Toast.LENGTH_SHORT).show();
+				}
+				else
+				{
+					//开始后台下载
+					Intent intent = new Intent(DownloadActivity.this, DownloadService.class);
+					intent.putExtra("SRC_PATH", filePath);
+					intent.putExtra("DES_PATH", curPath);
+					startService(intent);
+					finish();
+				}
 			}
 		});
 		 
