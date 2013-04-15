@@ -399,7 +399,7 @@ public class LoginActivity extends Activity
 			{
 				// TODO 需要修改为邮箱的映射文件
 				fileUrl = SVNURL.parseURIEncoded("http://10.109.34.24/wangpan/"
-						+ userName + "/.config.db");
+						+ userName + "/.email.xml");
 			} catch (SVNException e)
 			{
 				e.printStackTrace();

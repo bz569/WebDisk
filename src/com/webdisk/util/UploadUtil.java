@@ -25,20 +25,21 @@ import android.util.Log;
 
 import com.webdisk.application.SVNApplication;
 import com.webdisk.mail.CS_console_new;
+import com.webdisk.model.UserConfig;
 
 public class UploadUtil
 {
 	private static final String TAG = "UploadUtil";
 	
 	// TODO 需要修改为从.config.db中读取
-	private static String[] USERNAME = {"cyberbox1@163.com","cyberbox2@163.com","cyberbox3@163.com","cyberbox4@163.com","cyberbox5@163.com"};
-	private static String[] PASSWORD = {"cyberbox","cyberbox","cyberbox","cyberbox","cyberbox"};
-	private static String SERVER = "imap.163.com";
-	private static String USER_ID = "363";
+//	private static String[] USERNAME = {"cyberbox1@163.com","cyberbox2@163.com","cyberbox3@163.com","cyberbox4@163.com","cyberbox5@163.com"};
+//	private static String[] PASSWORD = {"cyberbox","cyberbox","cyberbox","cyberbox","cyberbox"};
+//	private static String SERVER = "imap.163.com";
+//	private static String USER_ID = "363";
 	private static String CACHE_DIR = Environment.getExternalStorageDirectory() + "/Webdisk/cache/";
 	
+	private static UserConfig userConfig = ReadXMLUtil.getConfigFromXML();
 	
-
 //	private static final int IMPORT_START = 200;
 //	private static final int IMPORT_FINISH = 202;
 	private static final int IMPORT = 200;
@@ -50,7 +51,7 @@ public class UploadUtil
 	private String fileName;
 	private String suffix;
 	private File srcFile;
-	private String fileID;
+	private String mID;
 	private SVNProperties mProperties;
 	
 //	private String props;
@@ -69,12 +70,12 @@ public class UploadUtil
 		this.fileName = srcFile.getName();
 		this.suffix = fileName.substring(fileName.lastIndexOf(".")+1);
 		
-		this.fileID = FileUtil.genFileId();
+		this.mID = FileUtil.genMId();
 		
 		//设置SVNProperties
 		mProperties = new SVNProperties();
 		
-		mProperties.put("magicgourd:id", USER_ID + fileID);
+		mProperties.put("magicgourd:id", mID);
 		mProperties.put("magicgourd:owner", uploadApp.getCurrentConnection().getUsername());
 		mProperties.put("magicgourd:size", Long.toString(srcFile.length()));
 		mProperties.put("magicgourd:timestamp", Long.toString(System.currentTimeMillis()));
@@ -166,7 +167,7 @@ public class UploadUtil
 		
 		final String tmpFilePath = tmpFile.getPath();
 		
-		final String mID = USER_ID + fileID;
+//		final String mID = USER_ID + fileID;
 		
 		new Thread(new Runnable()
 		{
@@ -179,13 +180,7 @@ public class UploadUtil
 				uploadhandler.sendMessage(importMsg);
 				
 				CS_console_new mMailSender = null;
-				try
-				{
-					mMailSender = new CS_console_new(USERNAME, PASSWORD, SERVER);
-				} catch (NoSuchProviderException e)
-				{
-					e.printStackTrace();
-				}
+				mMailSender = new CS_console_new(userConfig);
 				
 				mMailSender.send(mID, srcFilePath, CACHE_DIR);
 				

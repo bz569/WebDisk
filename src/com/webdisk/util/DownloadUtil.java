@@ -19,15 +19,18 @@ import android.util.Log;
 
 import com.webdisk.application.SVNApplication;
 import com.webdisk.mail.CS_console_new;
+import com.webdisk.model.UserConfig;
 
 public class DownloadUtil
 {
 	private static final String TAG = "DownloadUtil";
 	
 	private static String CACHE_DIR = Environment.getExternalStorageDirectory() + "/Webdisk/cache/";
-	private static String[] USERNAME = {"cyberbox1@163.com","cyberbox2@163.com","cyberbox3@163.com","cyberbox4@163.com","cyberbox5@163.com"};
-	private static String[] PASSWORD = {"cyberbox","cyberbox","cyberbox","cyberbox","cyberbox"};
-	private static String SERVER = "imap.163.com";
+//	private static String[] USERNAME = {"cyberbox1@163.com","cyberbox2@163.com","cyberbox3@163.com","cyberbox4@163.com","cyberbox5@163.com"};
+//	private static String[] PASSWORD = {"cyberbox","cyberbox","cyberbox","cyberbox","cyberbox"};
+//	private static String SERVER = "imap.163.com";
+	
+	private static UserConfig userConfig = ReadXMLUtil.getConfigFromXML();
 	
 	private static final int EXPORT_START = 0;
 	private static final int EXPORT_FINISH = 2;
@@ -262,11 +265,8 @@ public class DownloadUtil
 			{
 				try
 				{
-					CS_console_new mMailDownloader = new CS_console_new(USERNAME, PASSWORD, SERVER);
+					CS_console_new mMailDownloader = new CS_console_new(userConfig);
 					mMailDownloader.receive(mId, CACHE_DIR, desPath, fileName);
-				} catch (NoSuchProviderException e)
-				{
-					e.printStackTrace();
 				} catch (IOException e)
 				{
 					e.printStackTrace();

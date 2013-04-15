@@ -20,6 +20,7 @@ import android.util.Log;
 
 import com.webdisk.application.SVNApplication;
 import com.webdisk.mail.CS_console_new;
+import com.webdisk.model.UserConfig;
 
 public class CopyUtil
 {
@@ -27,10 +28,12 @@ public class CopyUtil
 	
 	private static String CACHE_DIR = Environment.getExternalStorageDirectory() + "/Webdisk/cache/";
 	
-	private static String[] USERNAME = {"cyberbox1@163.com","cyberbox2@163.com","cyberbox3@163.com","cyberbox4@163.com","cyberbox5@163.com"};
-	private static String[] PASSWORD = {"cyberbox","cyberbox","cyberbox","cyberbox","cyberbox"};
-	private static String SERVER = "imap.163.com";
-	private static String USER_ID = "363";
+//	private static String[] USERNAME = {"cyberbox1@163.com","cyberbox2@163.com","cyberbox3@163.com","cyberbox4@163.com","cyberbox5@163.com"};
+//	private static String[] PASSWORD = {"cyberbox","cyberbox","cyberbox","cyberbox","cyberbox"};
+//	private static String SERVER = "imap.163.com";
+//	private static String USER_ID = "363";
+	
+	private static UserConfig userConfig = ReadXMLUtil.getConfigFromXML();
 
 	private static final int COPY_MSG = 13;
 	private static final int COPY_START = 133;
@@ -223,12 +226,9 @@ public class CopyUtil
 				//先下载到本地
 				try
 				{
-					CS_console_new mMailDownloader = new CS_console_new(USERNAME, PASSWORD, SERVER);
+					CS_console_new mMailDownloader = new CS_console_new(userConfig);
 					Log.i(TAG, "copy：先下载文件至：" + CACHE_DIR + "copy_" + fileName);
 					mMailDownloader.receive(mId, CACHE_DIR, CACHE_DIR, "copy_" + fileName);
-				} catch (NoSuchProviderException e)
-				{
-					e.printStackTrace();
 				} catch (IOException e)
 				{
 					e.printStackTrace();
@@ -246,12 +246,13 @@ public class CopyUtil
 				
 				String tmpFilePath = tmpFile.getPath();
 				
-				String fileID = FileUtil.genFileId();
-				String mID = USER_ID + fileID;
+//				String fileID = FileUtil.genFileId();
+//				String mID = USER_ID + fileID;
+				String mID = FileUtil.genMId();
 				
 				//设置新的SVN属性
 				SVNProperties mProperties = new SVNProperties();
-				mProperties.put("magicgourd:id", USER_ID + fileID);
+				mProperties.put("magicgourd:id", mID);
 				mProperties.put("magicgourd:owner", copyApp.getCurrentConnection().getUsername());
 				mProperties.put("magicgourd:size", size);
 				mProperties.put("magicgourd:timestamp", Long.toString(System.currentTimeMillis()));
@@ -259,13 +260,7 @@ public class CopyUtil
 				
 				//上传至邮箱
 				CS_console_new mMailSender = null;
-				try
-				{
-					mMailSender = new CS_console_new(USERNAME, PASSWORD, SERVER);
-				} catch (NoSuchProviderException e)
-				{
-					e.printStackTrace();
-				}
+				mMailSender = new CS_console_new(userConfig);
 				
 				Log.i(TAG, "New File ID=" + mID);
 				mMailSender.send(mID, CACHE_DIR + "copy_" + fileName, CACHE_DIR);

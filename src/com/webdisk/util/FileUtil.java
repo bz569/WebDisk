@@ -1,5 +1,6 @@
 package com.webdisk.util;
 
+import java.io.StreamTokenizer;
 import java.math.BigInteger;
 import java.util.Calendar;
 import java.util.Random;
@@ -8,7 +9,7 @@ import com.webdisk.model.UserConfig;
 
 public class FileUtil
 {
-	public static String genFileId()
+	public static String genMId()
 	{
 		// arrayID
 		String arrayIDStr = "000";
@@ -44,7 +45,10 @@ public class FileUtil
 		// 从xml中读取userid
 		UserConfig userConfig = ReadXMLUtil.getConfigFromXML();
 		String userID = userConfig.getUserID();
+		System.out.println("userID.length=" + userID.length());
 		String bUserID = Integer.toBinaryString(Integer.parseInt(userID));
+		System.out.println("bUserID" + bUserID);
+		
 		
 		//拼接userid和fileID
 		String bMID = bUserID + binaryFileID;
@@ -55,5 +59,6 @@ public class FileUtil
 
 		return mID;
 	}
+	
 
 }

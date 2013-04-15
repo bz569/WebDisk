@@ -7,9 +7,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
+import java.util.ArrayList;
 
 import javax.mail.*;
 
+import com.webdisk.model.MailInfo;
 import com.webdisk.model.UserConfig;
 import com.webdisk.util.ReadXMLUtil;
 
@@ -21,8 +23,7 @@ import android.util.Log;
  */
 public class CS_console_new {
 	//final public static int lengthOf1M = 1024*1024;
-	private String[] username,password;
-	private String server = null;
+	private String[] username,password,server;
 	private int numOfEmailbox = 5;
 	private int numOfThread = 2;
 	private String folderName = "cyberbox";
@@ -40,12 +41,29 @@ public class CS_console_new {
 	 * @param server 服务器名
 	 * @throws NoSuchProviderException
 	 */
-	public CS_console_new(String[] username,String[] password,String server) throws NoSuchProviderException{
+	public CS_console_new(String[] username,String[] password,String server[]) throws NoSuchProviderException{
 		this.username = username;
 		this.password = password;
 		this.server = server;
 		
 	}
+	
+	public CS_console_new(ArrayList<MailInfo> list){
+		int len = list.size();
+		username = new String[len];
+		password = new String[len];
+		server = new String[len];
+		for(int i = 0 ; i < len ; i++){
+			MailInfo info = list.get(i);
+			username[i] = info.getUsername();
+			password[i] = info.getPassword();
+			server[i] = info.getServer_adr();
+		}
+	}
+	public CS_console_new(UserConfig config){
+		this(config.getMailList());
+	}
+
 	
 	/**
 	 * 设置邮箱的个数
@@ -81,11 +99,11 @@ public class CS_console_new {
 	public void delete(final String Myid ,boolean isFuzzy ){
 		if(isFuzzy){
 			for( int i = 0 ; i < numOfEmailbox ; i++)
-				new SampleDelete(username[i],password[i],server,folderName).deleteFuzzy(Myid);
+				new SampleDelete(username[i],password[i],server[i],folderName).deleteFuzzy(Myid);
 		}
 		else{
 			for( int i = 0 ; i < numOfEmailbox ; i++)
-				new SampleDelete(username[i],password[i],server,folderName).deleteDefine(Myid);
+				new SampleDelete(username[i],password[i],server[i],folderName).deleteDefine(Myid);
 		}
 	}
 	
@@ -105,7 +123,7 @@ public class CS_console_new {
 		}
 		if(file.length() <= chunkLength){
 			//new threadSampleSender(0 ,templeDir ,"_" + this.getFileName(dir) + ".part" + 0 ,Myid+":"+ 0 ,1 ).start();
-			SampleSend sender = new SampleSend(username[0],password[0],server,folderName);
+			SampleSend sender = new SampleSend(username[0],password[0],server[0],folderName);
 			if(sender.send(new File(dir),this.getFileName(dir),this.getFileName(dir),Myid+":0","1",""))
 				Log.i("in","成功发送小文件");
 			else
@@ -421,7 +439,7 @@ public class CS_console_new {
 			
 		}
 		public void run(){
-			SampleSend sender = new SampleSend(username[startPos],password[startPos],server,folderName);
+			SampleSend sender = new SampleSend(username[startPos],password[startPos],server[startPos],folderName);
 			
 			int now_i = init_i;
 			while(now_i < nChunk){
@@ -467,7 +485,7 @@ public class CS_console_new {
 			this.fileName = fileName;
 		}
 		public void run(){
-			SampleReceive receiver = new SampleReceive(username[i] ,password[i] ,server,folderName);
+			SampleReceive receiver = new SampleReceive(username[i] ,password[i] ,server[i],folderName);
 			Log.i("in","邮箱 " + username[i]+ " 开始接收");
 			receiver.receive(Myid,storeDir,fileName);
 			flag = receiver.isFinish();
@@ -499,22 +517,4 @@ public class CS_console_new {
 		}
 	}
 	
-	
-	
-	public static void main(String args[]){
-		String[] username = {"cyberbox1@163.com","cyberbox2@163.com","cyberbox3@163.com","cyberbox4@163.com","cyberbox5@163.com"};
-		String[] password = {"cyberbox","cyberbox","cyberbox","cyberbox","cyberbox"};
-		String server = "imap.163.com";
-		
-		try {
-			CS_console_new cs = new CS_console_new(username,password,server);
-			cs.send("19900517",  "E:/1/彩虹天堂.mp3", "E:/1/12");
-			//cs.receive("19901111", "E:/1/12",  "E:/1/123/" ,"彩虹天堂.mp3");
-			//cs.split("E:/1/lalala.mp3", "E:/1/12");
-			//cs.install_random("E:/1/12", "lalala.mp3", "E:/1/123/完美主义.mp3");
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
-	}
 }

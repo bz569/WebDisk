@@ -18,6 +18,7 @@ import android.util.Log;
 
 import com.webdisk.application.SVNApplication;
 import com.webdisk.mail.CS_console_new;
+import com.webdisk.model.UserConfig;
 
 public class DeleteUtil
 {
@@ -25,10 +26,12 @@ public class DeleteUtil
 	
 	private static String CACHE_DIR = Environment.getExternalStorageDirectory() + "/Webdisk/cache/";
 	
-	private static String[] USERNAME = {"cyberbox1@163.com","cyberbox2@163.com","cyberbox3@163.com","cyberbox4@163.com","cyberbox5@163.com"};
-	private static String[] PASSWORD = {"cyberbox","cyberbox","cyberbox","cyberbox","cyberbox"};
-	private static String SERVER = "imap.163.com";
-
+//	private static String[] USERNAME = {"cyberbox1@163.com","cyberbox2@163.com","cyberbox3@163.com","cyberbox4@163.com","cyberbox5@163.com"};
+//	private static String[] PASSWORD = {"cyberbox","cyberbox","cyberbox","cyberbox","cyberbox"};
+//	private static String SERVER = "imap.163.com";
+	
+	private static UserConfig userConfig = ReadXMLUtil.getConfigFromXML();
+	
 	private SVNApplication deleteApp;
 	
 	private String deleteUrl;
@@ -57,15 +60,8 @@ public class DeleteUtil
 			// TODO 从邮箱删除
 			Log.i(TAG, "从邮箱删除");
 			CS_console_new mMaildeleter;
-			try
-			{
-				mMaildeleter = new CS_console_new(USERNAME, PASSWORD, SERVER);
-				mMaildeleter.delete(mId, true);
-			} catch (NoSuchProviderException e)
-			{
-				e.printStackTrace();
-				return false;
-			}
+			mMaildeleter = new CS_console_new(userConfig);
+			mMaildeleter.delete(mId, true);
 		}
 		else if(isMail.equals("PROP_NOT_EXSIT"))//从web端上传的文件没有svn properties
 		{
@@ -133,15 +129,8 @@ public class DeleteUtil
 				
 				// TODO 从邮箱删除，删除临时文件
 				CS_console_new mMaildeleter;
-				try
-				{
-					mMaildeleter = new CS_console_new(USERNAME, PASSWORD, SERVER);
-					mMaildeleter.delete(mId, true);
-				} catch (NoSuchProviderException e)
-				{
-					e.printStackTrace();
-					return false;
-				}
+				mMaildeleter = new CS_console_new(userConfig);
+				mMaildeleter.delete(mId, true);
 				cacheFile.delete();
 				
 			}

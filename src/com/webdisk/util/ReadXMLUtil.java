@@ -80,7 +80,7 @@ public class ReadXMLUtil
 			
 			//∂¡»°UserID
 			Element userIDElement = (Element) (root.getElementsByTagName("user_id").item(0));
-			userID = userIDElement.getFirstChild().getNodeValue().replaceAll("\n", "");
+			userID = userIDElement.getFirstChild().getNodeValue().replaceAll("\n", "").replaceAll("\t", "");
 			Log.i(TAG, "userID=" + userID);
 			
 		} catch (ParserConfigurationException e)
