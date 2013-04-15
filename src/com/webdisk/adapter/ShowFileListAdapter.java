@@ -43,7 +43,10 @@ import com.webdisk.activity.DownloadActivity;
 import com.webdisk.activity.PasteActivity;
 import com.webdisk.activity.ShowFileActivity;
 import com.webdisk.application.SVNApplication;
+import com.webdisk.mail.CS_console_new;
+import com.webdisk.model.UserConfig;
 import com.webdisk.util.DeleteUtil;
+import com.webdisk.util.ReadXMLUtil;
 
 public class ShowFileListAdapter extends BaseAdapter
 {
@@ -658,7 +661,7 @@ public class ShowFileListAdapter extends BaseAdapter
 			}
 		});
 
-		// TODO 在此处设置用TextView显示文件信息(一定要在此处设置？)
+		//在此处设置用TextView显示文件信息(一定要在此处设置？)
 //		tv_showFileInfo.setText("此处显示文件详细信息");
 
 		// 使其聚集

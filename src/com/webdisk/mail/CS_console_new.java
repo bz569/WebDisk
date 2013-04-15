@@ -10,6 +10,9 @@ import java.io.RandomAccessFile;
 
 import javax.mail.*;
 
+import com.webdisk.model.UserConfig;
+import com.webdisk.util.ReadXMLUtil;
+
 import android.util.Log;
 /**
  * 此类用于发送、接收和删除邮件
@@ -27,6 +30,8 @@ public class CS_console_new {
 	private threadSampleReceiver[] receiveThreads = null;
 	private int chunkLength = 1024*1024*5;
 	private boolean sendFlag = false , receiveFlag = false;
+	
+	private UserConfig userConfig;
 	//public CS_console_new(){}//测试时使用
 	/**
 	 * 构造方法
@@ -39,6 +44,7 @@ public class CS_console_new {
 		this.username = username;
 		this.password = password;
 		this.server = server;
+		
 	}
 	
 	/**
