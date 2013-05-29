@@ -120,6 +120,7 @@ public class ShowFileListAdapter extends BaseAdapter
 		if (convertView == null)
 		{
 			convertView = mInflater.inflate(R.layout.row_showfile, null);
+			
 			holder = new ViewHolder();
 			holder.btn_fileAction = (Button) convertView
 					.findViewById(R.id.btn_row_expandFileAction);
@@ -173,12 +174,14 @@ public class ShowFileListAdapter extends BaseAdapter
 		if (entry.getKind().compareTo(SVNNodeKind.DIR) == 0) // 当前为文件夹时
 		{
 			holder.iv_showFileImage.setImageBitmap(icon_folder);
-			 //对文件夹禁止fileAction按钮
-			 holder.btn_fileAction.setEnabled(false);
-			 holder.btn_fileAction.setVisibility(View.GONE);
+			//对文件夹禁止fileAction按钮
+			holder.btn_fileAction.setEnabled(false);
+			holder.btn_fileAction.setVisibility(View.GONE);
 		} else if (entry.getKind().compareTo(SVNNodeKind.FILE) == 0) // 当前为文件时
 		{
 			holder.iv_showFileImage.setImageBitmap(icon_file);
+			holder.btn_fileAction.setEnabled(true);
+			holder.btn_fileAction.setVisibility(View.VISIBLE);
 		}
 
 		// TODO 为btn_fileAction设置弹出菜单

@@ -35,6 +35,7 @@ import android.os.Handler;
 import android.util.Log;
 
 import com.webdisk.model.Connection;
+import com.webdisk.util.LogUtil;
 
 import com.webdisk.R;
 
@@ -636,12 +637,17 @@ public class SVNApplication extends Application
 			System.out.println("local path : " + myFile.toString());
 			try
 			{
+				long startTime = System.currentTimeMillis(); 
 				// do the export
 				Long rev = clientManager.getUpdateClient().doExport(myURL,
 						myFile, pegRevision, myRevision, null, true, depth);
 
 				// log this success
 				Log.i(TAG, "export success");
+				long endTime = System.currentTimeMillis();
+	    		long usedTime = endTime - startTime;
+	    		//将结果写入日志
+	    		LogUtil.logToFile("------下载耗时" + usedTime + "ms\n");
 			} catch (SVNException se)
 			{
 				String msg = se.getMessage();
@@ -705,6 +711,8 @@ public class SVNApplication extends Application
        		this.initAuthManager();
        		
        		//doImport
+       		//记录开始时间
+    		long startTime = System.currentTimeMillis(); 
        		SVNCommitInfo commitInfo = clientManager.getCommitClient().doImport(srcFile, dstURL, commitMsg, mProperties, false, false, SVNDepth.FILES);
        		Log.i(TAG, "commitInfo=" + commitInfo.toString());
        		//doSetProperties
@@ -720,6 +728,10 @@ public class SVNApplication extends Application
        			commitInfo = clientManager.getWCClient().doSetProperty(dstURL, propName, propValue, SVNRevision.HEAD, "setProps", null, false, null);
        			Log.i(TAG, "set prop: propName=" + propName + ";value=" + propValue.toString());
        		}
+    		long endTime = System.currentTimeMillis();
+    		long usedTime = endTime - startTime;
+    		//将结果写入日志
+    		LogUtil.logToFile("------上传耗时" + usedTime + "ms\n");
        		
 //       		commitInfo = clientManager.getWCClient().doSetProperty(dstURL, "magicgourd:id", 
 //       				mProperties.getSVNPropertyValue("magicgourd:id"), SVNRevision.HEAD, "setProps", null, false, null);
